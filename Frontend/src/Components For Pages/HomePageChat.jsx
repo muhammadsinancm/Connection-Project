@@ -1,9 +1,6 @@
 import React, { useState } from 'react'
 import './HomeChatStyles.css'
 import InputTab from './InputTab'
-import TopBar from './TopBar'
-import SideBar from './SideBar'
-import UserLgin from '../Pages/UserLgin'
 
 function HomePageChat() {
 

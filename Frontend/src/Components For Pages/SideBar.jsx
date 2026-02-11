@@ -1,14 +1,17 @@
 import React from 'react'
 import './SideBar.css'
 
-function SideBar() {
+function SideBar({ items }) {
   return (
-    <div className="sidebar">
-      <div className="sidebar-header">Chats</div>
+    <aside className="sidebar">
       <ul className="chat-list">
-        
+        <li className="chat-item">
+          <div className="chat-bubble">
+            <p className="chat-name">{items.userInput}</p>
+          </div>
+        </li>
       </ul>
-    </div>
+    </aside>
   )
 }
 

@@ -1,0 +1,139 @@
+/* Input tab fixed to the bottom of the viewport */
+.input-tab {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  padding: 12px 20px;
+  background: linear-gradient(180deg, #ffffff 0%, #fafbfc 100%);
+  box-shadow: 0 -4px 12px rgba(0,0,0,0.1), 0 -1px 3px rgba(0,0,0,0.06);
+  z-index: 50;
+  justify-content: flex-end; /* keep input and button on the right */
+}
+
+/* Input field styling - narrower on desktop, aligned to the right */
+.chat-input {
+  width: 70%;
+  min-width: 220px;
+  max-width: 720px;
+  padding: 12px 16px;
+  border-radius: 24px;
+  border: 1px solid #e2e8f0;
+  outline: none;
+  font-size: 15px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  box-sizing: border-box;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.chat-input:focus {
+  border-color: #2b8aef;
+  box-shadow: 0 0 0 3px rgba(43, 138, 239, 0.1);
+}
+
+/* Send button styling */
+.send-btn {
+  padding: 10px 18px;
+  background: linear-gradient(135deg, #2b8aef 0%, #1e6bb8 100%);
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 14px;
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+.send-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(43, 138, 239, 0.3);
+}
+.send-btn:active {
+  transform: translateY(0);
+}
+
+/* Messages container - standard chat area */
+.messages {
+  padding: 20px;
+  max-height: calc(110vh - 132px);
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 96px;
+  scroll-behavior: smooth;
+  padding-bottom: 24px;
+}
+
+.message-row {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end; /* make user messages appear on right */
+  margin-top: 0;
+}
+
+/* Each message bubble */
+.messages p,
+.messages .chat-bubble,
+.messages .chat-name {
+  /* background: #fff; */
+  /* padding: 8px 12px; */
+  border-radius: 14px;
+  /* margin: 8px 0; */
+  /* max-width: 90%; */
+  /* box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04); */
+  min-width: min(30ch, 90%);
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  white-space: normal;
+  font-size: 15px;
+  line-height: 1.4;
+}
+
+/* Logout wrapper - fixed to the top-right of the viewport */
+.logout-wrapper {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  z-index: 60;
+}
+
+/* Logout button visuals */
+.logout-btn {
+  background: transparent;
+  border: 1.5px solid #ef4444;
+  color: #ef4444;
+  padding: 8px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 14px;
+  transition: all 0.2s;
+}
+
+.logout-btn:hover {
+  background: #ef4444;
+  color: #fff;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.2);
+}
+
+
+/* Small responsiveness tweaks */
+@media (max-width: 480px) {
+  .chat-input {
+    font-size: 14px;
+    width: 100%;
+    flex: 1;
+  }
+  .send-btn {
+    padding: 10px 14px;
+    font-size: 13px;
+  }
+  .input-tab {
+    padding: 12px 16px;
+    gap: 8px;
+  }
+}

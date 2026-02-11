@@ -1,0 +1,94 @@
+/* Left-side emails sidebar styling */
+.emails-sidebar {
+  width: 300px;
+  min-width: 240px;
+  max-width: 360px;
+  height: 100vh;
+  overflow-y: auto;
+  background: linear-gradient(180deg, #ffffff, #f7fafc);
+  border-right: 1px solid #e6eef7;
+  padding: 16px;
+  box-sizing: border-box;
+  float: left;
+  position: sticky;
+  top: 0;
+}
+
+.emails-sidebar .search-wrap {
+  margin-bottom: 12px;
+}
+
+.emails-sidebar .search-input {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid #d6e0f0;
+  background: #fff;
+  outline: none;
+  font-size: 14px;
+  box-shadow: 0 1px 2px rgba(16,24,40,0.03);
+}
+
+.emails-sidebar .email-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.emails-sidebar .email-item {
+  padding: 10px;
+  border-radius: 8px;
+  margin-bottom: 8px;
+  cursor: pointer;
+  transition: background .15s ease, transform .08s ease;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 10px;
+}
+
+.emails-sidebar .email-item:hover {
+  background: #eef6ff;
+  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.06);
+}
+
+.emails-sidebar .email-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #4b5563;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  text-transform: uppercase;
+  flex-shrink: 0;
+}
+
+.emails-sidebar .email-address {
+  font-size: 14px;
+  color: #0f172a;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+}
+
+.emails-sidebar .no-emails {
+  color: #64748b;
+  font-size: 14px;
+  text-align: center;
+  margin-top: 24px;
+}
+
+@media (max-width: 900px) {
+  .emails-sidebar {
+    float: none;
+    width: 100%;
+    max-width: none;
+    height: auto;
+    border-right: none;
+    border-bottom: 1px solid #e6eef7;
+  }
+}

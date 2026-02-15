@@ -6,14 +6,16 @@ export { Context_Connection }
 
 function ContextBrowser(props) {
   const [token, setToken] = useState( localStorage.getItem("token") || "")
+  const [storeEmails, setStoreEmails] = useState([])
 
   const backendURL = import.meta.env.VITE_BACKEND_URL
   const propsValue = {
     backendURL,
     setToken,
-    token
+    token,
+    storeEmails,
+    setStoreEmails
   }
-console.log(backendURL);
 
   return (
     <Context_Connection.Provider value={propsValue}>

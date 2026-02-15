@@ -1,0 +1,93 @@
+/* UserLgin.css - clean modern card layout for login/signup */
+:root{
+  --bg:#0f1724;
+  --card:#0b1220;
+  --accent:#4f46e5;
+  --muted:#94a3b8;
+  --glass: rgba(255,255,255,0.04);
+}
+
+*{box-sizing:border-box}
+html,body,#root{height:100%}
+
+.userpage-wrap{
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background: linear-gradient(135deg, #071024 0%, #0b1220 100%);
+  font-family: Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+  padding: 2rem;
+}
+
+.user-card{
+  width: 360px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  border-radius: 12px;
+  padding: 28px;
+  box-shadow: 0 10px 30px rgba(2,6,23,0.6), inset 0 1px 0 rgba(255,255,255,0.02);
+  color: #e6eef8;
+  border: 1px solid rgba(255,255,255,0.04);
+}
+
+.user-brand{
+  font-size:20px;
+  font-weight:700;
+  letter-spacing:0.4px;
+  margin-bottom: 12px;
+  color: var(--accent);
+}
+.user-sub{ color: var(--muted); font-size:13px; margin-bottom:18px }
+
+.form-field{ display:flex; flex-direction:column; gap:12px; }
+.form-field input{
+  width:100%;
+  padding: 12px 14px;
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.04);
+  background: rgba(255,255,255,0.02);
+  color: #eaf0ff;
+  outline: none;
+  transition: box-shadow .14s, transform .06s;
+}
+.form-field input::placeholder{ color: #9aa7bd }
+.form-field input:focus{ box-shadow: 0 6px 18px rgba(79,70,229,0.15); transform: translateY(-1px) }
+
+.actions{ display:flex; gap:10px; margin-top:18px; align-items:center }
+.btn-primary{
+  background: linear-gradient(90deg,var(--accent), #7c3aed);
+  color:white;
+  border:none;
+  padding: 10px 14px;
+  border-radius: 8px;
+  cursor:pointer;
+  font-weight:600;
+  flex:1;
+}
+.btn-switch{
+  background: transparent;
+  color: var(--muted);
+  border: 1px solid rgba(255,255,255,0.04);
+  padding: 10px 12px;
+  border-radius:8px;
+  cursor:pointer;
+  font-weight:600;
+}
+
+.small-note{ margin-top:12px; color:var(--muted); font-size:13px }
+
+/* responsive tweak */
+@media (max-width:420px){
+  .user-card{ width:100%; padding:20px }
+}
+
+.user-head{ margin-bottom:14px }
+.user-head .user-brand{ font-size:18px; margin:0 0 6px 0; color:var(--accent) }
+.user-head .user-sub{ font-size:13px; color:var(--muted) }
+
+.field{ display:flex; flex-direction:column; gap:6px; margin-bottom:10px }
+.field label{ color:var(--muted); font-size:12px; font-weight:600 }
+
+.info-wrap{ margin-top:18px; border-top:1px dashed rgba(255,255,255,0.03); padding-top:12px }
+.info-note{ color: #9fb0cc; font-size:12px; line-height:1.45; background: rgba(255,255,255,0.01); padding:10px; border-radius:6px; overflow:auto }
+.info-note code, .info-note pre{ white-space:pre-wrap }

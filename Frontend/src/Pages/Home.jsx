@@ -1,10 +1,10 @@
 import React from 'react'
-import HomePageChat from '../Components For Pages/HomePageChat'
+import Users from './Users'
 
 function Home() {
   return (
     <div>
-      <HomePageChat/>
+      <Users />
     </div>
   )
 }

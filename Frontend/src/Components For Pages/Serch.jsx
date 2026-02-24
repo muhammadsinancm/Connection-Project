@@ -1,12 +1,16 @@
 import React from 'react'
 import { useContext } from 'react'
-import { Context_Connection } from '../Contect/ContextBrowser'
+import ContextBrowser, { Context_Connection } from '../Contect/ContextBrowser'
 import { useState } from 'react'
-import { NavLink } from 'react-router-dom'
+import { NavLink, useNavigate } from 'react-router-dom'
 
 function Serch() {
-    const { storeEmails, setStoreEmails } = useContext(Context_Connection)
+    
+    const { storeEmails, setStoreEmails, storeRequest } = useContext(Context_Connection)
     const [serch, setSerch] = useState([])
+    
+    
+    const navigate = useNavigate()
 
     const userEmailsSerch = (value) => {
 
@@ -55,7 +59,7 @@ function Serch() {
                                 <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z" />
                             </svg>
                             <NavLink to='/connectionReq' state={{value:items}}>
-                             <div>
+                             <div onClick={()=> navigate('/context', {state:{value:items}})}>
                                 <p onClick={()=> userEmailSelect(items)} style={{ margin: 0, fontSize: '14px', color: '#202124' }}>{items.email}</p>
                             </div>   
                             </NavLink>

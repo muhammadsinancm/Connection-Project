@@ -4,21 +4,25 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import { Context_Connection } from '../Contect/ContextBrowser'
 
 function ConnectionREQ() {
+
     const location = useLocation()
 
-    const [final, setFinal] = useState(false)
-    const [connection, setConnection] = useState(true)
     const [pending, setPending] = useState('')
-    const [same, setSame] = useState(true)
-    const [storeREQ, setStoreREQ] = useState([])
-    const [match, setMatch] = useState([])
-    const [request, setRequest] = useState([])
 
     const navigate = useNavigate()
-    const { token, backendURL } = useContext(Context_Connection)
-    console.log(token);
+    const { token, backendURL, same, setSame, connection, setConnection, final, setFinal, requestAccept, remove, setRemove } = useContext(Context_Connection)
 
+console.log(requestAccept);
+   console.log(location.state.value.token);
+   
+       const acceptTokenMatch = requestAccept.filter((itme)=> (
+            itme.request === location.state.value.token
+        ))
+       console.log(acceptTokenMatch);
+
+    // -------------userConnection request to backend------------------------
     const connectionreqTobackend = async (userData) => {
+console.log(token);
 
         try {
 
@@ -29,8 +33,11 @@ function ConnectionREQ() {
 
                 if (userRequistSent.data.success) {
                     setPending(userRequistSent.data.message)
-                    console.log(userRequistSent.data.savedREQ);
-
+                    console.log('///////////////////////////');
+                 console.log(userRequistSent.data.savedREQ);   
+                    console.log('It user REQ first Stage');
+                    console.log('///////////////////////////');
+                    
                 } else {
                     console.log(userRequistSent.data.message);
                 }
@@ -42,45 +49,10 @@ function ConnectionREQ() {
 
     }
   
-    // REQ list Of user
-    const ListOFREQ = async () => {
-
-        try {
-
-            const responceREQList = await axios.get(backendURL + '/api/user/requestlist')
-            if (responceREQList.data.success) {
-                console.log(responceREQList.data.orginal);
-
-                if (responceREQList.data.orginal) {
-                    setMatch(responceREQList.data.orginal)
-                    console.log(responceREQList.data.orginal);
-
-                    console.log(match[0]?.request);
-                    console.log(token);
-
-                    // if (match[0]?.reciver) {
-                    //     let filterUserREQ = match?.filter((items) => {
-                    //         return items?.request === token
-                    //     })
-                    //     console.log(filterUserREQ);
-                    //     setRequest(filterUserREQ)
-                    // }
-                }
-
-                setStoreREQ(responceREQList.data.orginal || [])
-
-            } else {
-                console.log(responceREQList.data.message);
-            }
-
-        } catch (error) {
-            console.log(error.message);
-
-        }
-    }
-
+    // ----------------user request cancel-----------------------
     const RequestCancel = async (cancelREQ) => {
         setSame(true)
+
         try {
 
             const deleteREQResponce = await axios.delete(backendURL + `/api/user/userunrequest/${cancelREQ}`, { headers: { token } })
@@ -93,71 +65,43 @@ function ConnectionREQ() {
 
         } catch (error) {
             console.log(error.message);
-
         }
     }
 
-    useEffect(() => {
-        ListOFREQ()
-        console.log(request);
-        
-    }, [match])
-
-    useEffect(() => {
-  if (!match?.length) return;
-
-  const filterUserREQ = match.filter(item =>
-    item?.request === token
-  );
-console.log(filterUserREQ);
-
-  setRequest(filterUserREQ);
-  
-}, [match, token]);
-
-
-    useEffect(() => {
-
-        if (!storeREQ || storeREQ.length === 0) return
-
-        let newData = storeREQ?.filter((items) => {
-            return items?.reciver == location.state.value.email
-        })
-        console.log(newData);
-
-        console.log(newData[0]?.reciver);
-        console.log(location.state.value.email);
-
-        if (newData[0]?.reciver === location.state.value.email) {           
-            setSame(false)
-
-        } else {
-            console.log('not done');
-        }
-
-    }, [storeREQ])
-   
- 
   return (
     <div className='main-container'>
         <div className='heder-container'>
         <div className='text-container'>
-            <span className='user-data'> {location.state.value.firstName}</span>
-            <span className='user-data'> {location.state.value.lastName}</span>
+            <span className='user-data'> {location?.state?.value?.firstName}</span>
+            <span className='user-data'> {location?.state?.value?.lastName}</span>
         </div>
          <div>
-              <span className='user-data'> {location.state.value.email}</span>
+              <span className='user-data'> {location?.state?.value?.email}</span>
           </div>
 
-          {
-            request.map((items)=> (
-                <div>
-                    <h1>request from: {items.email}</h1>
-                </div>
-            ))
-          }
+       
+   <div>
 
-       {
+  <div>
+    {
+        acceptTokenMatch[0]?.accepted ? <div>
+            <div>
+                <button onClick={()=> navigate('/message', {state:{token: token, selectedUser:location.state.value.token}})}>message</button>
+            </div>
+              <div>
+          <div>
+             <div>
+                {<button onClick={(()=> RequestCancel(location.state.value.email))}>Follow</button>
+           
+            }
+             </div>
+             <div>
+                <button onClick={()=> navigate('/')}>Back</button>
+             </div>
+          </div>
+         </div>
+        </div> : <div>
+        {
         same ? 
          <div>
  { connection ?
@@ -202,6 +146,15 @@ console.log(filterUserREQ);
          </div>
          
        }
+       </div>
+
+
+    }
+  </div>
+        
+    
+   </div>
+      
             
         
          

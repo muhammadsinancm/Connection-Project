@@ -13,17 +13,6 @@ function Profile() {
         navigate('/loginorSing')
     }
 
-    const ForUserNotificationIcon = async () => {
-        try {
-
-
-
-        } catch (error) {
-            console.log(error.message);
-
-        }
-    }
-
     return (
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
 

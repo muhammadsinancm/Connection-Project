@@ -86,7 +86,7 @@ console.log(token);
     {
         acceptTokenMatch[0]?.accepted ? <div>
             <div>
-                <button onClick={()=> navigate('/message', {state:{token: token, selectedUser:location.state.value.token}})}>message</button>
+                <button onClick={()=> navigate('/message', {state:{token: token, selectedUser:location.state.value.token, selectedUserName:location.state.value}})}>message</button>
             </div>
               <div>
           <div>

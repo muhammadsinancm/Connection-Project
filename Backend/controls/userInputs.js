@@ -34,6 +34,7 @@ const userInputsShow = async (req, res) => {
     try {
 
         const {sendingUserToken, recivedUserToken, token} = req.body;
+// console.log(token);
 
         const userTextsToFrontend = await usersText.find()
         if (!userTextsToFrontend) {

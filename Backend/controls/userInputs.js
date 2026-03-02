@@ -15,7 +15,8 @@ const userInputsForStoring = async (req, res)=> {
         const saveUserTextData = await new usersText({
             userText: saveUserText,
             sendingUserToken:sendingUserToken,
-            recivedUserToken:recivedUserToken
+            recivedUserToken:recivedUserToken,
+            
         })
 
         const savedUserTextandDatas = await saveUserTextData.save();

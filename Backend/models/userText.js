@@ -5,6 +5,7 @@ const userTextScheema = new mongoose.Schema({
     date: { type: Date, default: Date.now, required: true },
     sendingUserToken: { type: String, required: true },
     recivedUserToken: { type: String, required: true }
+    // userEmail: { type: String, required: true }
 })
 
 const usersText = mongoose.models.textsOfUsers || mongoose.model('textsOfUsers', userTextScheema)

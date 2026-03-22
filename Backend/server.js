@@ -21,11 +21,11 @@ app.use('/api/user', requestRouter)
 app.use('/api/usertext', userInputsRouter)
 app.use('/api', userMessagesRouter)
 
-app.get('/',(req, res)=> {
+app.get('/', (req, res) => {
     res.send('workking')
 })
 
 
 
 
-app.listen(Port, ()=> console.log('port is runnig'))
+app.listen(Port, () => console.log('port is runnig'))

@@ -5,51 +5,63 @@
 ════════════════════════════════════════════ */
 :root {
   /* Brand */
-  --accent:       #1a73e8;
-  --accent-d:     #1558b0;
-  --accent-l:     #d2e3fc;
-  --accent-h:     #b8d0f9;
+  --accent: #1a73e8;
+  --accent-d: #1558b0;
+  --accent-l: #d2e3fc;
+  --accent-h: #b8d0f9;
 
   /* Surface */
-  --bg:           #f6f8fc;
-  --sidebar-bg:   #f6f8fc;
-  --card-bg:      #ffffff;
-  --border:       #e0e0e0;
+  --bg: #f6f8fc;
+  --sidebar-bg: #f6f8fc;
+  --card-bg: #ffffff;
+  --border: #e0e0e0;
   --border-focus: #1a73e8;
 
   /* Text */
-  --text:         #202124;
-  --text-2:       #444746;
-  --muted:        #5f6368;
+  --text: #202124;
+  --text-2: #444746;
+  --muted: #5f6368;
 
   /* State */
-  --hover-bg:     #f1f3f4;
-  --active-bg:    #d3e3fd;
-  --active-text:  #0b57d0;
+  --hover-bg: #f1f3f4;
+  --active-bg: #d3e3fd;
+  --active-text: #0b57d0;
 
   /* Danger */
   /* --red:          #d93025; */
-  --red-l:        #fce8e6;
+  --red-l: #fce8e6;
 
   /* Notification badge */
   /* --badge:        #d93025; */
 
   /* Misc */
-  --radius-sm:    8px;
-  --radius-md:    16px;
-  --radius-lg:    24px;
-  --font:         'Inter', 'Google Sans', Roboto, Arial, sans-serif;
-  --ease:         0.18s cubic-bezier(0.4, 0, 0.2, 1);
-  --sh-sm:        0 1px 3px rgba(0,0,0,.08), 0 1px 2px rgba(0,0,0,.04);
-  --sh-md:        0 4px 12px rgba(0,0,0,.10);
-  --sh-lg:        0 8px 28px rgba(0,0,0,.12);
+  --radius-sm: 8px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+  --font: 'Inter', 'Google Sans', Roboto, Arial, sans-serif;
+  --ease: 0.18s cubic-bezier(0.4, 0, 0.2, 1);
+  --sh-sm: 0 1px 3px rgba(0, 0, 0, .08), 0 1px 2px rgba(0, 0, 0, .04);
+  --sh-md: 0 4px 12px rgba(0, 0, 0, .10);
+  --sh-lg: 0 8px 28px rgba(0, 0, 0, .12);
 }
 
 /* ════════════════════════════════════════════
    RESET & BASE
 ════════════════════════════════════════════ */
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html, body, #root      { height: 100%; font-family: var(--font); }
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  font-family: var(--font);
+}
 
 /* ════════════════════════════════════════════
    ROOT LAYOUT  ──  .users-container
@@ -113,7 +125,9 @@ html, body, #root      { height: 100%; font-family: var(--font); }
   transform: translateY(-1px);
 }
 
-.compose-btn:active { transform: translateY(0); }
+.compose-btn:active {
+  transform: translateY(0);
+}
 
 .compose-icon {
   display: flex;
@@ -224,7 +238,7 @@ html, body, #root      { height: 100%; font-family: var(--font); }
 .search-input-wrapper:focus-within {
   background: #fff;
   border-color: var(--border-focus);
-  box-shadow: 0 0 0 3px rgba(26,115,232,.12);
+  box-shadow: 0 0 0 3px rgba(26, 115, 232, .12);
 }
 
 .search-icon {
@@ -236,7 +250,9 @@ html, body, #root      { height: 100%; font-family: var(--font); }
   transition: color var(--ease);
 }
 
-.search-input-wrapper:focus-within .search-icon { color: var(--accent); }
+.search-input-wrapper:focus-within .search-icon {
+  color: var(--accent);
+}
 
 .filter-icon {
   display: flex;
@@ -249,7 +265,9 @@ html, body, #root      { height: 100%; font-family: var(--font); }
   transition: background var(--ease);
 }
 
-.filter-icon:hover { background: rgba(0,0,0,.06); }
+.filter-icon:hover {
+  background: rgba(0, 0, 0, .06);
+}
 
 .search-input {
   flex: 1;
@@ -262,7 +280,9 @@ html, body, #root      { height: 100%; font-family: var(--font); }
   margin: 0 10px;
 }
 
-.search-input::placeholder { color: #9aa0a6; }
+.search-input::placeholder {
+  color: #9aa0a6;
+}
 
 /* ── Search results dropdown ── */
 .search-result {
@@ -280,8 +300,15 @@ html, body, #root      { height: 100%; font-family: var(--font); }
 }
 
 @keyframes dropIn {
-  from { opacity: 0; transform: translateY(-6px); }
-  to   { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .search-result-item {
@@ -294,9 +321,13 @@ html, body, #root      { height: 100%; font-family: var(--font); }
   gap: 4px;
 }
 
-.search-result-item:last-child { border-bottom: none; }
+.search-result-item:last-child {
+  border-bottom: none;
+}
 
-.search-result-item:hover { background: var(--hover-bg); }
+.search-result-item:hover {
+  background: var(--hover-bg);
+}
 
 /* NavLink inside result */
 .to-connect {
@@ -328,12 +359,12 @@ html, body, #root      { height: 100%; font-family: var(--font); }
 }
 
 /* Avatar circle – its inline style sets color, we polish shape/anim */
-.hover-container > div:first-child {
+.hover-container>div:first-child {
   transition: box-shadow var(--ease), transform var(--ease);
   box-shadow: 0 0 0 2px transparent;
 }
 
-.hover-container:hover > div:first-child {
+.hover-container:hover>div:first-child {
   box-shadow: 0 0 0 2.5px var(--accent-l);
   transform: scale(1.06);
 }
@@ -354,7 +385,9 @@ html, body, #root      { height: 100%; font-family: var(--font); }
   animation: dropIn 0.16s ease forwards;
 }
 
-.hover-container:hover .hover-display { display: block; }
+.hover-container:hover .hover-display {
+  display: block;
+}
 
 /* Logout item */
 span.logout {
@@ -370,7 +403,9 @@ span.logout {
   white-space: nowrap;
 }
 
-span.logout:hover { background: var(--red-l); }
+span.logout:hover {
+  background: var(--red-l);
+}
 
 /* ════════════════════════════════════════════
    MESSAGE LIST AREA  ──  .email-list-container
@@ -382,8 +417,14 @@ span.logout:hover { background: var(--red-l); }
   scroll-behavior: smooth;
 }
 
-.email-list-container::-webkit-scrollbar { width: 5px; }
-.email-list-container::-webkit-scrollbar-track { background: transparent; }
+.email-list-container::-webkit-scrollbar {
+  width: 5px;
+}
+
+.email-list-container::-webkit-scrollbar-track {
+  background: transparent;
+}
+
 .email-list-container::-webkit-scrollbar-thumb {
   background: #c9cdd1;
   border-radius: 8px;
@@ -393,11 +434,12 @@ span.logout:hover { background: var(--red-l); }
    ICON HOVER RINGS  (Profile.jsx inline divs)
    Applied via attribute since they have no class
 ════════════════════════════════════════════ */
-.header-container > div > div[title] {
+.header-container>div>div[title] {
   border-radius: 50%;
   transition: background var(--ease);
 }
-.header-container > div > div[title]:hover {
+
+.header-container>div>div[title]:hover {
   background: var(--hover-bg);
 }
 
@@ -424,17 +466,26 @@ span.logout:hover { background: var(--red-l); }
    RESPONSIVE  —  TABLET  (≤ 1024px)
 ════════════════════════════════════════════ */
 @media (max-width: 1024px) {
-  .left-bar-container { width: 200px; }
-  .search-container-wrapper { max-width: 480px; }
+  .left-bar-container {
+    width: 200px;
+  }
+
+  .search-container-wrapper {
+    max-width: 480px;
+  }
 }
 
 /* ════════════════════════════════════════════
    RESPONSIVE  —  NARROW TABLET  (≤ 768px)
 ════════════════════════════════════════════ */
 @media (max-width: 768px) {
-  .left-bar-container { width: 72px; }
+  .left-bar-container {
+    width: 72px;
+  }
 
-  .compose-text { display: none; }
+  .compose-text {
+    display: none;
+  }
 
   .compose-btn {
     width: 56px;
@@ -453,26 +504,36 @@ span.logout:hover { background: var(--red-l); }
     margin: 3px auto;
   }
 
-  .nav-icon { margin-right: 0; }
+  .nav-icon {
+    margin-right: 0;
+  }
 
   /* hide the text node inside NavLink */
-  .nav-link > *:not(.nav-icon) { display: none; }
+  .nav-link>*:not(.nav-icon) {
+    display: none;
+  }
 
   .main-content {
     margin: 6px 8px 6px 0;
     border-radius: var(--radius-md);
   }
 
-  .header-container { padding: 6px 12px; }
+  .header-container {
+    padding: 6px 12px;
+  }
 
-  .search-container-wrapper { margin-right: 10px; }
+  .search-container-wrapper {
+    margin-right: 10px;
+  }
 }
 
 /* ════════════════════════════════════════════
    RESPONSIVE  —  MOBILE  (≤ 480px)
 ════════════════════════════════════════════ */
 @media (max-width: 480px) {
-  .left-bar-container { display: none; }
+  .left-bar-container {
+    display: none;
+  }
 
   .main-content {
     margin: 0;
@@ -486,9 +547,15 @@ span.logout:hover { background: var(--red-l); }
     min-height: 56px;
   }
 
-  .search-input-wrapper { height: 40px; }
+  .search-input-wrapper {
+    height: 40px;
+  }
 
-  .search-input { font-size: 14px; }
+  .search-input {
+    font-size: 14px;
+  }
 
-  .search-result-item { padding: 8px 12px; }
+  .search-result-item {
+    padding: 8px 12px;
+  }
 }

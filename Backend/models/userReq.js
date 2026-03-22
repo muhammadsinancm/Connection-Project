@@ -10,6 +10,7 @@ const userREQScheema = new mongoose.Schema({
     accepted: { type: Boolean, default: false }
 })
 
+
 const REQ = mongoose.models.reqest || mongoose.model('reqest', userREQScheema)
 
 export default REQ

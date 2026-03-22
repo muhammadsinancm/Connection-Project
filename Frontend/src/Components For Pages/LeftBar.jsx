@@ -15,6 +15,7 @@ function LeftBar() {
           <span className="compose-text">Compose</span>
         </div>
       </div>
+      
       <div>
         <NavLink to="/" className="nav-link">
           <span className="nav-icon">

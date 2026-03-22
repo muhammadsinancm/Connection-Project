@@ -21,7 +21,7 @@ function UserConnect() {
 
     try {
 
-      const responce = await axios.post(backendURL + '/api/userreq/conection', { userData, token }, {headers:{token}})
+      const responce = await axios.post(backendURL + '/api/userreq/conection', { userData, token }, { headers: { token } })
       if (responce.data.success) {
         if (responce.data.userFindConection) {
           setStoreREQ(responce.data.userFindConection)

@@ -22,17 +22,17 @@ function ContextBrowser(props) {
   const [locations, setLocations] = useState('')
   const [followRemove, setFollowRemove] = useState('')
   const [userTexts, setUserTexts] = useState([])
-   const [sendingUserToken, setSendingUserToken] = useState('')
-   const [recivedUserToken, setRecivedUserToken] = useState('')
+  const [sendingUserToken, setSendingUserToken] = useState('')
+  const [recivedUserToken, setRecivedUserToken] = useState('')
 
   const locationUser = useLocation()
-  
-useEffect(()=> {
 
-}, [userTexts])
+  useEffect(() => {
 
-  useEffect(()=> {
-setLocations(locationUser?.state?.value)
+  }, [userTexts])
+
+  useEffect(() => {
+    setLocations(locationUser?.state?.value)
 
   }, [])
 
@@ -43,7 +43,7 @@ setLocations(locationUser?.state?.value)
 
     try {
 
-      const responceREQList = await axios.get(backendURL + '/api/user/requestlist', {headers:{token}})
+      const responceREQList = await axios.get(backendURL + '/api/user/requestlist', { headers: { token } })
       if (responceREQList.data.success) {
         if (responceREQList.data.orginal) {
           console.log(responceREQList.data.orginal);
@@ -67,17 +67,17 @@ setLocations(locationUser?.state?.value)
 
   }, [])
 
-//  -----------List Of User Connection Allow-------------
+  //  -----------List Of User Connection Allow-------------
   const listOfMessagepermision = async () => {
 
     try {
 
-      const responce = await axios.put(backendURL + `/api/user/messageallow/${token}`, {}, {headers:{token}})
+      const responce = await axios.put(backendURL + `/api/user/messageallow/${token}`, {}, { headers: { token } })
       if (responce.data.success) {
         console.log(responce.data.filterConnectionAllow);
-        
+
         if (responce.data.filterConnectionAllow) {
-          
+
         }
         setRequestAccept(responce.data.filterConnectionAllow)
       }
@@ -87,9 +87,9 @@ setLocations(locationUser?.state?.value)
     }
   }
 
-//  -------Calling  Message Allow--------
-  useEffect(()=> {
-      listOfMessagepermision()
+  //  -------Calling  Message Allow--------
+  useEffect(() => {
+    listOfMessagepermision()
   }, [])
 
   // ----------This useEffect doing for request filter----------
@@ -108,14 +108,14 @@ setLocations(locationUser?.state?.value)
     const storeRequestCount = []
     setStoreCount(storeRequestCount)
     for (const key in newData) {
-        storeRequestCount.push(Number(key)+1)  
+      storeRequestCount.push(Number(key) + 1)
     }
-    
+
     if (newData) {
       setStoreRequest(newData)
     }
 
-  }, [storeREQ])
+  }, [storeREQ]);
 
 
   const propsValue = {
@@ -142,7 +142,7 @@ setLocations(locationUser?.state?.value)
     requestAccept,
     setRequestAccept,
     remove,
-    setRemove, 
+    setRemove,
     locations,
     locationUser,
     followRemove,

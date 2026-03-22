@@ -7,44 +7,44 @@ import loginMidleware from '../midleware/loginmidleware.js';
 
 const UserControl = express.Router()
 
-const createUserToken = (id)=> {
-    return jwt.sign({id}, process.env.JWT_SECRET)
+const createUserToken = (id) => {
+    return jwt.sign({ id }, process.env.JWT_SECRET)
 }
 
-const userLogin = async (req, res)=> {
+const userLogin = async (req, res) => {
 
     try {
 
-        const {email, password} = req.body;
-        
-        const userEmailFind = await UserDataSignLogin.findOne({email})
+        const { email, password } = req.body;
+
+        const userEmailFind = await UserDataSignLogin.findOne({ email })
 
         if (!userEmailFind) {
-            res.json({success:false, message:'User does not exist'})
+            res.json({ success: false, message: 'User does not exist' })
         }
-        
+
         const isMatch = await bcrypt.compare(password, userEmailFind.password)
         if (isMatch) {
             if (userEmailFind.token) {
                 const newToken = userEmailFind.token
-               
-         console.log(newToken);   
-                 res.json({success:true, mrssage:'log in', newToken})
+
+                console.log(newToken);
+                res.json({ success: true, mrssage: 'log in', newToken })
             }
-           
-            
+
+
         }
 
-        
-        
+
+
     } catch (error) {
         console.log(error.message);
-        
+
     }
 
 }
 
-const userSing = async (req, res)=> {
+const userSing = async (req, res) => {
 
     try {
 
@@ -53,36 +53,36 @@ const userSing = async (req, res)=> {
         const userEmailCheck = await UserDataSignLogin.findOne({ email })
 
         if (userEmailCheck) {
-           return res.json({ success: false, message: 'User already exist' })
+            return res.json({ success: false, message: 'User already exist' })
         }
-         if (!validator.isEmail(email)) {
-           return res.json({ success: false, message: 'Invalid Email Address' })
+        if (!validator.isEmail(email)) {
+            return res.json({ success: false, message: 'Invalid Email Address' })
         }
-         if (password.length < 8) {
-           return res.json({ success: false, message: 'Password must be at least 8 characters' })
+        if (password.length < 8) {
+            return res.json({ success: false, message: 'Password must be at least 8 characters' })
         }
 
         const hashedPassword = await bcrypt.hash(password, 10)
         console.log(hashedPassword);
-        
+
         const newUserData = await new UserDataSignLogin({
             firstName,
             lastName,
             email,
-            password:hashedPassword,
+            password: hashedPassword,
         })
 
         const userDataSave = await newUserData.save()
         const token = createUserToken(userDataSave._id)
-         
-        userDataSave.token = token 
+
+        userDataSave.token = token
         await userDataSave.save();
 
-        res.json({success:true, token})
+        res.json({ success: true, token })
         console.log('done');
-            
-        
-console.log(token);
+
+
+        console.log(token);
 
 
     } catch (error) {
@@ -93,38 +93,38 @@ console.log(token);
 }
 
 
-const usersEmailList = async (req, res)=> {
+const usersEmailList = async (req, res) => {
 
-    const {token} = req.body;
+    const { token } = req.body;
 
-   try {
+    try {
 
-    const responceForEmailList = await UserDataSignLogin.find()
+        const responceForEmailList = await UserDataSignLogin.find()
 
-    if (!responceForEmailList) {
-        res.json({success:false, message:'can not find emails'})
-        console.log('not find');    
+        if (!responceForEmailList) {
+            res.json({ success: false, message: 'can not find emails' })
+            console.log('not find');
+        }
+
+        if (responceForEmailList) {
+
+            let newResponce = await responceForEmailList.filter((items) => (
+                items.token !== token
+            ))
+            console.log(newResponce);
+
+            res.json({ success: true, message: 'could find', newResponce })
+        }
+
+
+
+
+
+
+    } catch (error) {
+        console.log(error.message);
+
     }
-
-    if (responceForEmailList) {
-
-      let newResponce = await responceForEmailList.filter((items)=> (
-           items.token !== token
-        ))
-        console.log(newResponce);
-        
-        res.json({success:true, message:'could find', newResponce})
-    }
-
-    
-    
-
-    
-    
-   } catch (error) {
-    console.log(error.message);
-    
-   }
 
 }
 

@@ -2,7 +2,7 @@ import axios from 'axios'
 import React, { useContext, useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { Context_Connection } from '../Contect/ContextBrowser'
-import './ConnectionREQ.css'
+import './ConnectionREQ.css';
 
 function ConnectionREQ() {
 
@@ -28,7 +28,7 @@ function ConnectionREQ() {
 
     try {
 
-      const responceREQList = await axios.get(backendURL + '/api/user/requestlist', {headers:{token}})
+      const responceREQList = await axios.get(backendURL + '/api/user/requestlist', { headers: { token } })
       if (responceREQList.data.success) {
         if (responceREQList.data.orginal) {
           console.log(responceREQList.data.orginal);
@@ -58,7 +58,7 @@ function ConnectionREQ() {
 
     try {
 
-      const responce = await axios.put(backendURL + `/api/user/messageallow/${token}`, {}, {headers:{token}})
+      const responce = await axios.put(backendURL + `/api/user/messageallow/${token}`, {}, { headers: { token } })
       if (responce.data.success) {
         console.log(responce.data.filterConnectionAllow);
 

@@ -1,0 +1,340 @@
+/* ============================================================
+   ConnectionREQ — Responsive Styles
+   Supports: large desktop, laptop, tablet, iPad, mobile, small phones
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=Sora:wght@400;600;700&display=swap');
+
+/* ── CSS Variables ── */
+:root {
+  --clr-bg:        #f0f4ff;
+  --clr-card:      #ffffff;
+  --clr-primary:   #4f6ef7;
+  --clr-primary-h: #3a58e0;
+  --clr-accent:    #e8ecff;
+  --clr-danger:    #f43f5e;
+  --clr-danger-h:  #e11d48;
+  --clr-success:   #10b981;
+  --clr-text:      #1e2235;
+  --clr-muted:     #6b7280;
+  --clr-border:    #e2e8f0;
+  --avatar-bg:     #4f6ef7;
+  --radius-card:   20px;
+  --radius-btn:    10px;
+  --shadow-card:   0 8px 40px rgba(79,110,247,.12), 0 2px 8px rgba(0,0,0,.06);
+  --shadow-btn:    0 4px 14px rgba(79,110,247,.30);
+  --font-head:     'Sora',  sans-serif;
+  --font-body:     'DM Sans', sans-serif;
+  --transition:    0.22s cubic-bezier(.4,0,.2,1);
+}
+
+/* ── Reset / Base ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: var(--font-body); background: var(--clr-bg); color: var(--clr-text); }
+
+/* ============================================================
+   LAYOUT — full-page centering
+   ============================================================ */
+.main-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 16px;
+  background: var(--clr-bg);
+  /* Subtle mesh gradient backdrop */
+  background-image:
+    radial-gradient(ellipse 60% 50% at 20% 20%, rgba(79,110,247,.10) 0%, transparent 70%),
+    radial-gradient(ellipse 50% 60% at 80% 80%, rgba(99,102,241,.08) 0%, transparent 70%);
+}
+
+/* ── Card ── */
+.heder-container {
+  width: 100%;
+  max-width: 480px;
+  background: var(--clr-card);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card);
+  padding: 40px 36px 36px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  animation: cardIn .4s cubic-bezier(.4,0,.2,1) both;
+}
+
+@keyframes cardIn {
+  from { opacity: 0; transform: translateY(18px) scale(.98); }
+  to   { opacity: 1; transform: translateY(0)    scale(1);   }
+}
+
+/* ── Profile row (avatar + name) ── */
+.text-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+}
+
+.profile-letter {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: var(--clr-primary);
+  color: #fff;
+  font-family: var(--font-head);
+  font-size: 2rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 6px 20px rgba(79,110,247,.35);
+  letter-spacing: .01em;
+  flex-shrink: 0;
+}
+
+/* Name spans */
+.text-container .user-data {
+  font-family: var(--font-head);
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--clr-text);
+  letter-spacing: -.01em;
+}
+
+/* Email span (direct child of heder-container) */
+.heder-container > .user-data {
+  font-size: .875rem;
+  font-weight: 400;
+  color: var(--clr-muted);
+  background: var(--clr-accent);
+  padding: 4px 14px;
+  border-radius: 20px;
+}
+
+/* ── Divider line ── */
+.heder-container::after {
+  content: '';
+  display: block;
+  width: 100%;
+  height: 1px;
+  background: var(--clr-border);
+  margin-top: 4px;
+}
+
+/* ── Action control area ── */
+.user-id-controal {
+  width: 100%;
+  margin-top: 4px;
+}
+
+/* ============================================================
+   SHARED BUTTON STYLES
+   ============================================================ */
+button {
+  font-family: var(--font-body);
+  font-size: .875rem;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  border-radius: var(--radius-btn);
+  padding: 11px 22px;
+  transition: background var(--transition), transform var(--transition), box-shadow var(--transition);
+  white-space: nowrap;
+}
+button:active { transform: scale(.96); }
+
+/* Primary */
+.message,
+.user-cunection,
+.final-connection {
+  background: var(--clr-primary);
+  color: #fff;
+  box-shadow: var(--shadow-btn);
+  width: 100%;
+}
+.message:hover,
+.user-cunection:hover,
+.final-connection:hover {
+  background: var(--clr-primary-h);
+  box-shadow: 0 6px 20px rgba(79,110,247,.40);
+}
+
+/* Danger / unfollow */
+.unfollow {
+  background: var(--clr-danger);
+  color: #fff;
+  box-shadow: 0 4px 14px rgba(244,63,94,.28);
+  width: 100%;
+}
+.unfollow:hover { background: var(--clr-danger-h); }
+
+/* Ghost / back */
+.back-to-home {
+  background: transparent;
+  color: var(--clr-muted);
+  border: 1.5px solid var(--clr-border);
+  width: 100%;
+}
+.back-to-home:hover { background: var(--clr-accent); color: var(--clr-primary); border-color: var(--clr-primary); }
+
+/* Requested / pending — outlined primary */
+button.request {
+  background: transparent;
+  color: var(--clr-primary);
+  border: 1.5px solid var(--clr-primary);
+  width: 100%;
+}
+button.request:hover { background: var(--clr-accent); }
+
+/* ============================================================
+   MESSAGE STATE  (accepted connection)
+   ============================================================ */
+.to-message { margin-bottom: 10px; }
+.unfollow-user { }
+.unfollow-body {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 6px;
+}
+.unfollow-body > button:last-child { /* plain Back button */
+  background: transparent;
+  color: var(--clr-muted);
+  border: 1.5px solid var(--clr-border);
+  border-radius: var(--radius-btn);
+  padding: 10px 22px;
+  width: 100%;
+}
+.unfollow-body > button:last-child:hover { background: var(--clr-accent); }
+
+/* ============================================================
+   CONNECT STATE
+   ============================================================ */
+.connection-last { width: 100%; }
+.connection-container { width: 100%; }
+
+.button-box {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+}
+
+/* ── Final confirmation panel ── */
+.final-container {
+  background: var(--clr-accent);
+  border: 1.5px solid rgba(79,110,247,.20);
+  border-radius: 14px;
+  padding: 18px 20px;
+  margin-top: 4px;
+  animation: fadeSlide .25s ease both;
+}
+@keyframes fadeSlide {
+  from { opacity: 0; transform: translateY(-8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.final-head { display: flex; flex-direction: column; gap: 12px; }
+
+.final-text {
+  font-family: var(--font-head);
+  font-size: .8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  color: var(--clr-primary);
+}
+
+/* ── Request failed state ── */
+.request-container {
+  background: #fff7ed;
+  border: 1.5px solid #fed7aa;
+  border-radius: 14px;
+  padding: 18px 20px;
+  text-align: center;
+}
+.request-head h2 { font-size: 1rem; font-weight: 600; }
+h2.pending { color: var(--clr-success); }
+h2.request { color: #f97316; }
+
+/* ============================================================
+   REQUESTED STATE
+   ============================================================ */
+.final-request-container { width: 100%; }
+
+.final-request-head {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+}
+.final-request { width: 100%; }
+.back-to-home-head { width: 100%; }
+
+/* ============================================================
+   RESPONSIVE BREAKPOINTS
+   ============================================================ */
+
+/* ── Large desktop (≥1280px) ── */
+@media (min-width: 1280px) {
+  .heder-container {
+    max-width: 520px;
+    padding: 48px 44px 42px;
+  }
+  .profile-letter { width: 88px; height: 88px; font-size: 2.2rem; }
+  .text-container .user-data { font-size: 1.35rem; }
+}
+
+/* ── Laptop (1024px – 1279px) — default styles apply well ── */
+
+/* ── Tablet / iPad (768px – 1023px) ── */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .heder-container {
+    max-width: 440px;
+    padding: 36px 32px 32px;
+  }
+}
+
+/* ── iPad Mini / large mobile (600px – 767px) ── */
+@media (min-width: 600px) and (max-width: 767px) {
+  .heder-container {
+    max-width: 400px;
+    padding: 32px 28px 28px;
+  }
+  .profile-letter { width: 72px; height: 72px; font-size: 1.8rem; }
+}
+
+/* ── Mobile (max 599px) ── */
+@media (max-width: 599px) {
+  .main-container { padding: 16px 12px; align-items: flex-start; padding-top: 32px; }
+
+  .heder-container {
+    max-width: 100%;
+    padding: 28px 20px 24px;
+    border-radius: 16px;
+  }
+
+  .profile-letter { width: 64px; height: 64px; font-size: 1.6rem; }
+  .text-container .user-data { font-size: 1.1rem; }
+  .heder-container > .user-data { font-size: .8rem; }
+
+  button { font-size: .82rem; padding: 10px 18px; }
+}
+
+/* ── Small phones (max 360px) ── */
+@media (max-width: 360px) {
+  .main-container { padding: 12px 8px; padding-top: 20px; }
+
+  .heder-container {
+    padding: 22px 14px 20px;
+    border-radius: 14px;
+  }
+
+  .profile-letter { width: 56px; height: 56px; font-size: 1.4rem; }
+  .text-container .user-data { font-size: 1rem; }
+
+  button { font-size: .78rem; padding: 9px 14px; }
+  .final-container, .request-container { padding: 14px 14px; }
+}

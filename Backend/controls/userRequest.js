@@ -14,21 +14,33 @@ const userREQ = async (req, res) => {
 
         if (userData) {
 
-            const requestUser = await UserDataSignLogin.findOne({token:token})
-            console.log('////////////////////');  
-            console.log(requestUser?.token);
-             console.log('////////////////////');
+            const requestUser = await UserDataSignLogin.find({token:token})
+            console.log('////////////////////Toekn');
+            console.log(token);
+            
+            console.log(requestUser[0]?.token);
+             console.log('////////////////////Token');
 
             const saveUsersREQ = await new REQ({
-                firstName: requestUser.firstName,
-                lastName: requestUser.lastName,
-                email: requestUser.email,
-                token:requestUser.token,
-                request:userData.token,
-                reciver:userData.email
+                firstName: requestUser[0]?.firstName,
+                lastName: requestUser[0]?.lastName,
+                email: requestUser[0]?.email,
+                token:requestUser[0]?.token,
+                request:userData?.token,
+                reciver:userData?.email
             })
 
             const savedREQ = await saveUsersREQ.save();
+            console.log('++++++++++++++++++');
+            console.log(savedREQ);
+                        console.log('++++++++++++++++++');
+
+            const testSaveReq = await REQ.find()
+            console.log('|||||||||||||||||||||||');
+            console.log(testSaveReq);
+             console.log('|||||||||||||||||||||||');
+            
+            
             res.json({ success: true, message: 'Request sent', savedREQ })
         }
 
@@ -60,17 +72,29 @@ const REQList = async (req, res) => {
 
 const userREQDelete = async (req, res) => {
 
-    try {
-
+    try {  
+        const token = req.headers.token
         const reciver = req.params.cancelREQ;       
+
+        console.log('*************RemoveREQ');
+        console.log(reciver);
+        console.log(token);
+        
+        console.log('*************RemoveREQ');
+
 
         if (!reciver) {
             res.json({ success: false, message: 'not found' })
-        }
+        }   
 
-  await REQ.findOneAndDelete({ reciver: reciver })
+  await REQ.findOneAndDelete({ reciver: reciver, token:token})
       
-        res.json({ success: true, message: 'request removed' })  
+        res.json({ success: true, message: 'request removed' })
+
+         const testing = await REQ.find()
+        console.log('[][][][][][][][][][]');
+        console.log(testing);
+                console.log('[][][][][][][][][][]');
 
     } catch (error) {
         console.log(error.message);
@@ -81,9 +105,15 @@ const userREQDelete = async (req, res) => {
 const userAccept = async (req, res)=> {
 
     const {userAcceptData, token, storeRequest} = req.body;
-console.log('/////////////');
-console.log(storeRequest);
-console.log('/////////////');
+console.log('/////////////userAcceptedData');
+console.log(userAcceptData);
+console.log('/////////////userAcceptedData');
+
+console.log('*********REQ');
+const testing = await REQ.find()
+console.log(testing);
+console.log('*********REQ');
+
 
     try {
 
@@ -105,10 +135,7 @@ console.log(userReq[0]?._id);
              console.log(userAcceptData.token);
         res.json({success:true, message:'perfect', saving})
         }
-
     
-                
-        
     } catch (error) {
         console.log(error.message);   
     }
@@ -124,14 +151,15 @@ const userMessageAllow = async (req, res) => {
         const messageallowTtrue = await REQ.find()
 
         const filterConnectionAllow = messageallowTtrue.filter((itmes)=> (
-            itmes.accepted === true && itmes.token === hereUserToken
-        ))      
-        console.log('///////////////'); 
-        console.log(filterConnectionAllow);
-        console.log('///////////////');
-
-
+            itmes?.accepted === true && itmes?.token === hereUserToken
+        ))
+        console.log('///////////////MessageAllow'); 
+        console.log(hereUserToken);
         
+        console.log(messageallowTtrue);
+        
+        console.log(filterConnectionAllow);
+        console.log('///////////////MessageAlow');
         
         if (!filterConnectionAllow) {
             res.json({ success: false, message: 'can not find' })
@@ -146,30 +174,25 @@ const userMessageAllow = async (req, res) => {
 
 }
 
-// const acceptedDataRemove = async (req, res)=> {
-    
-//     const frontendData = req.params.permanent
+const userProfileDatas = async (req, res) => {
+    try {
 
-//     console.log('**************************');
-//     console.log(frontendData);
-//     console.log('**************************');
+        const {token} = req.body
 
-//     try {
+        const userDataFinding = await UserDataSignLogin.findOne({token:token})
 
-//         const findAcceptedDataAndRemove = await REQ.findOneAndDelete({token:frontendData})
-// console.log('----------------------------------------');
-// console.log(findAcceptedDataAndRemove);
-// console.log('----------------------------------------');
+        if (!userDataFinding) {
+            res.json({success:false, message:'can not find user data'})
+        }
 
-
-//         res.json({success:true, findAcceptedDataAndRemove})
-
-//     } catch (error) {
-//         console.log(error.message);
+        res.json({success:true, userDataFinding})
         
-//     }
-    
-// }
+    } catch (error) {
+        console.log(error.message);
+        
+    }
+}
+
 
 const acceptremove = async (req, res)=> {
 
@@ -181,10 +204,26 @@ const acceptremove = async (req, res)=> {
    
 }
 
-const userIgnore = async ()=> {
+const userIgnore = async (req, res)=> {
+
+    const removeReq = req.params.userIgnoreData
+    const token = req.headers.token
+
+    try {
+        
+     const removeUserREQ = await REQ.findOneAndDelete({token:removeReq, request:token})
+     if (!removeUserREQ) {
+        res.json({success:false, message:'data not find'})
+     }
+
+     res.json({success:true, message:'remove user notification'})
+        
+    } catch (error) {
+        console.log(error.message);
+    }
 
 }
 
 export {
-    userREQ, REQList, userREQDelete, userAccept, userIgnore, userMessageAllow
+    userREQ, REQList, userREQDelete, userAccept, userIgnore, userMessageAllow, userProfileDatas
 }

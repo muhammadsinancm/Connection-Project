@@ -1,6 +1,5 @@
 import React from 'react'
 import { NavLink } from 'react-router-dom'
-import '../Pages/Users.css'
 
 function LeftBar() {
   return (
@@ -16,7 +15,6 @@ function LeftBar() {
           <span className="compose-text">Compose</span>
         </div>
       </div>
-{/* active */}
       <div>
         <NavLink to="/" className="nav-link">
           <span className="nav-icon">

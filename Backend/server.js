@@ -6,6 +6,7 @@ import UserControl from './router/userLoginSign.js'
 import userConnectionRouter from './router/userconect.js'
 import requestRouter from './router/userREQ.js'
 import userInputsRouter from './router/userInputRouter.js'
+import userMessagesRouter from './router/userMessages.js'
 
 const app = express()
 const Port = process.env.PORT || 4000
@@ -18,6 +19,7 @@ app.use('/api/users', UserControl)
 app.use('/api/userreq', userConnectionRouter)
 app.use('/api/user', requestRouter)
 app.use('/api/usertext', userInputsRouter)
+app.use('/api', userMessagesRouter)
 
 app.get('/',(req, res)=> {
     res.send('workking')

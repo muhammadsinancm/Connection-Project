@@ -8,17 +8,17 @@ import LeftBar from '../Components For Pages/LeftBar'
 import Serch from '../Components For Pages/Serch'
 import Profile from '../Components For Pages/Profile'
 import './Users.css'
+import MessagesList from '../Components For Pages/MessagesList'
 
 function Users() {
 
-    const { backendURL, token, storeEmails, setStoreEmails } = useContext(Context_Connection)
+    const { backendURL, token, setStoreEmails } = useContext(Context_Connection)
 
     const userEmalList = async () => {
-        console.log(token);
 
         try {
 
-            const responceEmails = await axios.post(backendURL + '/api/users/emails', { token })
+            const responceEmails = await axios.post(backendURL + '/api/users/emails', { token }, {headers:{token}})
             if (!responceEmails.data.success) {
                 console.log(responceEmails.data.message);
             }
@@ -58,8 +58,7 @@ function Users() {
                         </div>
 
                         <div className="email-list-container">
-
-                            
+                         <MessagesList/>                            
                         </div>
                     </div>
 

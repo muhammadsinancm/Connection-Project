@@ -8,6 +8,7 @@ const userInputsForStoring = async (req, res)=> {
 
         const {saveUserText, sendingUserToken, recivedUserToken} = req.body;
 
+
         if (!saveUserText && sendingUserToken && recivedUserToken) {
             res.json({success:false, message:'Text not found'})
         }
@@ -16,7 +17,7 @@ const userInputsForStoring = async (req, res)=> {
             userText: saveUserText,
             sendingUserToken:sendingUserToken,
             recivedUserToken:recivedUserToken,
-            
+            date:Date.now()
         })
 
         const savedUserTextandDatas = await saveUserTextData.save();
@@ -35,7 +36,6 @@ const userInputsShow = async (req, res) => {
     try {
 
         const {sendingUserToken, recivedUserToken, token} = req.body;
-// console.log(token);
 
         const userTextsToFrontend = await usersText.find()
         if (!userTextsToFrontend) {
@@ -56,7 +56,29 @@ const userInputsShow = async (req, res) => {
 
 }
 
-const userInputsDelete = (req, res)=> {
+const userInputsDelete = async (req, res)=> {
+
+    try {
+
+        const reciver = req.params.EventDelete
+        console.log('*****************-*-*-*----------------');
+        console.log(reciver);
+                console.log('*****************-------------');
+        
+        if (!reciver) {
+            res.json({success:false, message:'data can not reached'})
+        }
+
+        await usersText.findByIdAndDelete({_id:reciver})
+
+        res.json({success:true, message:'message deleted'})
+
+        
+        
+    } catch (error) {
+        console.log(error.message);
+        
+    }
 
 }
 

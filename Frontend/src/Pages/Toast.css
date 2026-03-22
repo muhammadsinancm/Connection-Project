@@ -1,0 +1,24 @@
+.custom-toast-copy-text {
+
+  background: #00ff5e !important;
+  color: #ffffff !important;
+  border-radius: 50px !important;
+  padding: 6px 14px !important;
+  font-size: 12px !important;
+  min-height: 36px !important;
+  width: 160px !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2) !important;
+  margin: 0 auto !important;
+
+}
+.custom-toast-delete-text {
+     background: #ff0000e1 !important;
+  color: #ffffff !important;
+  border-radius: 50px !important;
+  padding: 6px 14px !important;
+  font-size: 12px !important;
+  min-height: 36px !important;
+  width: 160px !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2) !important;
+  margin: 0 auto !important;
+}

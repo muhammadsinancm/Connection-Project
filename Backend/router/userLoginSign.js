@@ -132,6 +132,6 @@ const usersEmailList = async (req, res)=> {
 
 UserControl.post('/login', userLogin)
 UserControl.post('/sign', userSing)
-UserControl.post('/emails', usersEmailList)
+UserControl.post('/emails', loginMidleware, usersEmailList)
 
 export default UserControl

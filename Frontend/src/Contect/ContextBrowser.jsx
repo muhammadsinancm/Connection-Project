@@ -2,7 +2,6 @@ import axios from 'axios'
 import React, { createContext, useEffect } from 'react'
 import { useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
-import UserNotificatios from '../Pages/UserNotificatios'
 
 const Context_Connection = createContext()
 export { Context_Connection }
@@ -20,9 +19,22 @@ function ContextBrowser(props) {
   const [final, setFinal] = useState(false)
   const [requestAccept, setRequestAccept] = useState([])
   const [remove, setRemove] = useState([])
+  const [locations, setLocations] = useState('')
+  const [followRemove, setFollowRemove] = useState('')
+  const [userTexts, setUserTexts] = useState([])
+   const [sendingUserToken, setSendingUserToken] = useState('')
+   const [recivedUserToken, setRecivedUserToken] = useState('')
 
-  const location = useLocation()
-  console.log(location?.state?.value?.token);
+  const locationUser = useLocation()
+  
+useEffect(()=> {
+
+}, [userTexts])
+
+  useEffect(()=> {
+setLocations(locationUser?.state?.value)
+
+  }, [])
 
   const backendURL = import.meta.env.VITE_BACKEND_URL
 
@@ -31,14 +43,12 @@ function ContextBrowser(props) {
 
     try {
 
-      const responceREQList = await axios.get(backendURL + '/api/user/requestlist')
+      const responceREQList = await axios.get(backendURL + '/api/user/requestlist', {headers:{token}})
       if (responceREQList.data.success) {
         if (responceREQList.data.orginal) {
           console.log(responceREQList.data.orginal);
-          
           setMatch(responceREQList.data.orginal)
         }
-
         setStoreREQ(responceREQList.data.orginal)
 
       } else {
@@ -57,13 +67,12 @@ function ContextBrowser(props) {
 
   }, [])
 
-
 //  -----------List Of User Connection Allow-------------
   const listOfMessagepermision = async () => {
 
     try {
 
-      const responce = await axios.put(backendURL + `/api/user/messageallow/${token}`)
+      const responce = await axios.put(backendURL + `/api/user/messageallow/${token}`, {}, {headers:{token}})
       if (responce.data.success) {
         console.log(responce.data.filterConnectionAllow);
         
@@ -75,9 +84,7 @@ function ContextBrowser(props) {
 
     } catch (error) {
       console.log(error.message);
-
     }
-
   }
 
 //  -------Calling  Message Allow--------
@@ -91,36 +98,21 @@ function ContextBrowser(props) {
     if (!storeREQ || storeREQ.length === 0) return
 
     let newData = storeREQ?.filter((items) => {
-      return items?.request === token
+      return items?.request === token && items?.accepted === false
     })
 
     let storing = storeREQ.filter((items) => (
-      items.request === location?.state?.value?.token
+      items.request === items.request && items.token === token
     ))
-    console.log('you got it', newData);
 
     const storeRequestCount = []
     setStoreCount(storeRequestCount)
     for (const key in newData) {
         storeRequestCount.push(Number(key)+1)  
     }
-
-    console.log(storeRequestCount);
     
-
     if (newData) {
       setStoreRequest(newData)
-    }
-
-    const maching = storeREQ.filter((items) => (
-      items?.token === token
-    ))
-
-    if (maching[0]?.token === token && storing[0]?.request === location?.state?.value?.token) {
-      setSame(false)
-
-    } else {
-      console.log('not done');
     }
 
   }, [storeREQ])
@@ -150,7 +142,17 @@ function ContextBrowser(props) {
     requestAccept,
     setRequestAccept,
     remove,
-    setRemove
+    setRemove, 
+    locations,
+    locationUser,
+    followRemove,
+    setFollowRemove,
+    userTexts,
+    setUserTexts,
+    sendingUserToken,
+    setSendingUserToken,
+    recivedUserToken,
+    setRecivedUserToken,
   }
 
   return (

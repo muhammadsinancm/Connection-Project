@@ -6,7 +6,7 @@ import { useState } from 'react'
 import { useEffect } from 'react'
 import ListOfRequest from './ListOfRequest'
 import SideBar from './SideBar'
- export const backendURL = import.meta.env.VITE_BACKEND_URL
+ export const backendURL = "https://connection-project-backend.onrender.com"
 function App() {
 
   const [token, setToken] = useState(localStorage.getItem('adminToken') ? localStorage.getItem('adminToken') : '')

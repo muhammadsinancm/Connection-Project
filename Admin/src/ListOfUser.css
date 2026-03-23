@@ -1,0 +1,215 @@
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap');
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: #0f1117;
+  font-family: 'IBM Plex Sans', sans-serif;
+  color: #e2e8f0;
+}
+
+/* ── Content offset from fixed sidebar ── */
+body > div,
+#root > div {
+  margin-left: 220px;
+}
+
+/* ─────────────────────────────────────────────────────
+   Scoped card — only when it contains .user-emails
+   (avoids clash with SideBar & ListOfRequest .container)
+───────────────────────────────────────────────────── */
+.container:has(> .user-emails) {
+  background: #1a1d27;
+  border: 1px solid #2a2d3e;
+  border-radius: 12px;
+  padding: 28px 32px;
+  margin: 20px auto;
+  max-width: 780px;
+  position: relative;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.container:has(> .user-emails):hover {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 1px #3b82f620, 0 8px 32px #0005;
+}
+
+/* ─────────────────────────────────────────────────────
+   INLINE ROWS — label + button on the same line
+───────────────────────────────────────────────────── */
+.user-emails {
+  display: inline;
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+  color: #e2e8f0;
+}
+
+.user-name {
+  display: inline;
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+  color: #e2e8f0;
+}
+
+/* Block pseudo line-break before each row */
+.user-emails::before {
+  content: '';
+  display: block;
+  margin-top: 0;
+}
+
+.user-name::before {
+  content: '';
+  display: block;
+  margin-top: 14px;
+}
+
+/* Inline update buttons beside labels */
+.update-user-email,
+.update-name {
+  display: inline;
+  margin-left: 12px;
+  padding: 4px 14px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  font-weight: 600;
+  color: #60a5fa;
+  background: #1e3a5f33;
+  border: 1px solid #3b82f655;
+  border-radius: 5px;
+  cursor: pointer;
+  vertical-align: middle;
+  letter-spacing: 0.04em;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+}
+
+.update-user-email:hover,
+.update-name:hover {
+  background: #3b82f622;
+  border-color: #60a5fa;
+  color: #93c5fd;
+}
+
+/* ─────────────────────────────────────────────────────
+   TOKEN & DATE — prominent full-width blocks
+───────────────────────────────────────────────────── */
+.user-token {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  font-weight: 400;
+  color: #cbd5e1;
+  background: #12151f;
+  border-left: 3px solid #3b82f6;
+  border-radius: 0 8px 8px 0;
+  padding: 10px 16px;
+  margin-top: 16px;
+  word-break: break-all;
+  line-height: 1.5;
+}
+
+.user-token::before {
+  content: '🔑';
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.user-date {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12px;
+  color: #94a3b8;
+  background: #0f1117;
+  border: 1px solid #2a2d3e;
+  border-radius: 6px;
+  padding: 5px 12px;
+  margin: 14px 0 0 0;
+}
+
+.user-date::before {
+  content: '📅';
+}
+
+/* ─────────────────────────────────────────────────────
+   ADMIN BUTTON ROW — horizontal, right-aligned
+───────────────────────────────────────────────────── */
+.admin-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+  margin-top: 22px;
+  padding-top: 18px;
+  border-top: 1px solid #2a2d3e;
+  justify-content: flex-end;
+}
+
+.delete-email {
+  padding: 8px 20px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12px;
+  font-weight: 600;
+  color: #f87171;
+  background: #450a0a33;
+  border: 1px solid #f8717155;
+  border-radius: 7px;
+  cursor: pointer;
+  letter-spacing: 0.04em;
+  transition: background 0.15s, border-color 0.15s, transform 0.1s;
+}
+
+.delete-email:hover {
+  background: #7f1d1d55;
+  border-color: #f87171;
+  transform: translateY(-1px);
+}
+
+.update-email {
+  padding: 8px 20px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12px;
+  font-weight: 600;
+  color: #60a5fa;
+  background: #1e3a5f33;
+  border: 1px solid #3b82f655;
+  border-radius: 7px;
+  cursor: pointer;
+  letter-spacing: 0.04em;
+  transition: background 0.15s, border-color 0.15s, transform 0.1s;
+}
+
+.update-email:hover {
+  background: #1e3a5f66;
+  border-color: #60a5fa;
+  transform: translateY(-1px);
+}
+
+.block-email {
+  padding: 8px 20px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12px;
+  font-weight: 600;
+  color: #fb923c;
+  background: #431a0533;
+  border: 1px solid #fb923c55;
+  border-radius: 7px;
+  cursor: pointer;
+  letter-spacing: 0.04em;
+  transition: background 0.15s, border-color 0.15s, transform 0.1s;
+}
+
+.block-email:hover {
+  background: #7c2d1266;
+  border-color: #fb923c;
+  transform: translateY(-1px);
+}

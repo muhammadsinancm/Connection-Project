@@ -123,11 +123,11 @@ function Profile() {
             </div>
             <div onClick={() => { setAllow(!allow) }} style={{ padding: '8px', cursor: 'pointer' }} title="Notification">
                 <div style={{ position: "relative", display: "inline-block" }}>
-                    <Bell size={25} style={{ marginTop: '7px' }} className="icon-shake-once cursor-pointer" />
+                    <Bell size={25} style={{ marginTop: '0px' }} className="icon-shake-once cursor-pointer" />
                     {storeCount.length > 0 ?
                         <span style={{
                             position: "absolute",
-                            top: "2px",
+                            top: "1px",
                             right: "-3px",
                             background: "#0066ff",
                             borderRadius: "50%",

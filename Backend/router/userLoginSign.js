@@ -116,11 +116,6 @@ const usersEmailList = async (req, res) => {
             res.json({ success: true, message: 'could find', newResponce })
         }
 
-
-
-
-
-
     } catch (error) {
         console.log(error.message);
 

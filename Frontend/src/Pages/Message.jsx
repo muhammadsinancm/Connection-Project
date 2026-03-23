@@ -21,7 +21,7 @@ export function ChatHeader({ responceText }) {
       <div className="header-info">
         <div onClick={() => navigate('/profile', { state: { selectedUserData: responceText, selectedUser: location.state.selectedUser, token: token } })} className="avatar">{responceText?.userName?.email?.charAt(0)?.toUpperCase() || responceText?.userDataFind[0]?.email?.charAt(0)?.toUpperCase()}</div>
         <div className="user-profile">
-          <h3 className="user-email">{responceText?.userName[0]?.email || responceText?.userDataFind[0]?.email}</h3>
+          <h3 className="user-email">{responceText?.userName?.email || responceText?.userDataFind[0]?.email}</h3>
           <p className="user-active">Active now</p>
         </div>
       </div>

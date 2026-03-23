@@ -7,7 +7,8 @@ const userDataSignLoginScheema = new mongoose.Schema({
     password: { type: String, required: true },
     token: { type: String, default: null },
     notification: { type: String, default: null },
-    request: { type: String, default: null }
+    request: { type: String, default: null },
+    date: { type: Date, default: Date.now, required: true }
 })
 
 const UserDataSignLogin = mongoose.models.userloginsignup || mongoose.model('userloginsignup', userDataSignLoginScheema)

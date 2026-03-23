@@ -5,6 +5,7 @@ import './MessagesList.css'
 import { useNavigate } from 'react-router-dom'
 import { BeatLoader } from "react-spinners";
 import { BookOpen, MessageCircle, MessageSquare, Trash2, X } from 'lucide-react'
+import { toast } from 'react-toastify'
 
 function MessagesList() {
 
@@ -103,6 +104,15 @@ function MessagesList() {
   }, [])
 
   const messageDelete = async (userData) => {
+
+     toast.success('Message Deleted', {
+              className: "custom-toast-delete-text",
+              icon: <Trash2 size={20} color="white" />,
+              autoClose: 3000,
+              hideProgressBar: true,
+              closeButton: false,
+            })
+
     try {
 
       const EventDelete = userData._id

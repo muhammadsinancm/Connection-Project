@@ -19,10 +19,10 @@ export function ChatHeader({ responceText }) {
     <div className="chat-header">
       <button className="back-btn" onClick={() => navigate('/')}><Home size={20} />Home</button>
       <div className="header-info">
-        <div onClick={() => navigate('/profile', { state: { selectedUserData: responceText, selectedUser: location.state.selectedUser, token: token } })} className="avatar">{responceText?.userName?.email?.charAt(0)?.toUpperCase() || responceText?.userDataFind[0]?.email?.charAt(0)?.toUpperCase()}</div>
-        <div className="user-profile">
-          <h3 className="user-email">{responceText?.userName?.email || responceText?.userDataFind[0]?.email}</h3>
-          <p className="user-active">Active now</p>
+        <div onClick={() => navigate('/profile', { state: { selectedUserData: responceText, selectedUser: location.state.selectedUser, token: token } })} className="chat-avatar">{responceText?.userName?.email?.charAt(0)?.toUpperCase() || responceText?.userDataFind[0]?.email?.charAt(0)?.toUpperCase()}</div>
+        <div className="chat-user-profile">
+          <h3 className="chat-user-email">{responceText?.userName?.email || responceText?.userDataFind[0]?.email}</h3>
+          <p className="chat-user-active">Active now</p>
         </div>
       </div>
     </div>
@@ -210,7 +210,7 @@ export function PopUp() {
   }
 
   return (
-    <div className={`user-select-container${selectPopUp._id}`}>
+    <div className={`message-popup user-select-container${selectPopUp._id}`}>
       <div onClick={() => textCopy(selectPopUp?.userText)} className="item">
         <CopyIcon /> <label>Copy</label>
 

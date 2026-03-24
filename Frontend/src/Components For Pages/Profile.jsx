@@ -66,7 +66,7 @@ export function Notifications() {
                     storeRequest.map((items, index) => (
                         <div key={index}>
                             <span className='first-name'>{items.firstName}  {items.lastName}</span><br />
-                            <span className='user-email'>{items.email}</span>
+                            <span className='notification-user-email'>{items.email}</span>
                             <button className='button-accept' onClick={() => Accept(items)}>Accept</button>
                             <button className='butoon-ignore' onClick={() => Ignore(items)}>Ignore</button>
                         </div>
@@ -116,30 +116,16 @@ function Profile() {
     }
 
     return (
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+        <div className='profile-toolbar'>
 
-            <div style={{ padding: '8px', cursor: 'pointer' }} title="Support">
+            <div className='profile-icon-btn' title="Support">
                 <MessageCircleQuestion size={25} />
             </div>
-            <div onClick={() => { setAllow(!allow) }} style={{ padding: '8px', cursor: 'pointer' }} title="Notification">
-                <div style={{ position: "relative", display: "inline-block" }}>
+            <div className='profile-icon-btn profile-icon-btn--notify' onClick={() => { setAllow(!allow) }} title="Notification">
+                <div className='profile-bell-wrap'>
                     <Bell size={25} style={{ marginTop: '0px' }} className="icon-shake-once cursor-pointer" />
                     {storeCount.length > 0 ?
-                        <span style={{
-                            position: "absolute",
-                            top: "1px",
-                            right: "-3px",
-                            background: "#0066ff",
-                            borderRadius: "50%",
-                            width: "15px",
-                            height: "15px",
-                            paddingLeft: '3px',
-                            color: 'white',
-                            marginTop: '0px',
-                            fontSize: 'small',
-                            fontFamily: 'revert',
-                            fontWeight: 'lighter',
-                        }}>{storeCount[[storeCount.length - 1]]}
+                        <span className='profile-notification-badge'>{storeCount[[storeCount.length - 1]]}
                         </span> : ''
                     }
                 </div>
@@ -152,25 +138,12 @@ function Profile() {
 
 
             </div>
-            <div style={{ padding: '8px', cursor: 'pointer' }} title="Settings">
+            <div className='profile-icon-btn' title="Settings">
                 <Settings size={25} />
             </div>
 
             <div className='hover-container' title='Profile' onClick={() => UserProfile()}>
-                <div style={{
-                    width: '40px',
-                    height: '40px',
-                    borderRadius: '50%',
-                    backgroundColor: '#ffffff',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    color: '#0066ff',
-                    fontWeight: '500',
-                    fontSize: '18px',
-                    cursor: 'pointer',
-                    marginTop: '-3px'
-                }}>
+                <div className='profile-user-chip'>
                     <User size={25} />
                 </div>
             </div>
@@ -184,7 +157,7 @@ function Profile() {
                             <label className='user-profile-email'>{userDataSave?.email}</label>
                             <span className='user-first-name'>{userDataSave?.firstName}  {userDataSave?.lastName}</span>
                             <button className='log-out' onClick={() => LogOut()}>Log Out</button>
-                            <button className='close-button'><X onClick={() => setUserIcon(!userIcon)} size={35} style={{ paddingLeft: '3px' }} color='#0066ff' /></button>
+                            <button className='profile-close-button'><X onClick={() => setUserIcon(!userIcon)} size={35} style={{ paddingLeft: '3px' }} color='#0066ff' /></button>
                         </div>
                     </div> : ''
                 }

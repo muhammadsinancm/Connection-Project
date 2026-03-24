@@ -3,7 +3,7 @@ import { useContext } from 'react'
 import ContextBrowser, { Context_Connection } from '../Contect/ContextBrowser'
 import { useState } from 'react'
 import { NavLink, useLocation, useNavigate } from 'react-router-dom'
-import '../Pages/Users.css'
+import './Serch.css'
 import { Search } from 'lucide-react'
 
 export function UserText() {

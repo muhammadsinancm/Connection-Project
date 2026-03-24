@@ -1,0 +1,296 @@
+/* LeftBar.css — Fully Responsive */
+
+/* ─── Variables ─────────────────────────────────────────── */
+:root {
+  --sidebar-width: 256px;
+  --sidebar-collapsed-width: 72px;
+  --primary: #001D35;
+  --accent: #0b57d0;
+  --accent-light: #d3e3fd;
+  --surface: #f6f8fc;
+  --text-primary: #1f1f1f;
+  --text-secondary: #444746;
+  --hover-bg: #e8eaed;
+  --active-bg: #d3e3fd;
+  --active-text: #041e49;
+  --compose-bg: #c2e7ff;
+  --compose-hover: #a8d7f5;
+  --radius: 24px;
+  --nav-radius: 16px;
+  --transition: 0.2s ease;
+  --font: 'Google Sans', 'Roboto', sans-serif;
+
+  /* Mobile bottom nav height */
+  --bottom-nav-height: 64px;
+}
+
+/* ─── Sidebar Container ─────────────────────────────────── */
+.left-bar-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  width: var(--sidebar-width);
+  min-height: 100vh;
+  padding: 8px 0;
+  background: var(--surface);
+  font-family: var(--font);
+  flex-shrink: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+/* ─── Compose Button ────────────────────────────────────── */
+.compose-btn-container {
+  padding: 8px 12px 16px 12px;
+}
+
+.compose-btn {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--compose-bg);
+  border: none;
+  border-radius: var(--radius);
+  padding: 16px 24px 16px 16px;
+  cursor: pointer;
+  transition: background var(--transition), box-shadow var(--transition), transform var(--transition);
+  width: 100%;
+  text-decoration: none;
+  color: var(--primary);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.compose-btn:hover {
+  background: var(--compose-hover);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
+}
+
+.compose-btn:active {
+  transform: scale(0.97);
+  box-shadow: none;
+}
+
+.compose-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+}
+
+.compose-text {
+  font-family: var(--font);
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+}
+
+/* ─── Navigation Links ──────────────────────────────────── */
+.nav-link {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 10px 16px 10px 26px;
+  margin: 1px 8px;
+  border-radius: var(--nav-radius);
+  font-family: var(--font);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-primary);
+  text-decoration: none;
+  transition: background var(--transition), color var(--transition);
+  cursor: pointer;
+  white-space: nowrap;
+  -webkit-tap-highlight-color: transparent;
+  min-height: 40px;
+}
+
+.nav-link:hover {
+  background: var(--hover-bg);
+}
+
+.nav-link.active {
+  background: var(--active-bg);
+  color: var(--active-text);
+  font-weight: 700;
+}
+
+.nav-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  color: inherit;
+}
+
+/* ─── Tablet: Collapsed Icon-Only Sidebar ───────────────── */
+@media (max-width: 900px) {
+  .left-bar-inner {
+    width: var(--sidebar-collapsed-width);
+    align-items: center;
+    padding: 8px 0;
+  }
+
+  .compose-btn-container {
+    padding: 8px 0 16px 0;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+
+  .compose-btn {
+    width: 56px;
+    height: 56px;
+    border-radius: 18px;
+    padding: 0;
+    justify-content: center;
+    gap: 0;
+  }
+
+  .compose-text {
+    display: none;
+  }
+
+  .nav-link {
+    flex-direction: column;
+    gap: 2px;
+    padding: 8px 0;
+    margin: 2px 4px;
+    width: 56px;
+    border-radius: 14px;
+    justify-content: center;
+    font-size: 10px;
+    min-height: unset;
+  }
+
+  .nav-link span:last-child {
+    font-size: 10px;
+    font-weight: 500;
+  }
+
+  .nav-icon {
+    width: 22px;
+    height: 22px;
+  }
+}
+
+/* ─── Mobile: Bottom Navigation Bar ────────────────────── */
+@media (max-width: 600px) {
+  .left-bar-inner {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    min-height: unset;
+    height: var(--bottom-nav-height);
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+    padding: 0 8px;
+    background: #fff;
+    border-top: 1px solid #e0e0e0;
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.08);
+    z-index: 1000;
+    overflow: visible;
+    gap: 0;
+
+    /* Safe area for phones with notches/home bars */
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+
+  /* Compose button floats above the nav bar */
+  .compose-btn-container {
+    position: fixed;
+    bottom: calc(var(--bottom-nav-height) + 16px + env(safe-area-inset-bottom, 0px));
+    right: 16px;
+    padding: 0;
+    width: auto;
+    order: 0;
+  }
+
+  .compose-btn {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    padding: 0;
+    justify-content: center;
+    gap: 0;
+    box-shadow: 0 4px 14px rgba(0, 29, 53, 0.28);
+  }
+
+  .compose-btn:active {
+    transform: scale(0.93);
+  }
+
+  .compose-text {
+    display: none;
+  }
+
+  /* Nav items spread across bottom bar */
+  .left-bar-inner > div:last-child {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+    width: 100%;
+  }
+
+  .nav-link {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    padding: 6px 16px;
+    margin: 0;
+    border-radius: 12px;
+    flex: 1;
+    max-width: 88px;
+    min-height: unset;
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--text-secondary);
+    transition: background var(--transition), color var(--transition);
+  }
+
+  .nav-link:hover,
+  .nav-link:focus {
+    background: var(--hover-bg);
+  }
+
+  .nav-link.active {
+    color: var(--accent);
+    background: var(--accent-light);
+    font-weight: 700;
+  }
+
+  .nav-icon {
+    width: 22px;
+    height: 22px;
+    margin-bottom: 1px;
+  }
+
+  /* Label text visible on mobile */
+  .nav-link span:not(.nav-icon) {
+    display: block;
+  }
+}
+
+/* ─── Smooth scrollbar for sidebar ─────────────────────── */
+.left-bar-inner::-webkit-scrollbar {
+  width: 4px;
+}
+.left-bar-inner::-webkit-scrollbar-track {
+  background: transparent;
+}
+.left-bar-inner::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 4px;
+}

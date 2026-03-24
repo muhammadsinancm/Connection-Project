@@ -6,31 +6,31 @@ import { useState } from 'react'
 import { useEffect } from 'react'
 import ListOfRequest from './ListOfRequest'
 import SideBar from './SideBar'
- export const backendURL = "https://connection-project-backend.onrender.com"
+export const backendURL = "https://connection-project-backend.onrender.com"
 function App() {
 
   const [token, setToken] = useState(localStorage.getItem('adminToken') ? localStorage.getItem('adminToken') : '')
 
-  useEffect(()=> {
-localStorage.setItem('adminToken', token)
+  useEffect(() => {
+    localStorage.setItem('adminToken', token)
   }, [token])
-console.log(token);
+  console.log(token);
 
   return (
     <div>
       {
-        token === '' ? <AdminLogin setToken={setToken}/> :  
+        token === '' ? <AdminLogin setToken={setToken} /> :
 
-        <div>
-          <SideBar/>
-      <Routes>
-        <Route path='/' element={<SideBar/>} />
-        <Route path='/useremail' element={<ListOfUser />}/>
-        <Route path='/userrequest' element={<ListOfRequest/>}/>
-      </Routes>
-    </div>
+          <div>
+            <SideBar />
+            <Routes>
+              <Route path='/' element={<SideBar />} />
+              <Route path='/useremail' element={<ListOfUser />} />
+              <Route path='/userrequest' element={<ListOfRequest />} />
+            </Routes>
+          </div>
       }
-      
+
     </div>
   )
 }

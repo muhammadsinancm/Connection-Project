@@ -1,0 +1,280 @@
+/* ════════════════════════════════════════
+   SERCH.CSS — Fully Responsive
+════════════════════════════════════════ */
+
+/* ── CSS variable fallbacks (in case root vars aren't defined) ── */
+:root {
+  --ease: 0.18s cubic-bezier(0.4, 0, 0.2, 1);
+  --accent: #1a73e8;
+  --muted: #5f6368;
+  --text: #202124;
+  --border: #e2e8f0;
+  --border-focus: #1a73e8;
+  --font: inherit;
+  --card-bg: #ffffff;
+  --radius-md: 16px;
+  --sh-lg: 0 4px 24px rgba(0, 0, 0, 0.12);
+  --hover-bg: #f1f3f4;
+  --bottom-nav-height: 64px;
+}
+
+/* ── Wrapper ── */
+.search-bar {
+  width: 100%;
+  position: relative;
+}
+
+/* ── Input pill ── */
+.search-input-wrapper {
+  display: flex;
+  align-items: center;
+  background: #eaf1fb;
+  border-radius: 24px;
+  padding: 0 16px;
+  height: 46px;
+  border: 1.5px solid transparent;
+  transition: background var(--ease), border-color var(--ease), box-shadow var(--ease);
+  box-sizing: border-box;
+  width: 100%;
+}
+.search-input-wrapper:focus-within {
+  background: #fff;
+  border-color: var(--border-focus);
+  box-shadow: 0 0 0 3px rgba(26, 115, 232, 0.12);
+}
+
+/* ── Search icon ── */
+.search-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  cursor: pointer;
+  color: var(--muted);
+  transition: color var(--ease);
+  min-width: 36px;
+  min-height: 36px;
+  -webkit-tap-highlight-color: transparent;
+}
+.search-input-wrapper:focus-within .search-icon {
+  color: var(--accent);
+}
+
+/* ── Filter icon ── */
+.filter-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  cursor: pointer;
+  color: var(--muted);
+  padding: 6px;
+  border-radius: 50%;
+  transition: background var(--ease);
+  min-width: 36px;
+  min-height: 36px;
+  -webkit-tap-highlight-color: transparent;
+}
+.filter-icon:hover,
+.filter-icon:focus {
+  background: rgba(0, 0, 0, 0.06);
+}
+.filter-icon:active {
+  background: rgba(0, 0, 0, 0.12);
+}
+
+/* ── Text input ── */
+.search-input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  outline: none;
+  font-size: 15px;
+  font-family: var(--font);
+  color: var(--text);
+  margin: 0 10px;
+  min-width: 0;
+  /* Prevent iOS auto-zoom — override per breakpoint below */
+}
+.search-input::placeholder {
+  color: #9aa0a6;
+}
+
+/* ── Results dropdown ── */
+.search-result {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--sh-lg);
+  z-index: 500;
+  overflow: hidden;
+  animation: dropIn 0.16s ease forwards;
+  max-height: 60vh;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+@keyframes dropIn {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Result row ── */
+.search-result-item {
+  display: flex;
+  align-items: center;
+  padding: 10px 18px;
+  cursor: pointer;
+  border-bottom: 1px solid var(--border);
+  transition: background var(--ease);
+  gap: 4px;
+  min-height: 48px;
+  box-sizing: border-box;
+}
+.search-result-item:last-child { border-bottom: none; }
+.search-result-item:hover,
+.search-result-item:focus-within { background: var(--hover-bg); }
+.search-result-item:active { background: #e8f0fe; }
+
+/* ── NavLink wrapper ── */
+.to-connect {
+  text-decoration: none;
+  flex: 1;
+  min-width: 0;
+}
+.to-connectios {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  min-width: 0;
+}
+
+/* ── Email label ── */
+.user-emails {
+  margin: 0;
+  font-size: 14px;
+  font-family: var(--font);
+  color: var(--text);
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
+  width: 100%;
+}
+
+/* ════════════════════════════════════════
+   TABLET  (≤ 900px)
+════════════════════════════════════════ */
+@media (max-width: 900px) {
+  .search-input-wrapper {
+    height: 44px;
+  }
+}
+
+/* ════════════════════════════════════════
+   MOBILE  (≤ 768px)
+════════════════════════════════════════ */
+@media (max-width: 768px) {
+  .search-input-wrapper {
+    height: 44px;
+    padding: 0 12px;
+  }
+
+  /* font-size 16px prevents iOS auto-zoom on focus */
+  .search-input {
+    font-size: 16px;
+    margin: 0 8px;
+  }
+
+  .search-result {
+    top: calc(100% + 4px);
+    /* Keep dropdown above the fixed bottom nav bar */
+    max-height: calc(50vh - var(--bottom-nav-height));
+    border-radius: 16px;
+    /* Stick to viewport edges on narrow screens */
+    left: 0;
+    right: 0;
+  }
+
+  .search-result-item {
+    padding: 10px 14px;
+    min-height: 50px;
+  }
+
+  .user-emails {
+    font-size: 13.5px;
+  }
+}
+
+/* ════════════════════════════════════════
+   SMALL PHONES  (≤ 480px)
+════════════════════════════════════════ */
+@media (max-width: 480px) {
+  .search-input-wrapper {
+    height: 42px;
+    padding: 0 10px;
+    border-radius: 20px;
+  }
+
+  .search-input {
+    font-size: 16px; /* always 16px to block iOS zoom */
+    margin: 0 6px;
+  }
+
+  .search-result {
+    border-radius: 14px;
+    max-height: calc(45vh - var(--bottom-nav-height));
+  }
+
+  .search-result-item {
+    padding: 9px 12px;
+    min-height: 48px;
+    gap: 8px;
+  }
+
+  .user-emails {
+    font-size: 13px;
+  }
+
+  /* Shrink the mail icon inside results on very small screens */
+  .search-result-item > svg {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+  }
+}
+
+/* ════════════════════════════════════════
+   VERY SMALL  (≤ 360px)
+════════════════════════════════════════ */
+@media (max-width: 360px) {
+  .search-input-wrapper {
+    height: 40px;
+    padding: 0 8px;
+    border-radius: 18px;
+  }
+
+  .search-input {
+    font-size: 16px;
+    margin: 0 4px;
+  }
+
+  .search-icon,
+  .filter-icon {
+    min-width: 32px;
+    min-height: 32px;
+  }
+
+  .search-result-item {
+    padding: 8px 10px;
+    min-height: 46px;
+  }
+
+  .user-emails {
+    font-size: 12.5px;
+  }
+}

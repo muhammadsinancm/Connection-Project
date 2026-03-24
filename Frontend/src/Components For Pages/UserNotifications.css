@@ -1,5 +1,4 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
-
 /* ════════════════════════════════════════
    TOKENS
 ════════════════════════════════════════ */
@@ -21,76 +20,32 @@
   --sh-lg: 0 20px 60px rgba(0, 0, 0, 0.18), 0 4px 16px rgba(0, 0, 0, 0.08);
   --sh-sm: 0 1px 4px rgba(0, 0, 0, 0.07);
 }
-
 /* ════════════════════════════════════════
    KEYFRAMES
 ════════════════════════════════════════ */
 @keyframes backdropIn {
-  from {
-    opacity: 0;
-  }
-
-  to {
-    opacity: 1;
-  }
+  from { opacity: 0; }
+  to   { opacity: 1; }
 }
-
 @keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-
-  to {
-    opacity: 1;
-  }
+  from { opacity: 0; }
+  to   { opacity: 1; }
 }
-
 @keyframes modalIn {
-  from {
-    opacity: 0;
-    transform: scale(0.92) translateY(16px);
-  }
-
-  to {
-    opacity: 1;
-    transform: scale(1) translateY(0);
-  }
+  from { opacity: 0; transform: scale(0.92) translateY(16px); }
+  to   { opacity: 1; transform: scale(1)    translateY(0);    }
 }
-
 @keyframes bellShake {
-
-  0%,
-  100% {
-    transform: rotate(0deg);
-  }
-
-  15% {
-    transform: rotate(14deg);
-  }
-
-  30% {
-    transform: rotate(-12deg);
-  }
-
-  45% {
-    transform: rotate(10deg);
-  }
-
-  60% {
-    transform: rotate(-8deg);
-  }
-
-  75% {
-    transform: rotate(6deg);
-  }
-
-  90% {
-    transform: rotate(-4deg);
-  }
+  0%,100% { transform: rotate(0deg);  }
+  15%     { transform: rotate(14deg); }
+  30%     { transform: rotate(-12deg);}
+  45%     { transform: rotate(10deg); }
+  60%     { transform: rotate(-8deg); }
+  75%     { transform: rotate(6deg);  }
+  90%     { transform: rotate(-4deg); }
 }
-
 /* ════════════════════════════════════════
-   NOTIFICATION OVERLAY  ──  .container-notification
+   NOTIFICATION OVERLAY
 ════════════════════════════════════════ */
 .container-notification {
   position: fixed;
@@ -102,12 +57,11 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 20px;
+  padding: 16px;
   animation: backdropIn 0.22s ease forwards;
 }
-
 /* ════════════════════════════════════════
-   NOTIFICATION MODAL  ──  .head-notification
+   NOTIFICATION MODAL
 ════════════════════════════════════════ */
 .head-notification {
   background: var(--card);
@@ -116,7 +70,6 @@
   padding: 0;
   width: 500px;
   max-width: 100%;
-  /* grows with content, caps at viewport height */
   max-height: min(88vh, 680px);
   min-height: 160px;
   display: flex;
@@ -129,27 +82,20 @@
   overflow: hidden;
   animation: modalIn 0.28s cubic-bezier(0.34, 1.35, 0.64, 1) forwards;
 }
-
-/* top accent bar */
 .head-notification::before {
   content: '';
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
+  top: 0; left: 0; right: 0;
   height: 3px;
   background: linear-gradient(90deg, var(--accent) 0%, #6c63ff 100%);
   border-radius: 22px 22px 0 0;
   z-index: 2;
 }
-
-/* scrollable notification list */
-.head-notification>div:not(:first-child) {
+.head-notification > div:not(:first-child) {
   overflow-y: auto;
 }
-
 /* ════════════════════════════════════════
-   NOTIFICATION TITLE  ──  .notification-text
+   NOTIFICATION TITLE
 ════════════════════════════════════════ */
 .notification-text {
   display: flex;
@@ -159,7 +105,6 @@
   font-size: 13.5px;
   font-weight: 700;
   color: var(--text);
-  /* title always top-left */
   text-align: left;
   padding: 20px 24px 16px;
   border-bottom: 1px solid var(--border);
@@ -169,19 +114,15 @@
   position: sticky;
   top: 0;
   z-index: 1;
-  text-transform: none;
 }
-
-/* bell emoji prefix */
 .notification-text::before {
   font-size: 15px;
   flex-shrink: 0;
 }
-
 /* ════════════════════════════════════════
-   NOTIFICATION ROW  ──  each mapped <div>
+   NOTIFICATION ROW
 ════════════════════════════════════════ */
-.head-notification>div {
+.head-notification > div {
   display: grid;
   grid-template-columns: 40px 1fr auto auto;
   grid-template-rows: auto auto;
@@ -193,22 +134,10 @@
   transition: background var(--ease);
   min-width: 0;
 }
-
-.head-notification>div:last-of-type {
-  border-bottom: none;
-}
-
-.head-notification>div:hover {
-  background: #f4f7ff;
-}
-
-/* hide the <br /> tag that sits inside each row */
-.head-notification>div br {
-  display: none;
-}
-
-/* avatar circle — first column, spans both rows */
-.head-notification>div::before {
+.head-notification > div:last-of-type { border-bottom: none; }
+.head-notification > div:hover        { background: #f4f7ff; }
+.head-notification > div br           { display: none; }
+.head-notification > div::before {
   content: '';
   grid-column: 1;
   grid-row: 1 / 3;
@@ -219,9 +148,8 @@
   box-shadow: 0 3px 10px rgba(26, 115, 232, 0.25);
   flex-shrink: 0;
 }
-
 /* ════════════════════════════════════════
-   USER INFO  ──  LEFT side
+   USER INFO — LEFT
 ════════════════════════════════════════ */
 .first-name {
   font-family: var(--font);
@@ -236,7 +164,6 @@
   text-align: left;
   min-width: 0;
 }
-
 .user-email {
   font-family: var(--font);
   font-size: 11px;
@@ -250,9 +177,8 @@
   text-align: left;
   min-width: 0;
 }
-
 /* ════════════════════════════════════════
-   ACTION BUTTONS  ──  RIGHT side
+   ACTION BUTTONS — RIGHT
 ════════════════════════════════════════ */
 .button-accept,
 .butoon-ignore {
@@ -264,13 +190,13 @@
   cursor: pointer;
   white-space: nowrap;
   flex-shrink: 0;
-  /* vertically centered across both name rows */
   align-self: center;
   transition: background var(--ease), box-shadow var(--ease), transform var(--ease);
+  /* Accessible touch target */
+  min-height: 36px;
+  min-width: 36px;
 }
-
 .button-accept {
-  /* right side, col 3, spans both rows */
   grid-column: 3;
   grid-row: 1 / 3;
   padding: 7px 15px;
@@ -278,20 +204,16 @@
   color: var(--green-d);
   box-shadow: 0 2px 8px rgba(34, 197, 94, 0.18);
 }
-
 .button-accept:hover {
   background: #bbf7d0;
   box-shadow: 0 4px 14px rgba(34, 197, 94, 0.30);
   transform: translateY(-1px);
 }
-
 .button-accept:active {
   transform: translateY(0);
   opacity: 0.85;
 }
-
 .butoon-ignore {
-  /* right side, col 4, spans both rows */
   grid-column: 4;
   grid-row: 1 / 3;
   padding: 7px 12px;
@@ -299,18 +221,15 @@
   color: var(--muted);
   border: 1.5px solid var(--border);
 }
-
 .butoon-ignore:hover {
   background: #e8ecf0;
   color: var(--text);
   transform: translateY(-1px);
 }
-
 .butoon-ignore:active {
   transform: translateY(0);
   opacity: 0.85;
 }
-
 /* ════════════════════════════════════════
    BELL ICON
 ════════════════════════════════════════ */
@@ -319,16 +238,18 @@
   animation: bellShake 0.7s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
   transform-origin: top center;
 }
-
 /* ════════════════════════════════════════
    PROFILE HOVER CONTAINER
+   Desktop: show dropdown on hover.
+   Touch: clicking the profile icon opens the
+   full .contaioner-profile modal instead, so
+   the dropdown is a nice-to-have on desktop only.
 ════════════════════════════════════════ */
 .hover-container {
   position: relative;
   display: inline-flex;
   align-items: center;
 }
-
 .hover-display {
   display: none;
   position: absolute;
@@ -343,11 +264,12 @@
   z-index: 1001;
   animation: modalIn 0.16s ease forwards;
 }
-
-.hover-container:hover .hover-display {
-  display: block;
+/* Desktop hover only — touch devices tap to open modal */
+@media (hover: hover) and (pointer: fine) {
+  .hover-container:hover .hover-display {
+    display: block;
+  }
 }
-
 span.logout {
   display: block;
   padding: 10px 14px;
@@ -360,13 +282,9 @@ span.logout {
   transition: background var(--ease);
   white-space: nowrap;
 }
-
-span.logout:hover {
-  background: var(--red-l);
-}
-
+span.logout:hover { background: var(--red-l); }
 /* ════════════════════════════════════════
-   PROFILE OVERLAY  ──  .overlayyy
+   PROFILE OVERLAY
 ════════════════════════════════════════ */
 .contaioner-profile {
   position: fixed;
@@ -381,18 +299,21 @@ span.logout:hover {
   padding: 16px;
   animation: backdropIn 0.2s ease forwards;
 }
-
 /* ════════════════════════════════════════
-   PROFILE MODAL  ──  .modalll
+   PROFILE MODAL
 ════════════════════════════════════════ */
 .head-profile {
-  height: 500px;
+  /* Auto height — no fixed 500px that clips on small screens */
+  height: auto;
+  min-height: 260px;
   background: var(--card);
   border: 1px solid var(--border);
   border-radius: 24px;
   padding: 40px 36px 32px;
   max-width: 500px;
   width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -401,21 +322,21 @@ span.logout:hover {
   position: relative;
   overflow: hidden;
   animation: modalIn 0.28s cubic-bezier(0.34, 1.4, 0.64, 1) forwards;
+  box-sizing: border-box;
 }
-
-.modalll::before {
+.head-profile::before {
   content: '';
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
+  top: 0; left: 0; right: 0;
   height: 4px;
   background: linear-gradient(90deg, #1a73e8 0%, #6c63ff 100%);
   border-radius: 24px 24px 0 0;
 }
-
 /* ════════════════════════════════════════
-   PROFILE AVATAR  ──  .profile-letter
+   PROFILE AVATAR
+   FIX: removed margin-right: 250px — was
+   pushing the avatar completely off-screen
+   on every device under ~600px wide.
 ════════════════════════════════════════ */
 .profile-letters {
   width: 80px;
@@ -433,11 +354,11 @@ span.logout:hover {
   letter-spacing: 0.01em;
   flex-shrink: 0;
   margin-top: 4px;
-  margin-right: 250px;
+  /* No fixed margin — centered naturally by flexbox */
+  margin-right: 0;
 }
-
 /* ════════════════════════════════════════
-   PROFILE EMAIL  ──  .user-profile-email
+   PROFILE EMAIL
 ════════════════════════════════════════ */
 .user-profile-email {
   display: block;
@@ -457,7 +378,6 @@ span.logout:hover {
   text-overflow: ellipsis;
   box-sizing: border-box;
 }
-
 /* ════════════════════════════════════════
    PROFILE NAMES
 ════════════════════════════════════════ */
@@ -472,7 +392,6 @@ span.logout:hover {
   text-align: center;
   width: 100%;
 }
-
 .user-last-name {
   display: block;
   font-family: var(--font);
@@ -485,48 +404,14 @@ span.logout:hover {
   width: 100%;
   margin-top: -10px;
 }
-
 /* ════════════════════════════════════════
    LOGOUT BUTTON
+   FIX: removed margin-left: 370px — was
+   pushing the button completely off-screen
+   on every device under ~420px wide.
 ════════════════════════════════════════ */
-
-.modalll button:not(.close-button):hover {
-  background: #fecaca;
-  box-shadow: 0 4px 14px rgba(220, 38, 38, 0.18);
-  transform: translateY(-1px);
-}
-
-.modalll button:not(.close-button):active {
-  transform: translateY(0);
-}
-
-/* ════════════════════════════════════════
-   CLOSE BUTTON  ──  .close-button
-════════════════════════════════════════ */
-.close-button {
-  position: absolute;
-  top: 14px;
-  right: 14px;
-  width: 34px;
-  height: 34px;
-  background: var(--bg);
-  border: 1px solid var(--border);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  padding: 0;
-  transition: background var(--ease), transform var(--ease);
-}
-
-.close-button:hover {
-  background: var(--accent-l);
-  transform: rotate(90deg) scale(1.08);
-}
-
 .log-out {
-  padding: 11px;
+  padding: 11px 24px;
   font-family: var(--font);
   font-size: 13.5px;
   font-weight: 700;
@@ -537,6 +422,136 @@ span.logout:hover {
   cursor: pointer;
   letter-spacing: 0.01em;
   transition: background var(--ease), transform var(--ease), box-shadow var(--ease);
+  /* Sit below the profile info, full-width for easy tapping */
+  width: 100%;
   margin-top: auto;
-  margin-left: 370px;
+  /* No fixed left margin — centered by parent flexbox */
+  margin-left: 0;
+  min-height: 44px;
+}
+.log-out:hover {
+  background: #fecaca;
+  box-shadow: 0 4px 14px rgba(220, 38, 38, 0.18);
+  transform: translateY(-1px);
+}
+.log-out:active { transform: translateY(0); }
+/* ════════════════════════════════════════
+   CLOSE BUTTON
+════════════════════════════════════════ */
+.close-button {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 36px;
+  height: 36px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 0;
+  transition: background var(--ease), transform var(--ease);
+  z-index: 2;
+  flex-shrink: 0;
+}
+.close-button:hover {
+  background: var(--accent-l);
+  transform: rotate(90deg) scale(1.08);
+}
+/* ════════════════════════════════════════
+   MOBILE  (≤ 768px)
+════════════════════════════════════════ */
+@media (max-width: 768px) {
+  /* Notification modal — full width with breathing room */
+  .container-notification {
+    align-items: flex-end;
+    padding: 0;
+  }
+  .head-notification {
+    width: 100%;
+    max-width: 100%;
+    border-radius: 22px 22px 0 0;
+    max-height: 70vh;
+  }
+  .notification-text {
+    padding: 16px 18px 14px;
+    font-size: 13px;
+  }
+  .head-notification > div {
+    padding: 12px 14px 12px 14px;
+    column-gap: 10px;
+  }
+  /* Slightly smaller buttons, still easy to tap */
+  .button-accept { padding: 8px 12px; font-size: 11px; }
+  .butoon-ignore { padding: 8px 10px; font-size: 11px; }
+  /* Profile modal — full width, bottom sheet style */
+  .contaioner-profile {
+    align-items: flex-end;
+    padding: 0;
+  }
+  .head-profile {
+    border-radius: 22px 22px 0 0;
+    padding: 36px 24px 28px;
+    max-width: 100%;
+    max-height: 80vh;
+    overflow-y: auto;
+    gap: 12px;
+  }
+  .head-profile::before {
+    border-radius: 22px 22px 0 0;
+  }
+  .profile-letters {
+    width: 70px;
+    height: 70px;
+    font-size: 1.75rem;
+  }
+  .user-first-name,
+  .user-last-name {
+    font-size: 20px;
+  }
+}
+/* ════════════════════════════════════════
+   SMALL PHONES  (≤ 480px)
+════════════════════════════════════════ */
+@media (max-width: 480px) {
+  .head-profile {
+    padding: 30px 18px 24px;
+    gap: 10px;
+  }
+  .profile-letters {
+    width: 62px;
+    height: 62px;
+    font-size: 1.5rem;
+  }
+  .user-first-name,
+  .user-last-name {
+    font-size: 18px;
+  }
+  .user-profile-email {
+    font-size: 11px;
+  }
+  .log-out {
+    font-size: 13px;
+    padding: 10px 20px;
+  }
+  /* Notification row — tighter on very small screens */
+  .head-notification > div {
+    grid-template-columns: 34px 1fr auto auto;
+    column-gap: 8px;
+    padding: 10px 12px;
+  }
+  .head-notification > div::before {
+    width: 34px;
+    height: 34px;
+  }
+  .first-name  { font-size: 12px; }
+  .user-email  { font-size: 10px; }
+  .button-accept,
+  .butoon-ignore {
+    font-size: 10.5px;
+    padding: 7px 8px;
+    border-radius: 16px;
+  }
 }

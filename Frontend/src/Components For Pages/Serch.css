@@ -172,48 +172,22 @@
 @media (max-width: 900px) {
   .search-input-wrapper {
     height: 44px;
-  }
-}
-
-/* ════════════════════════════════════════
-   MOBILE  (≤ 768px)
-════════════════════════════════════════ */
-@media (max-width: 768px) {
-  .search-input-wrapper {
-    height: 44px;
     padding: 0 12px;
   }
 
-  /* font-size 16px prevents iOS auto-zoom on focus */
   .search-input {
-    font-size: 16px;
+    font-size: 15px;
     margin: 0 8px;
   }
 
   .search-result {
     top: calc(100% + 4px);
-    /* Keep dropdown above the fixed bottom nav bar */
-    max-height: calc(50vh - var(--bottom-nav-height));
-    border-radius: 16px;
-    /* Stick to viewport edges on narrow screens */
-    left: 0;
-    right: 0;
-  }
-
-  .search-result-item {
-    padding: 10px 14px;
-    min-height: 50px;
-  }
-
-  .user-emails {
-    font-size: 13.5px;
+    max-height: 55vh;
+    border-radius: 15px;
   }
 }
 
-/* ════════════════════════════════════════
-   SMALL PHONES  (≤ 480px)
-════════════════════════════════════════ */
-@media (max-width: 480px) {
+@media (max-width: 600px) {
   .search-input-wrapper {
     height: 42px;
     padding: 0 10px;
@@ -221,13 +195,21 @@
   }
 
   .search-input {
-    font-size: 16px; /* always 16px to block iOS zoom */
+    font-size: 16px;
     margin: 0 6px;
   }
 
+  .search-icon,
+  .filter-icon {
+    min-width: 34px;
+    min-height: 34px;
+  }
+
   .search-result {
+    left: 0;
+    right: 0;
+    max-height: calc(50vh - var(--bottom-nav-height));
     border-radius: 14px;
-    max-height: calc(45vh - var(--bottom-nav-height));
   }
 
   .search-result-item {
@@ -239,19 +221,9 @@
   .user-emails {
     font-size: 13px;
   }
-
-  /* Shrink the mail icon inside results on very small screens */
-  .search-result-item > svg {
-    width: 18px;
-    height: 18px;
-    flex-shrink: 0;
-  }
 }
 
-/* ════════════════════════════════════════
-   VERY SMALL  (≤ 360px)
-════════════════════════════════════════ */
-@media (max-width: 360px) {
+@media (max-width: 480px) {
   .search-input-wrapper {
     height: 40px;
     padding: 0 8px;
@@ -263,10 +235,9 @@
     margin: 0 4px;
   }
 
-  .search-icon,
-  .filter-icon {
-    min-width: 32px;
-    min-height: 32px;
+  .search-result {
+    max-height: calc(45vh - var(--bottom-nav-height));
+    border-radius: 12px;
   }
 
   .search-result-item {
@@ -276,5 +247,40 @@
 
   .user-emails {
     font-size: 12.5px;
+  }
+
+  .search-result-item > svg {
+    width: 18px;
+    height: 18px;
+    margin-right: 8px;
+    flex-shrink: 0;
+  }
+}
+
+@media (max-width: 360px) {
+  .search-input-wrapper {
+    height: 38px;
+    padding: 0 6px;
+    border-radius: 16px;
+  }
+
+  .search-icon,
+  .filter-icon {
+    min-width: 30px;
+    min-height: 30px;
+  }
+
+  .search-input {
+    font-size: 16px;
+    margin: 0 3px;
+  }
+
+  .search-result-item {
+    padding: 7px 8px;
+    min-height: 44px;
+  }
+
+  .user-emails {
+    font-size: 12px;
   }
 }

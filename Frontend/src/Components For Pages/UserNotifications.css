@@ -1,11 +1,8 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
-/* ════════════════════════════════════════
-   TOKENS
-════════════════════════════════════════ */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
 :root {
   --accent: #1a73e8;
   --accent-l: #e8f0fe;
-  --green: #22c55e;
   --green-l: #dcfce7;
   --green-d: #16a34a;
   --red-l: #fee2e2;
@@ -18,126 +15,154 @@
   --font: 'Inter', system-ui, sans-serif;
   --ease: 0.18s cubic-bezier(0.4, 0, 0.2, 1);
   --sh-lg: 0 20px 60px rgba(0, 0, 0, 0.18), 0 4px 16px rgba(0, 0, 0, 0.08);
-  --sh-sm: 0 1px 4px rgba(0, 0, 0, 0.07);
+  --bottom-nav-height: 64px;
 }
-/* ════════════════════════════════════════
-   KEYFRAMES
-════════════════════════════════════════ */
+
 @keyframes backdropIn {
-  from { opacity: 0; }
-  to   { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
 }
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to   { opacity: 1; }
-}
+
 @keyframes modalIn {
-  from { opacity: 0; transform: scale(0.92) translateY(16px); }
-  to   { opacity: 1; transform: scale(1)    translateY(0);    }
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(14px);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
 }
+
 @keyframes bellShake {
-  0%,100% { transform: rotate(0deg);  }
-  15%     { transform: rotate(14deg); }
-  30%     { transform: rotate(-12deg);}
-  45%     { transform: rotate(10deg); }
-  60%     { transform: rotate(-8deg); }
-  75%     { transform: rotate(6deg);  }
-  90%     { transform: rotate(-4deg); }
+  0%,
+  100% {
+    transform: rotate(0deg);
+  }
+
+  15% {
+    transform: rotate(14deg);
+  }
+
+  30% {
+    transform: rotate(-12deg);
+  }
+
+  45% {
+    transform: rotate(10deg);
+  }
+
+  60% {
+    transform: rotate(-8deg);
+  }
+
+  75% {
+    transform: rotate(6deg);
+  }
+
+  90% {
+    transform: rotate(-4deg);
+  }
 }
-/* ════════════════════════════════════════
-   NOTIFICATION OVERLAY
-════════════════════════════════════════ */
+
+/* Notification overlay */
 .container-notification {
   position: fixed;
   inset: 0;
-  z-index: 1000;
-  background: rgba(10, 15, 40, 0.50);
+  z-index: 1200;
+  background: rgba(10, 15, 40, 0.5);
   backdrop-filter: blur(6px);
   -webkit-backdrop-filter: blur(6px);
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 16px;
+  padding: 20px;
   animation: backdropIn 0.22s ease forwards;
 }
-/* ════════════════════════════════════════
-   NOTIFICATION MODAL
-════════════════════════════════════════ */
+
 .head-notification {
+  position: relative;
+  width: min(560px, 100%);
+  max-height: min(86vh, 680px);
   background: var(--card);
   border: 1px solid var(--border);
-  border-radius: 22px;
-  padding: 0;
-  width: 500px;
-  max-width: 100%;
-  max-height: min(88vh, 680px);
-  min-height: 160px;
+  border-radius: 20px;
+  overflow-x: hidden;
+  overflow-y: auto;
   display: flex;
   flex-direction: column;
-  box-shadow:
-    0 32px 80px rgba(0, 0, 0, 0.22),
-    0 8px 24px rgba(0, 0, 0, 0.10),
-    inset 0 1px 0 rgba(255, 255, 255, 0.8);
-  position: relative;
-  overflow: hidden;
-  animation: modalIn 0.28s cubic-bezier(0.34, 1.35, 0.64, 1) forwards;
+  box-shadow: var(--sh-lg);
+  animation: modalIn 0.24s cubic-bezier(0.34, 1.3, 0.64, 1) forwards;
 }
+
 .head-notification::before {
   content: '';
   position: absolute;
-  top: 0; left: 0; right: 0;
+  top: 0;
+  left: 0;
+  right: 0;
   height: 3px;
   background: linear-gradient(90deg, var(--accent) 0%, #6c63ff 100%);
-  border-radius: 22px 22px 0 0;
   z-index: 2;
 }
-.head-notification > div:not(:first-child) {
-  overflow-y: auto;
-}
-/* ════════════════════════════════════════
-   NOTIFICATION TITLE
-════════════════════════════════════════ */
+
 .notification-text {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-family: var(--font);
-  font-size: 13.5px;
-  font-weight: 700;
-  color: var(--text);
-  text-align: left;
-  padding: 20px 24px 16px;
-  border-bottom: 1px solid var(--border);
-  letter-spacing: 0.05px;
-  flex-shrink: 0;
-  background: var(--card);
   position: sticky;
   top: 0;
   z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 18px 20px 14px;
+  border-bottom: 1px solid var(--border);
+  background: var(--card);
+  color: var(--text);
+  font-family: var(--font);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.04px;
 }
+
 .notification-text::before {
-  font-size: 15px;
+  content: '';
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--accent);
   flex-shrink: 0;
 }
-/* ════════════════════════════════════════
-   NOTIFICATION ROW
-════════════════════════════════════════ */
-.head-notification > div {
+
+.head-notification > div:not(:first-child) {
   display: grid;
-  grid-template-columns: 40px 1fr auto auto;
+  grid-template-columns: 40px minmax(0, 1fr) auto auto;
   grid-template-rows: auto auto;
   align-items: center;
-  column-gap: 12px;
+  column-gap: 10px;
   row-gap: 2px;
-  padding: 13px 20px 13px 18px;
+  padding: 12px 16px;
   border-bottom: 1px solid var(--border);
   transition: background var(--ease);
-  min-width: 0;
 }
-.head-notification > div:last-of-type { border-bottom: none; }
-.head-notification > div:hover        { background: #f4f7ff; }
-.head-notification > div br           { display: none; }
-.head-notification > div::before {
+
+.head-notification > div:not(:first-child):hover {
+  background: #f6f9ff;
+}
+
+.head-notification > div:last-of-type {
+  border-bottom: none;
+}
+
+.head-notification > div br {
+  display: none;
+}
+
+.head-notification > div:not(:first-child)::before {
   content: '';
   grid-column: 1;
   grid-row: 1 / 3;
@@ -146,150 +171,133 @@
   border-radius: 50%;
   background: linear-gradient(135deg, var(--accent) 0%, #6c63ff 100%);
   box-shadow: 0 3px 10px rgba(26, 115, 232, 0.25);
-  flex-shrink: 0;
 }
-/* ════════════════════════════════════════
-   USER INFO — LEFT
-════════════════════════════════════════ */
+
 .first-name {
+  grid-column: 2;
+  grid-row: 1;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: var(--text);
   font-family: var(--font);
   font-size: 13px;
   font-weight: 600;
-  color: var(--text);
+  text-align: left;
+}
+
+.user-email {
+  grid-column: 2;
+  grid-row: 2;
+  min-width: 0;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  grid-column: 2;
-  grid-row: 1;
-  text-align: left;
-  min-width: 0;
-}
-.user-email {
+  color: var(--muted);
   font-family: var(--font);
   font-size: 11px;
   font-weight: 400;
-  color: var(--muted);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  grid-column: 2;
-  grid-row: 2;
   text-align: left;
-  min-width: 0;
 }
-/* ════════════════════════════════════════
-   ACTION BUTTONS — RIGHT
-════════════════════════════════════════ */
+
 .button-accept,
 .butoon-ignore {
   font-family: var(--font);
-  font-size: 11.5px;
+  font-size: 11px;
   font-weight: 700;
+  border-radius: 18px;
   border: none;
-  border-radius: 20px;
   cursor: pointer;
   white-space: nowrap;
-  flex-shrink: 0;
-  align-self: center;
   transition: background var(--ease), box-shadow var(--ease), transform var(--ease);
-  /* Accessible touch target */
-  min-height: 36px;
-  min-width: 36px;
 }
+
 .button-accept {
   grid-column: 3;
   grid-row: 1 / 3;
-  padding: 7px 15px;
+  padding: 7px 12px;
   background: var(--green-l);
   color: var(--green-d);
   box-shadow: 0 2px 8px rgba(34, 197, 94, 0.18);
 }
+
 .button-accept:hover {
   background: #bbf7d0;
-  box-shadow: 0 4px 14px rgba(34, 197, 94, 0.30);
+  box-shadow: 0 4px 14px rgba(34, 197, 94, 0.3);
   transform: translateY(-1px);
 }
-.button-accept:active {
-  transform: translateY(0);
-  opacity: 0.85;
-}
+
 .butoon-ignore {
   grid-column: 4;
   grid-row: 1 / 3;
-  padding: 7px 12px;
+  padding: 7px 10px;
   background: var(--bg);
   color: var(--muted);
-  border: 1.5px solid var(--border);
+  border: 1px solid var(--border);
 }
+
 .butoon-ignore:hover {
   background: #e8ecf0;
   color: var(--text);
   transform: translateY(-1px);
 }
-.butoon-ignore:active {
-  transform: translateY(0);
-  opacity: 0.85;
-}
-/* ════════════════════════════════════════
-   BELL ICON
-════════════════════════════════════════ */
+
+/* Top-right icon animation */
 .icon-shake-once {
   display: inline-block;
   animation: bellShake 0.7s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
   transform-origin: top center;
 }
-/* ════════════════════════════════════════
-   PROFILE HOVER CONTAINER
-   Desktop: show dropdown on hover.
-   Touch: clicking the profile icon opens the
-   full .contaioner-profile modal instead, so
-   the dropdown is a nice-to-have on desktop only.
-════════════════════════════════════════ */
+
+/* Profile hover */
 .hover-container {
   position: relative;
   display: inline-flex;
   align-items: center;
 }
+
 .hover-display {
   display: none;
   position: absolute;
   top: calc(100% + 10px);
   right: 0;
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  box-shadow: var(--sh-lg);
+  z-index: 1001;
   min-width: 140px;
   padding: 6px;
-  z-index: 1001;
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  background: var(--card);
+  box-shadow: var(--sh-lg);
   animation: modalIn 0.16s ease forwards;
 }
-/* Desktop hover only — touch devices tap to open modal */
-@media (hover: hover) and (pointer: fine) {
-  .hover-container:hover .hover-display {
-    display: block;
-  }
+
+.hover-container:hover .hover-display {
+  display: block;
 }
+
 span.logout {
   display: block;
   padding: 10px 14px;
-  font-family: var(--font);
-  font-size: 13.5px;
-  font-weight: 600;
-  color: var(--red-d);
   border-radius: 9px;
+  color: var(--red-d);
+  font-family: var(--font);
+  font-size: 13px;
+  font-weight: 600;
   cursor: pointer;
-  transition: background var(--ease);
   white-space: nowrap;
+  transition: background var(--ease);
 }
-span.logout:hover { background: var(--red-l); }
-/* ════════════════════════════════════════
-   PROFILE OVERLAY
-════════════════════════════════════════ */
+
+span.logout:hover {
+  background: var(--red-l);
+}
+
+/* Profile modal */
 .contaioner-profile {
   position: fixed;
   inset: 0;
-  z-index: 1000;
+  z-index: 1200;
   background: rgba(15, 15, 30, 0.55);
   backdrop-filter: blur(6px);
   -webkit-backdrop-filter: blur(6px);
@@ -299,259 +307,377 @@ span.logout:hover { background: var(--red-l); }
   padding: 16px;
   animation: backdropIn 0.2s ease forwards;
 }
-/* ════════════════════════════════════════
-   PROFILE MODAL
-════════════════════════════════════════ */
+
 .head-profile {
-  /* Auto height — no fixed 500px that clips on small screens */
-  height: auto;
-  min-height: 260px;
-  background: var(--card);
+  position: relative;
+  width: min(500px, 100%);
+  min-height: 420px;
+  padding: 36px 30px 24px;
+  border-radius: 22px;
   border: 1px solid var(--border);
-  border-radius: 24px;
-  padding: 40px 36px 32px;
-  max-width: 500px;
-  width: 100%;
-  max-height: 90vh;
-  overflow-y: auto;
+  background: var(--card);
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 14px;
-  box-shadow: var(--sh-lg);
-  position: relative;
   overflow: hidden;
-  animation: modalIn 0.28s cubic-bezier(0.34, 1.4, 0.64, 1) forwards;
-  box-sizing: border-box;
+  box-shadow: var(--sh-lg);
+  animation: modalIn 0.24s cubic-bezier(0.34, 1.3, 0.64, 1) forwards;
 }
+
 .head-profile::before {
   content: '';
   position: absolute;
-  top: 0; left: 0; right: 0;
+  top: 0;
+  left: 0;
+  right: 0;
   height: 4px;
-  background: linear-gradient(90deg, #1a73e8 0%, #6c63ff 100%);
-  border-radius: 24px 24px 0 0;
+  background: linear-gradient(90deg, var(--accent) 0%, #6c63ff 100%);
 }
-/* ════════════════════════════════════════
-   PROFILE AVATAR
-   FIX: removed margin-right: 250px — was
-   pushing the avatar completely off-screen
-   on every device under ~600px wide.
-════════════════════════════════════════ */
+
 .profile-letters {
   width: 80px;
   height: 80px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #1a73e8 0%, #6c63ff 100%);
+  background: linear-gradient(135deg, var(--accent) 0%, #6c63ff 100%);
   color: #fff;
   font-family: var(--font);
-  font-size: 2rem;
+  font-size: 30px;
   font-weight: 700;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 8px 24px rgba(26, 115, 232, 0.40);
-  letter-spacing: 0.01em;
+  box-shadow: 0 8px 24px rgba(26, 115, 232, 0.4);
   flex-shrink: 0;
-  margin-top: 4px;
-  /* No fixed margin — centered naturally by flexbox */
-  margin-right: 0;
 }
-/* ════════════════════════════════════════
-   PROFILE EMAIL
-════════════════════════════════════════ */
+
 .user-profile-email {
   display: block;
-  font-family: var(--font);
-  font-size: 12px;
-  font-weight: 500;
-  color: var(--muted);
-  letter-spacing: 0.01em;
-  background: var(--bg);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  padding: 8px 16px;
   width: 100%;
+  max-width: 360px;
+  padding: 8px 14px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  color: var(--muted);
   text-align: center;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  box-sizing: border-box;
-}
-/* ════════════════════════════════════════
-   PROFILE NAMES
-════════════════════════════════════════ */
-.user-first-name {
-  display: block;
   font-family: var(--font);
-  font-size: 22px;
-  font-weight: 800;
-  color: var(--text);
-  letter-spacing: -0.04em;
-  line-height: 1.15;
-  text-align: center;
-  width: 100%;
+  font-size: 12px;
+  font-weight: 500;
 }
+
+.user-first-name,
 .user-last-name {
   display: block;
+  width: 100%;
+  color: var(--text);
+  text-align: center;
   font-family: var(--font);
   font-size: 22px;
   font-weight: 800;
-  color: var(--text);
-  letter-spacing: -0.04em;
   line-height: 1.15;
-  text-align: center;
-  width: 100%;
-  margin-top: -10px;
+  letter-spacing: -0.04em;
 }
-/* ════════════════════════════════════════
-   LOGOUT BUTTON
-   FIX: removed margin-left: 370px — was
-   pushing the button completely off-screen
-   on every device under ~420px wide.
-════════════════════════════════════════ */
+
 .log-out {
-  padding: 11px 24px;
-  font-family: var(--font);
-  font-size: 13.5px;
-  font-weight: 700;
-  color: var(--red-d);
-  background: var(--red-l);
-  border: 1.5px solid #fca5a5;
-  border-radius: 12px;
-  cursor: pointer;
-  letter-spacing: 0.01em;
-  transition: background var(--ease), transform var(--ease), box-shadow var(--ease);
-  /* Sit below the profile info, full-width for easy tapping */
-  width: 100%;
   margin-top: auto;
-  /* No fixed left margin — centered by parent flexbox */
-  margin-left: 0;
-  min-height: 44px;
+  width: min(220px, 100%);
+  padding: 10px 14px;
+  border-radius: 12px;
+  border: 1.5px solid #fca5a5;
+  background: var(--red-l);
+  color: var(--red-d);
+  font-family: var(--font);
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background var(--ease), box-shadow var(--ease), transform var(--ease);
 }
+
 .log-out:hover {
   background: #fecaca;
   box-shadow: 0 4px 14px rgba(220, 38, 38, 0.18);
   transform: translateY(-1px);
 }
-.log-out:active { transform: translateY(0); }
-/* ════════════════════════════════════════
-   CLOSE BUTTON
-════════════════════════════════════════ */
+
 .close-button {
   position: absolute;
-  top: 14px;
-  right: 14px;
-  width: 36px;
-  height: 36px;
-  background: var(--bg);
+  top: 12px;
+  right: 12px;
+  width: 34px;
+  height: 34px;
   border: 1px solid var(--border);
   border-radius: 50%;
+  background: var(--bg);
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   padding: 0;
   transition: background var(--ease), transform var(--ease);
-  z-index: 2;
-  flex-shrink: 0;
 }
+
 .close-button:hover {
   background: var(--accent-l);
   transform: rotate(90deg) scale(1.08);
 }
-/* ════════════════════════════════════════
-   MOBILE  (≤ 768px)
-════════════════════════════════════════ */
-@media (max-width: 768px) {
-  /* Notification modal — full width with breathing room */
-  .container-notification {
-    align-items: flex-end;
-    padding: 0;
-  }
-  .head-notification {
-    width: 100%;
-    max-width: 100%;
-    border-radius: 22px 22px 0 0;
-    max-height: 70vh;
-  }
-  .notification-text {
-    padding: 16px 18px 14px;
-    font-size: 13px;
-  }
-  .head-notification > div {
-    padding: 12px 14px 12px 14px;
-    column-gap: 10px;
-  }
-  /* Slightly smaller buttons, still easy to tap */
-  .button-accept { padding: 8px 12px; font-size: 11px; }
-  .butoon-ignore { padding: 8px 10px; font-size: 11px; }
-  /* Profile modal — full width, bottom sheet style */
+
+/* Tablet: <= 900px */
+@media (max-width: 900px) {
+  .container-notification,
   .contaioner-profile {
-    align-items: flex-end;
-    padding: 0;
+    padding: 14px;
   }
+
+  .head-notification {
+    width: min(520px, 100%);
+    border-radius: 18px;
+  }
+
+  .notification-text {
+    padding: 16px 16px 12px;
+    font-size: 13.5px;
+  }
+
+  .head-notification > div:not(:first-child) {
+    grid-template-columns: 36px minmax(0, 1fr) auto auto;
+    padding: 10px 12px;
+  }
+
+  .head-notification > div:not(:first-child)::before {
+    width: 36px;
+    height: 36px;
+  }
+
   .head-profile {
-    border-radius: 22px 22px 0 0;
-    padding: 36px 24px 28px;
-    max-width: 100%;
-    max-height: 80vh;
-    overflow-y: auto;
-    gap: 12px;
+    width: min(460px, 100%);
+    min-height: 380px;
+    padding: 32px 24px 20px;
   }
-  .head-profile::before {
-    border-radius: 22px 22px 0 0;
-  }
+
   .profile-letters {
-    width: 70px;
-    height: 70px;
-    font-size: 1.75rem;
+    width: 72px;
+    height: 72px;
+    font-size: 28px;
   }
+
   .user-first-name,
   .user-last-name {
     font-size: 20px;
   }
 }
-/* ════════════════════════════════════════
-   SMALL PHONES  (≤ 480px)
-════════════════════════════════════════ */
-@media (max-width: 480px) {
+
+/* Mobile: <= 600px */
+@media (max-width: 600px) {
+  .container-notification,
+  .contaioner-profile {
+    padding: 10px;
+  }
+
+  .head-notification {
+    width: 100%;
+    max-height: min(80vh, 560px);
+    border-radius: 16px;
+  }
+
+  .notification-text {
+    padding: 14px 12px 10px;
+    font-size: 13px;
+  }
+
+  .head-notification > div:not(:first-child) {
+    grid-template-columns: 34px minmax(0, 1fr) auto auto;
+    padding: 9px 10px;
+    column-gap: 8px;
+  }
+
+  .head-notification > div:not(:first-child)::before {
+    width: 34px;
+    height: 34px;
+  }
+
+  .first-name {
+    font-size: 12px;
+  }
+
+  .user-email {
+    font-size: 10.5px;
+  }
+
+  .button-accept,
+  .butoon-ignore {
+    font-size: 10px;
+    padding: 6px 8px;
+    border-radius: 14px;
+  }
+
   .head-profile {
-    padding: 30px 18px 24px;
-    gap: 10px;
+    width: 100%;
+    min-height: 340px;
+    padding: 28px 16px 18px;
+    border-radius: 18px;
   }
+
   .profile-letters {
-    width: 62px;
-    height: 62px;
-    font-size: 1.5rem;
+    width: 64px;
+    height: 64px;
+    font-size: 24px;
   }
+
+  .user-profile-email {
+    font-size: 11px;
+  }
+
   .user-first-name,
   .user-last-name {
     font-size: 18px;
   }
-  .user-profile-email {
-    font-size: 11px;
-  }
+
   .log-out {
-    font-size: 13px;
-    padding: 10px 20px;
+    width: 100%;
+    font-size: 12px;
+    padding: 9px 12px;
   }
-  /* Notification row — tighter on very small screens */
-  .head-notification > div {
-    grid-template-columns: 34px 1fr auto auto;
-    column-gap: 8px;
-    padding: 10px 12px;
+
+  .close-button {
+    top: 10px;
+    right: 10px;
+    width: 32px;
+    height: 32px;
   }
-  .head-notification > div::before {
-    width: 34px;
-    height: 34px;
+}
+
+/* Small phones: <= 480px */
+@media (max-width: 480px) {
+  .container-notification,
+  .contaioner-profile {
+    padding: 8px;
   }
-  .first-name  { font-size: 12px; }
-  .user-email  { font-size: 10px; }
+
+  .head-notification {
+    max-height: min(76vh, 520px);
+    border-radius: 14px;
+  }
+
+  .notification-text {
+    padding: 12px 10px 9px;
+    font-size: 12.5px;
+  }
+
+  .head-notification > div:not(:first-child) {
+    grid-template-columns: 30px minmax(0, 1fr) auto auto;
+    padding: 8px;
+    column-gap: 6px;
+  }
+
+  .head-notification > div:not(:first-child)::before {
+    width: 30px;
+    height: 30px;
+  }
+
   .button-accept,
   .butoon-ignore {
-    font-size: 10.5px;
-    padding: 7px 8px;
+    font-size: 9.5px;
+    padding: 5px 7px;
+  }
+
+  .head-profile {
+    min-height: 320px;
+    padding: 24px 12px 16px;
     border-radius: 16px;
+  }
+
+  .profile-letters {
+    width: 56px;
+    height: 56px;
+    font-size: 22px;
+  }
+
+  .user-profile-email {
+    font-size: 10.5px;
+    padding: 7px 10px;
+  }
+
+  .user-first-name,
+  .user-last-name {
+    font-size: 16px;
+  }
+
+  .close-button {
+    width: 30px;
+    height: 30px;
+  }
+}
+
+/* Very small phones: <= 360px */
+@media (max-width: 360px) {
+  .head-notification {
+    max-height: min(74vh, 480px);
+  }
+
+  .notification-text {
+    padding: 10px 8px 8px;
+    font-size: 12px;
+  }
+
+  .head-notification > div:not(:first-child) {
+    grid-template-columns: 28px minmax(0, 1fr);
+    grid-template-rows: auto auto auto auto;
+    row-gap: 4px;
+    padding: 8px;
+  }
+
+  .head-notification > div:not(:first-child)::before {
+    grid-row: 1 / 3;
+    width: 28px;
+    height: 28px;
+  }
+
+  .first-name {
+    grid-column: 2;
+    grid-row: 1;
+    font-size: 11.5px;
+  }
+
+  .user-email {
+    grid-column: 2;
+    grid-row: 2;
+    font-size: 10px;
+  }
+
+  .button-accept {
+    grid-column: 2;
+    grid-row: 3;
+    justify-self: start;
+  }
+
+  .butoon-ignore {
+    grid-column: 2;
+    grid-row: 4;
+    justify-self: start;
+  }
+
+  .head-profile {
+    min-height: 300px;
+    padding: 22px 10px 14px;
+  }
+
+  .profile-letters {
+    width: 52px;
+    height: 52px;
+    font-size: 20px;
+  }
+
+  .user-first-name,
+  .user-last-name {
+    font-size: 15px;
+  }
+
+  .log-out {
+    font-size: 11.5px;
+    padding: 8px 10px;
   }
 }

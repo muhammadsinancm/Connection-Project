@@ -467,68 +467,14 @@ div:has(> .item) {
 /* ════════════════════════════════════════
    RESPONSIVE
 ════════════════════════════════════════ */
-@media (min-width: 1440px) {
-  .chat-header {
-    padding: 12px 48px;
-  }
-
-  .messages {
-    padding: 24px 48px 88px;
-  }
-
-  .input-bar {
-    padding: 14px 48px;
-  }
-
-  .bubble {
-    max-width: 52%;
-  }
-
-  .user-email {
-    max-width: 420px;
-  }
-}
-
-@media (min-width: 1024px) and (max-width: 1439px) {
-  .chat-header {
-    padding: 10px 32px;
-  }
-
-  .messages {
-    padding: 20px 32px 84px;
-  }
-
-  .input-bar {
-    padding: 12px 32px;
-  }
-
-  .bubble {
-    max-width: 56%;
-  }
-}
-
-@media (min-width: 768px) and (max-width: 1023px) {
-  .messages {
-    padding: 16px 20px 80px;
-  }
-
-  .bubble {
-    max-width: 70%;
-  }
-
-  .user-email {
-    max-width: 220px;
-  }
-}
-
-@media (min-width: 600px) and (max-width: 767px) {
+@media (max-width: 900px) {
   .chat-header {
     padding: 10px 16px;
     min-height: 58px;
   }
 
   .messages {
-    padding: 14px 16px 78px;
+    padding: 16px 18px 78px;
   }
 
   .input-bar {
@@ -536,7 +482,7 @@ div:has(> .item) {
   }
 
   .bubble {
-    max-width: 75%;
+    max-width: 74%;
   }
 
   .avatar {
@@ -546,13 +492,8 @@ div:has(> .item) {
   }
 
   .user-email {
-    max-width: 160px;
+    max-width: 220px;
     font-size: 14px;
-  }
-
-  .back-btn {
-    padding: 7px 14px;
-    font-size: 12px;
   }
 
   div:has(> .item) {
@@ -560,10 +501,14 @@ div:has(> .item) {
   }
 }
 
-@media (max-width: 599px) {
+@media (max-width: 600px) {
   .chat-header {
-    padding: 8px 14px;
+    padding: 8px 12px;
     min-height: 54px;
+    gap: 8px;
+  }
+
+  .header-info {
     gap: 8px;
   }
 
@@ -577,14 +522,14 @@ div:has(> .item) {
   }
 
   .avatar {
-    width: 36px;
-    height: 36px;
+    width: 34px;
+    height: 34px;
     font-size: 14px;
   }
 
   .user-email {
+    max-width: 140px;
     font-size: 13px;
-    max-width: 130px;
   }
 
   .user-active {
@@ -592,7 +537,7 @@ div:has(> .item) {
   }
 
   .bubble {
-    max-width: 82%;
+    max-width: 84%;
     font-size: 13.5px;
     padding: 9px 12px 7px;
   }
@@ -602,14 +547,20 @@ div:has(> .item) {
   }
 
   .back-btn {
-    padding: 6px 12px;
-    font-size: 12px;
+    padding: 6px 10px;
+    font-size: 11px;
     border-radius: 18px;
+    gap: 5px;
+  }
+
+  .back-btn svg {
+    width: 14px;
+    height: 14px;
   }
 
   .user-input {
-    padding: 10px 16px;
-    font-size: 13px;
+    padding: 10px 14px;
+    font-size: 16px;
   }
 
   .send-btn {
@@ -623,8 +574,8 @@ div:has(> .item) {
   }
 
   div:has(> .item) {
-    bottom: 70px;
-    width: calc(100% - 24px);
+    bottom: 68px;
+    width: calc(100% - 20px);
     border-radius: 16px;
     justify-content: space-around;
   }
@@ -632,12 +583,16 @@ div:has(> .item) {
   .item {
     flex: 1;
     justify-content: center;
-    font-size: 12.5px;
-    padding: 9px 10px;
+    font-size: 12px;
+    padding: 8px 10px;
+  }
+
+  .item + .item {
+    padding-left: 10px;
   }
 }
 
-@media (max-width: 360px) {
+@media (max-width: 480px) {
   .chat-header {
     padding: 7px 10px;
     min-height: 50px;
@@ -657,19 +612,19 @@ div:has(> .item) {
     font-size: 13px;
   }
 
+  .user-email {
+    max-width: 120px;
+    font-size: 12.5px;
+  }
+
   .bubble {
-    max-width: 86%;
+    max-width: 88%;
     font-size: 13px;
   }
 
-  .back-btn {
-    padding: 5px 10px;
-    font-size: 11px;
-  }
-
   .user-input {
-    padding: 9px 14px;
-    font-size: 12px;
+    padding: 9px 12px;
+    font-size: 16px;
   }
 
   .send-btn {
@@ -677,7 +632,77 @@ div:has(> .item) {
     height: 38px;
   }
 
+  .item {
+    font-size: 11.5px;
+    padding: 8px;
+  }
+
   div:has(> .item) {
-    bottom: 66px;
+    bottom: 64px;
+  }
+}
+
+@media (max-width: 360px) {
+  .chat-header {
+    padding: 6px 8px;
+    min-height: 48px;
+  }
+
+  .header-info {
+    gap: 6px;
+  }
+
+  .messages {
+    padding: 9px 8px 66px;
+  }
+
+  .input-bar {
+    padding: 6px 8px;
+  }
+
+  .avatar {
+    width: 30px;
+    height: 30px;
+    font-size: 12px;
+  }
+
+  .user-email {
+    max-width: 100px;
+    font-size: 12px;
+  }
+
+  .user-active {
+    font-size: 10px;
+  }
+
+  .bubble {
+    max-width: 90%;
+    font-size: 12.5px;
+    padding: 8px 10px 6px;
+  }
+
+  .back-btn {
+    padding: 4px 8px;
+    font-size: 10px;
+  }
+
+  .user-input {
+    padding: 8px 10px;
+    font-size: 16px;
+  }
+
+  .send-btn {
+    width: 34px;
+    height: 34px;
+  }
+
+  .send-btn svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  div:has(> .item) {
+    bottom: 60px;
+    width: calc(100% - 16px);
   }
 }

@@ -2,6 +2,7 @@
   border-radius: 50%;
   object-fit: cover;
 }
+
 .profile-letter {
   width: 180px;
   height: 180px;
@@ -16,39 +17,26 @@
   margin-left: 10px;
 }
 
-.container-users {
-   
-}
-.head-users {
+.container-users {}
 
-}
-.profile {
+.head-users {}
 
-}
-.user-details {
+.profile {}
 
-}
-.user-email {
+.user-details {}
 
-}
-.user-name {
+.user-email {}
 
-}
-.users-container {
+.user-name {}
 
-}
-.user-contoral {
+.users-container {}
 
-}
-.unfollow {
+.user-contoral {}
 
-}
-.follow {
+.unfollow {}
 
-}
-.messages {
+.follow {}
 
-}
-.home {
-  
-}
+.messages {}
+
+.home {}

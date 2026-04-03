@@ -18,7 +18,7 @@ function Users() {
 
         try {
 
-            const responceEmails = await axios.post(backendURL + '/api/users/emails', { token }, {headers:{token}})
+            const responceEmails = await axios.post(backendURL + '/api/users/emails', { token }, { headers: { token } })
             if (!responceEmails.data.success) {
                 console.log(responceEmails.data.message);
             }
@@ -58,7 +58,7 @@ function Users() {
                         </div>
 
                         <div className="email-list-container">
-                         <MessagesList/>                            
+                            <MessagesList />
                         </div>
                     </div>
 

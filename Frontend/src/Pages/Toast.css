@@ -11,8 +11,9 @@
   margin: 0 auto !important;
 
 }
+
 .custom-toast-delete-text {
-     background: #ff0000e1 !important;
+  background: #ff0000e1 !important;
   color: #ffffff !important;
   border-radius: 50px !important;
   padding: 6px 14px !important;

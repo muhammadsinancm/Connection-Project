@@ -4,7 +4,7 @@ const store = []
 
 const userconectionreq = async (req, res) => {
   const { userData, token } = req.body;
-store.push(userData)
+  store.push(userData)
   try {
 
     const userFindConection = await UserDataSignLogin.findOne({ token: userData.token })
@@ -19,10 +19,10 @@ store.push(userData)
     if (userFindConection) {
       userFindConection.notification = token
       await userFindConection.save()
-    console.log(userFindConection);
-    
-       console.log('true');
-   return res.json({ success: true, message:'sent your token key', userFindConection})
+      console.log(userFindConection);
+
+      console.log('true');
+      return res.json({ success: true, message: 'sent your token key', userFindConection })
 
     }
 

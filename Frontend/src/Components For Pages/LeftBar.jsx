@@ -1,6 +1,6 @@
 import React from 'react'
 import { NavLink } from 'react-router-dom'
-
+import './LeftBar.css'
 function LeftBar() {
   return (
     <div className="left-bar-inner">
@@ -15,14 +15,15 @@ function LeftBar() {
           <span className="compose-text">Compose</span>
         </div>
       </div>
-      <div>
+      
+      <div className="left-nav-links">
         <NavLink to="/" className="nav-link">
           <span className="nav-icon">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
               <path d="M19 3H5C3.9 3 3 3.9 3 5V19C3 20.1 3.9 21 5 21H19C20.1 21 21 20.1 21 19V5C21 3.9 20.1 3 19 3ZM19 19H5V7L12 11.5L19 7V19ZM12 9.5L5 5H19L12 9.5Z" />
             </svg>
           </span>
-          Inbox
+          <span className="nav-label">Inbox</span>
         </NavLink>
         <NavLink to="/sent" className="nav-link">
           <span className="nav-icon">
@@ -30,7 +31,7 @@ function LeftBar() {
               <path d="M2.01 21L23 12L2.01 3L2 10L17 12L2 14L2.01 21Z" />
             </svg>
           </span>
-          Sent
+          <span className="nav-label">Sent</span>
         </NavLink>
         <NavLink to="/drafts" className="nav-link">
           <span className="nav-icon">
@@ -38,7 +39,7 @@ function LeftBar() {
               <path d="M14 2H6C4.9 2 4.01 2.9 4.01 4L4 20C4 21.1 4.89 22 5.99 22H18C19.1 22 20 21.1 20 20V8L14 2ZM18 20H6V4H13V9H18V20Z" />
             </svg>
           </span>
-          Drafts
+          <span className="nav-label">Drafts</span>
         </NavLink>
       </div>
     </div>

@@ -7,6 +7,7 @@ import userConnectionRouter from './router/userconect.js'
 import requestRouter from './router/userREQ.js'
 import userInputsRouter from './router/userInputRouter.js'
 import userMessagesRouter from './router/userMessages.js'
+import adminRouter from './router/adminlogin.js'
 
 const app = express()
 const Port = process.env.PORT || 4000
@@ -20,12 +21,13 @@ app.use('/api/userreq', userConnectionRouter)
 app.use('/api/user', requestRouter)
 app.use('/api/usertext', userInputsRouter)
 app.use('/api', userMessagesRouter)
+app.use('/api/admin', adminRouter)
 
-app.get('/',(req, res)=> {
+app.get('/', (req, res) => {
     res.send('workking')
 })
 
 
 
 
-app.listen(Port, ()=> console.log('port is runnig'))
+app.listen(Port, () => console.log('port is runnig'))

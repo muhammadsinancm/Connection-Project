@@ -1,10 +1,13 @@
 import axios from 'axios'
 import React, { createContext, useEffect } from 'react'
 import { useState } from 'react'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { data, useLocation, useNavigate } from 'react-router-dom'
+import {io} from 'socket.io-client'
 
 const Context_Connection = createContext()
 export { Context_Connection }
+
+
 
 function ContextBrowser(props) {
   const [token, setToken] = useState(localStorage.getItem("token") || "")
@@ -24,8 +27,31 @@ function ContextBrowser(props) {
   const [userTexts, setUserTexts] = useState([])
   const [sendingUserToken, setSendingUserToken] = useState('')
   const [recivedUserToken, setRecivedUserToken] = useState('')
+  const [socket, setsocket] = useState(null)
 
   const locationUser = useLocation()
+// console.log(token);
+
+useEffect(()=> {
+
+  const newSocketProviding = io('http://localhost:4000', {
+  auth:{serverOffset: 0},
+  transports: ['websocket', 'polling']
+})
+
+const userRequest = (request)=> {
+  setStoreREQ(request)
+  setMatch(request)
+}
+
+newSocketProviding.on('user request',userRequest)
+
+setsocket(newSocketProviding)
+return () => {
+  newSocketProviding.off('user request', userRequest)
+  newSocketProviding.disconnect()
+}
+}, [])
 
   useEffect(() => {
 
@@ -36,45 +62,45 @@ function ContextBrowser(props) {
 
   }, [])
 
-  const backendURL = "https://connection-project-backend.onrender.com"
+  const backendURL = import.meta.env.VITE_BACKEND_URL
 
   // -----------REQ list Of user------------------
-  const ListOFREQ = async () => {
+  // const ListOFREQ = async () => {
 
-    try {
+  //   try {
 
-      const responceREQList = await axios.get(backendURL + '/api/user/requestlist', { headers: { token } })
-      if (responceREQList.data.success) {
-        if (responceREQList.data.orginal) {
-          console.log(responceREQList.data.orginal);
-          setMatch(responceREQList.data.orginal)
-        }
-        setStoreREQ(responceREQList.data.orginal)
+  //     const responceREQList = await axios.get(backendURL + '/api/user/requestlist', { headers: { token } })
+  //     if (responceREQList.data.success) {
+  //       if (responceREQList.data.orginal) {
+  //         console.log(responceREQList.data.orginal);
+  //         setMatch(responceREQList.data.orginal)
+  //       }
+  //       // setStoreREQ(responceREQList.data.orginal)
 
-      } else {
-        console.log(responceREQList.data.message);
-      }
+  //     } else {
+  //       console.log(responceREQList.data.message);
+  //     }
 
-    } catch (error) {
-      console.log(error.message);
+  //   } catch (error) {
+  //     console.log(error.message);
 
-    }
-  }
+  //   }
+  // }
 
   // ---------this useEffect using List of request---------------- 
-  useEffect(() => {
-    ListOFREQ()
+  // useEffect(() => {
+  //   ListOFREQ()
 
-  }, [])
+  // }, [])
 
   //  -----------List Of User Connection Allow-------------
+ 
   const listOfMessagepermision = async () => {
 
     try {
 
       const responce = await axios.put(backendURL + `/api/user/messageallow/${token}`, {}, { headers: { token } })
       if (responce.data.success) {
-        console.log(responce.data.filterConnectionAllow);
 
         if (responce.data.filterConnectionAllow) {
 
@@ -153,6 +179,7 @@ function ContextBrowser(props) {
     setSendingUserToken,
     recivedUserToken,
     setRecivedUserToken,
+    socket
   }
 
   return (

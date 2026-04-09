@@ -8,6 +8,8 @@ import { toast } from "react-toastify";
 import './Toast.css'
 import { Home, Trash2 } from 'lucide-react'
 import { BeatLoader } from "react-spinners";
+import { io } from "socket.io-client";
+import { useRef } from "react";
 
 export function ChatHeader({ responceText }) {
 
@@ -234,6 +236,7 @@ export function InputBar() {
 
   const { backendURL, sendingUserToken, setSendingUserToken, recivedUserToken, token, setRecivedUserToken } = useContext(Context_Connection)
   const [saveUserText, setSaveUserText] = useState('')
+  const useReffSocket = useRef(null)
 
   const location = useLocation() //This location come from ConnectionREQ.js
 
@@ -245,10 +248,32 @@ export function InputBar() {
 
   }, [sendingUserToken, recivedUserToken])
 
+  useEffect(()=> {
+   const newSocketProviding = io('http://localhost:4000', {
+     auth:{
+      serverOffset: 0,
+      token:token
+     },
+     transports: ['websocket', 'polling']
+   })
+   useReffSocket.current = newSocketProviding
+
+    newSocketProviding.on('connect', () => {
+
+    })
+
+    newSocketProviding.on('user message show', (message)=> {
+         console.log(message);
+    })
+
+  }, [])
+
   const userInputForSelectedUser = async (userEvent) => {
 
     userEvent.preventDefault()
     setSaveUserText('')
+
+   useReffSocket.current.emit('user message send', location.state?.token, location.state?.selectedUser, saveUserText)
 
     try {
 
@@ -286,6 +311,7 @@ function Message() {
   const [textSaved, setTextSaved] = useState([])
   const [userSendTexts, setUserSendTexts] = useState([]) //Select user texts
   const [userName, setUserName] = useState('')
+  const useRefSocket = useRef(null)
 
   const { backendURL, token, userTexts, setUserTexts, sendingUserToken, setSendingUserToken, recivedUserToken, setRecivedUserToken } = useContext(Context_Connection)
 
@@ -303,46 +329,102 @@ function Message() {
   })
 
 
-  // -------------User Texts doing display--------------------
-  const userTextsShowOnTheDisplay = async () => {
+    useEffect(()=> {
+   const newSocketProviding = io('http://localhost:4000', {
+     auth:{
+      serverOffset: 0,
+      token:token
+     },
+     transports: ['websocket', 'polling']
+   })
+   useRefSocket.current = newSocketProviding
 
-    try {
+    newSocketProviding.on('connect', () => {
 
-      const responce = await axios.post(backendURL + '/api/usertext/userinputsent', { sendingUserToken, recivedUserToken, token }, { headers: { token } })
-      if (responce.data.success) {
-        setUserTextResponceData(responce.data.userTextsToFrontend)
-        setUserSendTexts(responce.data.userMessage) // reciver texts
-        setSpeshal(responce.data.userTextsToFrontend)
-        setUserTexts(textSaved)
+    })
 
-      }
+    const userLatestMessages = (messages)=> {
+      console.log(messages);
+      setUserTextResponceData(messages)
+      setSpeshal(messages)
+    }
+    const userTextsToFrontend = async (messages)=> {
+      setUserTextResponceData(messages)
+      setSpeshal(messages)
+      console.log(messages);
+      
+    }
 
-      const send = userTextResponceData.filter((itmes) => (
+    newSocketProviding.on('user message previos', userTextsToFrontend)
+    newSocketProviding.on('user message show', userLatestMessages)
+
+    return ()=> {
+      newSocketProviding.off('connect')
+      newSocketProviding.off('user message previos', userTextsToFrontend)
+      newSocketProviding.off('user message show', userLatestMessages)
+      newSocketProviding.disconnect()
+    }
+
+  }, [])
+
+  console.log(userTextResponceData);
+  console.log(speshal);
+  
+
+  useEffect(()=> {
+const send = Object.values(userTextResponceData)?.filter((itmes) => (
         itmes.sendingUserToken === token && itmes.recivedUserToken === recivedUserToken
       ))
       setResponceText(send)
 
-
-
-    } catch (error) {
-      console.log(error.message);
-    }
-
-  }
-  useEffect(() => {
-
-  }, [userTexts])
-
-  //UseEffect for userTexts Display
-  useEffect(() => {
-    userTextsShowOnTheDisplay()
-
-    const FinalFilterTexts = speshal.filter((item) => (
+       const FinalFilterTexts = Object.values(speshal)?.filter((item) => (
       item.sendingUserToken === recivedUserToken && item.recivedUserToken === token
     ))
     setTextSaved(FinalFilterTexts)
+  }, [userTextResponceData, speshal])
+console.log(textSaved);
+console.log(responceText);
 
-  }, [userTextResponceData, userSendTexts, responceText])
+  // -------------User Texts doing display--------------------
+  // const userTextsShowOnTheDisplay = async () => {
+
+  //   try {
+
+  //     const responce = await axios.post(backendURL + '/api/usertext/userinputsent', { sendingUserToken, recivedUserToken, token }, { headers: { token } })
+  //     if (responce.data.success) {
+  //       // setUserTextResponceData(responce.data.userTextsToFrontend)
+  //       setUserSendTexts(responce.data.userMessage) // reciver texts
+  //       // setSpeshal(responce.data.userTextsToFrontend)
+  //       setUserTexts(textSaved)
+
+  //     }
+
+  //     const send = userTextResponceData.filter((itmes) => (
+  //       itmes.sendingUserToken === token && itmes.recivedUserToken === recivedUserToken
+  //     ))
+  //     setResponceText(send)
+
+
+
+  //   } catch (error) {
+  //     console.log(error.message);
+  //   }
+
+  // }
+  // useEffect(() => {
+
+  // }, [userTexts])
+
+  // //UseEffect for userTexts Display
+  // useEffect(() => {
+  //   userTextsShowOnTheDisplay()
+
+  //   const FinalFilterTexts = speshal?.filter((item) => (
+  //     item.sendingUserToken === recivedUserToken && item.recivedUserToken === token
+  //   ))
+  //   setTextSaved(FinalFilterTexts)
+
+  // }, [userTextResponceData, userSendTexts, responceText])
 
 
   //Convert to modern-------------------------------------

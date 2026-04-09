@@ -7,6 +7,7 @@ const userTextScheema = new mongoose.Schema({
     sendingUserToken: { type: String, required: true },
     recivedUserToken: { type: String, required: true },
     emailForUser: { type: String, default: null },
+    roomID: {type:String, required: null}
 
 })
 

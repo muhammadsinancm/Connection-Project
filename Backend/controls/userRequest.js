@@ -51,6 +51,7 @@ const userREQ = async (req, res) => {
 
 }
 
+// remove REQList
 const REQList = async (req, res) => {
 
     try {
@@ -69,6 +70,7 @@ const REQList = async (req, res) => {
     }
 
 }
+// removeremove REQList
 
 const userREQDelete = async (req, res) => {
 
@@ -175,22 +177,23 @@ const userMessageAllow = async (req, res) => {
 }
 
 const userProfileDatas = async (req, res) => {
-    try {
+    // try {
 
-        const { token } = req.body
+        // const { token } = req.body
 
-        const userDataFinding = await UserDataSignLogin.findOne({ token: token })
+//         const userDataFinding = await UserDataSignLogin.findOne({ token: token })
+// console.log(userDataFinding, '///////////////////////');
 
-        if (!userDataFinding) {
-            res.json({ success: false, message: 'can not find user data' })
-        }
+    //     if (!userDataFinding) {
+    //         res.json({ success: false, message: 'can not find user data' })
+    //     }
 
-        res.json({ success: true, userDataFinding })
+    //     res.json({ success: true, userDataFinding })
 
-    } catch (error) {
-        console.log(error.message);
+    // } catch (error) {
+    //     console.log(error.message);
 
-    }
+    // }
 }
 
 

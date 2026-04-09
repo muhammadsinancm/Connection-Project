@@ -167,19 +167,13 @@ export function SendIcon() {
   );
 }
 
-export function PopUp({tokens}) {
-  console.log(tokens?.state?.token);
-  console.log(tokens?.state?.selectedUser);
-  
+export function PopUp({tokens}) { 
   
   const { token, backendURL } = useContext(Context_Connection)
 
   const { selectPopUp, setSelectPopUp } = useContext(TextSelecteClear)
 
   const useRefSocket = useRef(null)
-
-     console.log(location.state?.token);
-     console.log(location.state?.selectedUser);
 
   useEffect(()=> {
 
@@ -194,17 +188,15 @@ export function PopUp({tokens}) {
    useRefSocket.current = newSocketProviding
 
    newSocketProviding.on('connect', () => {
-    newSocketProviding.emit('initial datas')
+   newSocketProviding.emit('initial datas')
+   newSocketProviding.emit('user message previos', token, location.state?.selectedUser)
+
+    if (token && tokens?.state?.selectedUser) {
+      newSocketProviding.emit('message join', token, tokens?.state?.selectedUser)
+    }
    })
 
-   const messageDeleted = (message)=> {
-    console.log(message);
-   }
-
-   newSocketProviding.on('user message deleted', messageDeleted)
-
    return ()=> {
-    newSocketProviding.off('user message deleted', messageDeleted)
     newSocketProviding.disconnect()
    }
 
@@ -224,7 +216,7 @@ export function PopUp({tokens}) {
     navigator.clipboard.writeText(event).catch(() => { });
 
   }
-
+   
   const textDelete = async (EventDelete) => {
     useRefSocket.current.emit('user message delete', tokens?.state?.token, tokens?.state?.selectedUser, EventDelete)
 
@@ -279,10 +271,6 @@ export function InputBar() {
 
     newSocketProviding.on('connect', () => {
 
-    })
-
-    newSocketProviding.on('user message show', (message)=> {
-         console.log(message);
     })
 
   }, [])
@@ -365,10 +353,17 @@ function Message() {
       setSpeshal(messages)
     }
 
+    const messageDeleted = (deletedMessage)=> {
+      setUserTextResponceData(deletedMessage)
+      setSpeshal(deletedMessage)
+    }
+    
+    newSocketProviding.on('user message deleted', messageDeleted)
     newSocketProviding.on('user message previos', userTextsToFrontend)
     newSocketProviding.on('user message show', userLatestMessages)
 
     return ()=> {
+      newSocketProviding.off('user message deleted', messageDeleted)
       newSocketProviding.off('user message previos', userTextsToFrontend)
       newSocketProviding.off('user message show', userLatestMessages)
       newSocketProviding.disconnect()

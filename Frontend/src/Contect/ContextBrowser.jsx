@@ -47,7 +47,16 @@ const userRequest = (request)=> {
 newSocketProviding.on('user request',userRequest)
 
 setsocket(newSocketProviding)
+
+newSocketProviding.on('connect', () => {
+
+})
+
+newSocketProviding.on('user message', (messages)=> {
+  console.log(messages);
+})
 return () => {
+  newSocketProviding.off('user message')
   newSocketProviding.off('user request', userRequest)
   newSocketProviding.disconnect()
 }

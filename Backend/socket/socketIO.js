@@ -134,7 +134,11 @@ socket.on('message allow', async (hereUserToken, requestedUserToken)=> {
 socket.on('message join', async (token, selectedUser)=> {
 const roomId = [token, selectedUser].sort().join('-')
 socket.join(roomId)
+})
 
+socket.on('message join token', async (token)=> {
+const roomId = [token].sort().join('-')
+socket.join(roomId)
 })
 
 // Message sent and recive_____________________
@@ -153,7 +157,7 @@ socket.on('user message send', async (token, selectedUser, saveUserText)=> {
   
           const savedText = await saveUserTextData.save();
             io.to(roomId).emit('user message show', savedText)
-
+            io.emit('user message', savedText)
     
    } catch (error) {
     console.log(error.message);
@@ -164,27 +168,28 @@ socket.on('user message send', async (token, selectedUser, saveUserText)=> {
 
 socket.on('user message previos', async (token, reciverToken)=> {
   const roomId = [token, reciverToken].sort().join('-')
-console.log(roomId, 'room id');
 
  const userTextsToFrontend = await usersText.find({roomID: roomId}).sort({ date: 1 });
-         socket.emit('user message previos', userTextsToFrontend)   
+         socket.emit('user message previos', userTextsToFrontend)
 })
 
-socket.on('user message delete', async (token, reciverToken, messageId) => {
+    socket.on('user message delete', async (token, reciverToken, messageId) => {
+      const roomId = [token, reciverToken].sort().join('-')
 
-  const roomId = [token, reciverToken].sort().join('-')
-  console.log(roomId, '[]');
-  
-  try {
+      try {
 
-const messageDeleted = await usersText.findByIdAndDelete({ _id: messageId })
- socket.emit('user message deleted', messageDeleted)
-  
-} catch (error) {
-  console.log(error.message);
-  io(roomId).emit('can not delete the message')
-}
-})
+        await usersText.findByIdAndDelete(messageId)
+
+        const messageDeleted = await usersText.find({ roomID: roomId }).sort({ date: 1 })
+        console.log(messageDeleted);
+
+        io.emit('user message deleted', messageDeleted)
+
+      } catch (error) {
+        console.log(error.message);
+        socket.emit('can not delete the message')
+      }
+    })
 
 // initial data send to client_____________________
     socket.on('initial datas', async ()=> {

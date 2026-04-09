@@ -6,15 +6,17 @@ import { useNavigate } from 'react-router-dom'
 import { BeatLoader } from "react-spinners";
 import { BookOpen, MessageCircle, MessageSquare, Trash2, X } from 'lucide-react'
 import { toast } from 'react-toastify'
+import { io } from 'socket.io-client'
 
 function MessagesList() {
 
-  const { backendURL, token, storeEmails } = useContext(Context_Connection)
+  const { backendURL, token, storeEmails, locationUser } = useContext(Context_Connection)
   const [userTexts, setUserTexts] = useState([])
   const [open, setOpen] = useState(false)
   const [messageControal, setMessageControal] = useState(true)
   const [time, setTime] = useState(false)
   const [dataSave, setDataSave] = useState([])
+console.log(locationUser?.state);
 
   const clone = structuredClone(userTexts)
   const [userTextsUpdated, setUserTextsUpdated] = useState(clone)
@@ -83,25 +85,47 @@ function MessagesList() {
 
   }, [userTexts])
 
-  const userTextsShowOnTheDisplay = async () => {
+  useEffect(()=> {
+   
+    const newSocketProviding = io('http://localhost:4000', {
+      auth:{
+        serverOffset: 0,
+        token:token
+      },
+       transports: ['websocket', 'polling']
+    })
 
-    try {
+    newSocketProviding.on('connect', () => {
+    //   if (token) {
+    //   newSocketProviding.emit('message join token', token)
+    // }
+    })
 
-      const responce = await axios.post(backendURL + '/api/usermessage', { token }, { headers: { token } })
-      if (responce.data.success) {
-        setUserTexts(responce?.data.datas)
-        setTime(true)
-      }
-
-    } catch (error) {
-      console.log(error.message);
+    return ()=> {
+      newSocketProviding.disconnect()
     }
 
-  }
-  useEffect(() => {
-    userTextsShowOnTheDisplay()
-
   }, [])
+
+  // const userTextsShowOnTheDisplay = async () => {
+
+  //   try {
+
+  //     const responce = await axios.post(backendURL + '/api/usermessage', { token }, { headers: { token } })
+  //     if (responce.data.success) {
+  //       setUserTexts(responce?.data.datas)
+  //       setTime(true)
+  //     }
+
+  //   } catch (error) {
+  //     console.log(error.message);
+  //   }
+
+  // }
+  // useEffect(() => {
+  //   userTextsShowOnTheDisplay()
+
+  // }, [])
 
   const messageDelete = async (userData) => {
 

@@ -30,7 +30,7 @@ function ContextBrowser(props) {
   const [socket, setsocket] = useState(null)
 
   const locationUser = useLocation()
-// console.log(token);
+console.log(token);
 
 useEffect(()=> {
 

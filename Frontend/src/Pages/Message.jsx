@@ -8,7 +8,7 @@ import { toast } from "react-toastify";
 import './Toast.css'
 import { Home, Trash2 } from 'lucide-react'
 import { BeatLoader } from "react-spinners";
-import { io } from "socket.io-client";
+import { io, Socket } from "socket.io-client";
 import { useRef } from "react";
 
 export function ChatHeader({ responceText }) {
@@ -60,6 +60,7 @@ export function Messages({ data }) {
     setSendingUserToken(location.state?.token)
     // This token is reciver
     setRecivedUserToken(location.state?.selectedUser)
+
   }, [sendingUserToken, recivedUserToken, dataSaved])
 
 
@@ -107,7 +108,7 @@ export function Messages({ data }) {
       {
         selectPopUp ? <div>
           <TextSelecteClear.Provider value={{ selectPopUp, setSelectPopUp }}>
-            <PopUp />
+            <PopUp tokens={location} />
           </TextSelecteClear.Provider>
 
         </div> : ''
@@ -166,10 +167,48 @@ export function SendIcon() {
   );
 }
 
-export function PopUp() {
+export function PopUp({tokens}) {
+  console.log(tokens?.state?.token);
+  console.log(tokens?.state?.selectedUser);
+  
+  
   const { token, backendURL } = useContext(Context_Connection)
 
   const { selectPopUp, setSelectPopUp } = useContext(TextSelecteClear)
+
+  const useRefSocket = useRef(null)
+
+     console.log(location.state?.token);
+     console.log(location.state?.selectedUser);
+
+  useEffect(()=> {
+
+   const newSocketProviding = io('http://localhost:4000', {
+      auth:{
+        serverOffset: 0,
+        token:token
+      },
+      transports: ['websocket', 'polling']
+   })
+
+   useRefSocket.current = newSocketProviding
+
+   newSocketProviding.on('connect', () => {
+    newSocketProviding.emit('initial datas')
+   })
+
+   const messageDeleted = (message)=> {
+    console.log(message);
+   }
+
+   newSocketProviding.on('user message deleted', messageDeleted)
+
+   return ()=> {
+    newSocketProviding.off('user message deleted', messageDeleted)
+    newSocketProviding.disconnect()
+   }
+
+  }, [])
 
   const textCopy = (event) => {
     toast.success("Message copy", {
@@ -187,27 +226,7 @@ export function PopUp() {
   }
 
   const textDelete = async (EventDelete) => {
-
-    try {
-
-      const responce = await axios.delete(backendURL + `/api/usertext/userinputdelete/${EventDelete}`, { headers: { token } })
-
-      if (responce.data.success) {
-        toast.success('Message Deleted', {
-          className: "custom-toast-delete-text",
-          icon: <Trash2 size={20} color="white" />,
-          autoClose: 3000,
-          hideProgressBar: true,
-          closeButton: false,
-        })
-        console.log(responce.data.message);
-      } else {
-        console.log(responce.data.message);
-      }
-
-    } catch (error) {
-      console.log(error.message);
-    }
+    useRefSocket.current.emit('user message delete', tokens?.state?.token, tokens?.state?.selectedUser, EventDelete)
 
   }
 
@@ -275,19 +294,6 @@ export function InputBar() {
 
    useReffSocket.current.emit('user message send', location.state?.token, location.state?.selectedUser, saveUserText)
 
-    try {
-
-      const responceSave = await axios.post(backendURL + '/api/usertext/userinputrecive', { saveUserText, sendingUserToken, recivedUserToken }, { headers: { token } })
-      if (responceSave.data.success) {
-        console.log(responceSave.data.savedUserTextandDatas);
-
-      }
-
-    } catch (error) {
-      console.log(error.message);
-
-    }
-
   }
   return (
 
@@ -313,7 +319,7 @@ function Message() {
   const [userName, setUserName] = useState('')
   const useRefSocket = useRef(null)
 
-  const { backendURL, token, userTexts, setUserTexts, sendingUserToken, setSendingUserToken, recivedUserToken, setRecivedUserToken } = useContext(Context_Connection)
+  const { token, sendingUserToken, setSendingUserToken, recivedUserToken, setRecivedUserToken } = useContext(Context_Connection)
 
   const location = useLocation() //This location come from ConnectionREQ.js
 
@@ -328,7 +334,6 @@ function Message() {
     return items?.token === recivedUserToken
   })
 
-
     useEffect(()=> {
    const newSocketProviding = io('http://localhost:4000', {
      auth:{
@@ -340,26 +345,30 @@ function Message() {
    useRefSocket.current = newSocketProviding
 
     newSocketProviding.on('connect', () => {
+      newSocketProviding.emit('initial datas')
+     newSocketProviding.emit('user message previos', token, location.state?.selectedUser)
 
+
+     if (token && location.state?.selectedUser) {
+      newSocketProviding.emit('message join', token, location.state?.selectedUser)
+    }
     })
 
+
     const userLatestMessages = (messages)=> {
-      console.log(messages);
-      setUserTextResponceData(messages)
-      setSpeshal(messages)
+      setUserTextResponceData((pre)=> [...pre, messages])
+      setSpeshal((pre)=> [...pre, messages])
     }
-    const userTextsToFrontend = async (messages)=> {
+
+    const userTextsToFrontend = (messages)=> {
       setUserTextResponceData(messages)
       setSpeshal(messages)
-      console.log(messages);
-      
     }
 
     newSocketProviding.on('user message previos', userTextsToFrontend)
     newSocketProviding.on('user message show', userLatestMessages)
 
     return ()=> {
-      newSocketProviding.off('connect')
       newSocketProviding.off('user message previos', userTextsToFrontend)
       newSocketProviding.off('user message show', userLatestMessages)
       newSocketProviding.disconnect()
@@ -367,70 +376,32 @@ function Message() {
 
   }, [])
 
-  console.log(userTextResponceData);
-  console.log(speshal);
-  
+  useEffect(() => {
 
-  useEffect(()=> {
-const send = Object.values(userTextResponceData)?.filter((itmes) => (
-        itmes.sendingUserToken === token && itmes.recivedUserToken === recivedUserToken
-      ))
-      setResponceText(send)
+    const dataToArray = Array.isArray(userTextResponceData) ? userTextResponceData : Object.values(userTextResponceData || [])
 
-       const FinalFilterTexts = Object.values(speshal)?.filter((item) => (
-      item.sendingUserToken === recivedUserToken && item.recivedUserToken === token
+    const send = dataToArray.filter((itmes) => (
+      itmes?.sendingUserToken === token && itmes?.recivedUserToken === recivedUserToken
     ))
-    setTextSaved(FinalFilterTexts)
+    setResponceText(send)
+
+    const dataToArraySpeshal = Array.isArray(speshal) ? speshal : Object.values(speshal || [])
+    
+    const FinalFilterTexts = dataToArraySpeshal.filter((item) => (
+      item?.sendingUserToken === recivedUserToken && item?.recivedUserToken === token
+    ))
+    setTextSaved(FinalFilterTexts)   
+
   }, [userTextResponceData, speshal])
-console.log(textSaved);
-console.log(responceText);
-
-  // -------------User Texts doing display--------------------
-  // const userTextsShowOnTheDisplay = async () => {
-
-  //   try {
-
-  //     const responce = await axios.post(backendURL + '/api/usertext/userinputsent', { sendingUserToken, recivedUserToken, token }, { headers: { token } })
-  //     if (responce.data.success) {
-  //       // setUserTextResponceData(responce.data.userTextsToFrontend)
-  //       setUserSendTexts(responce.data.userMessage) // reciver texts
-  //       // setSpeshal(responce.data.userTextsToFrontend)
-  //       setUserTexts(textSaved)
-
-  //     }
-
-  //     const send = userTextResponceData.filter((itmes) => (
-  //       itmes.sendingUserToken === token && itmes.recivedUserToken === recivedUserToken
-  //     ))
-  //     setResponceText(send)
 
 
-
-  //   } catch (error) {
-  //     console.log(error.message);
-  //   }
-
-  // }
-  // useEffect(() => {
-
-  // }, [userTexts])
-
-  // //UseEffect for userTexts Display
-  // useEffect(() => {
-  //   userTextsShowOnTheDisplay()
-
-  //   const FinalFilterTexts = speshal?.filter((item) => (
-  //     item.sendingUserToken === recivedUserToken && item.recivedUserToken === token
-  //   ))
-  //   setTextSaved(FinalFilterTexts)
-
-  // }, [userTextResponceData, userSendTexts, responceText])
-
-
-  //Convert to modern-------------------------------------
   const mixedMessages = [...responceText, ...textSaved].sort((a, b) => (
     new Date(a?.date).getTime() - new Date(b?.date).getTime()
   ))
+
+  const newDatas = mixedMessages.filter((items, index, self)=> {
+   return index === self.findIndex((m)=> m._id === items._id)
+   })
 
   return (
 
@@ -438,8 +409,8 @@ console.log(responceText);
       <ChatHeader responceText={{ userName, userDataFind }} />
 
       <div className="messages">
-        {Array.isArray(mixedMessages) &&
-          Object.values(mixedMessages).map((items, index) => (
+        {Array.isArray(newDatas) &&
+          Object.values(newDatas).map((items, index) => (
             <Messages key={items?._id || index} data={items} />
           ))
         }

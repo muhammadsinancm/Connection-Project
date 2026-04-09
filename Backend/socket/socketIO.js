@@ -41,7 +41,6 @@ const userEmails = async (io) => {
         roomId: roomId
       })
       const savedREQ = await saveUsersREQ.save();
-      // io.to(roomId).emit('server responce', savedREQ)
       io.except(roomId).emit('server responce', savedREQ)
 
        const updatedReq = await REQ.find()
@@ -73,6 +72,7 @@ try {
    io.to(roomId).emit('user deleted', deleteRequest)
    io.to(roomId).emit('previos delete', deleteRequest)
    io.except(roomId).emit('previos delete', deleteRequest) 
+
 } catch (error) {
   console.log(error.message);
   socket.emit('can not delete the data')
@@ -82,8 +82,6 @@ try {
 
 socket.on('ingore user', async (userIgnoreData) => {
 try {
-
-  // const roomId = [token, ingoreUser?.token].sort().join('-')
   
   const testing = await REQ.findOneAndDelete({_id: userIgnoreData})
    const deleteRequest = await REQ.find()
@@ -133,12 +131,17 @@ socket.on('message allow', async (hereUserToken, requestedUserToken)=> {
       }
 })
 
+socket.on('message join', async (token, selectedUser)=> {
+const roomId = [token, selectedUser].sort().join('-')
+socket.join(roomId)
+
+})
+
 // Message sent and recive_____________________
 socket.on('user message send', async (token, selectedUser, saveUserText)=> {
    try {
 
     const roomId = [token, selectedUser].sort().join('-')
-    socket.join(roomId)
 
      const saveUserTextData = await new usersText({
                 userText: saveUserText,
@@ -147,22 +150,40 @@ socket.on('user message send', async (token, selectedUser, saveUserText)=> {
                 roomID:roomId,
                 date: Date.now()
             })
-   
+  
           const savedText = await saveUserTextData.save();
-            io.except(roomId).emit('user message show', savedText)
-
-        const userTextsToFrontend = await usersText.find()
-        const userMessage = userTextsToFrontend.filter((itmes) => (
-            itmes.recivedUserToken === token
-        ))
-
-        io.to(roomId).emit('user message previos', userMessage)
+            io.to(roomId).emit('user message show', savedText)
 
     
    } catch (error) {
     console.log(error.message);
     socket.emit('message not found')
    }
+})
+// Message sent and recive_____________________
+
+socket.on('user message previos', async (token, reciverToken)=> {
+  const roomId = [token, reciverToken].sort().join('-')
+console.log(roomId, 'room id');
+
+ const userTextsToFrontend = await usersText.find({roomID: roomId}).sort({ date: 1 });
+         socket.emit('user message previos', userTextsToFrontend)   
+})
+
+socket.on('user message delete', async (token, reciverToken, messageId) => {
+
+  const roomId = [token, reciverToken].sort().join('-')
+  console.log(roomId, '[]');
+  
+  try {
+
+const messageDeleted = await usersText.findByIdAndDelete({ _id: messageId })
+ socket.emit('user message deleted', messageDeleted)
+  
+} catch (error) {
+  console.log(error.message);
+  io(roomId).emit('can not delete the message')
+}
 })
 
 // initial data send to client_____________________
@@ -173,7 +194,7 @@ socket.on('user message send', async (token, selectedUser, saveUserText)=> {
          const Req = await REQ.find()
     socket.emit('user emails to serch component', emails)
     io.emit('user request', Req)
-        
+         
       } catch (error) {
         console.log('can not fetch initial data');
       }

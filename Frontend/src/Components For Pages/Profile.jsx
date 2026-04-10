@@ -18,7 +18,7 @@ export function Notifications() {
     const useRefSocket = useRef(null)
 
     useEffect(()=> {
-     const newSocketProviding = io('https://connection-project-backend.onrender.com', {
+     const newSocketProviding = io('http://localhost:4000', {
      auth:{serverOffset: 0},
      transports: ['websocket', 'polling']
    })
@@ -56,6 +56,7 @@ export function Notifications() {
    newSocketProviding.on('previos accept', previosAcceptHandler)
    newSocketProviding.on('message accept', messageAcceptHandler)
    newSocketProviding.on('previos delete', (deleted)=> {
+
     
    })
 
@@ -181,7 +182,7 @@ function Profile() {
   const { backendURL, token } = useContext(Context_Connection)
 
 useEffect(()=> {
-     const newSocketProviding = io('https://connection-project-backend.onrender.com', {
+     const newSocketProviding = io('http://localhost:4000', {
      auth:{serverOffset: 0},
      transports: ['websocket', 'polling']
    })

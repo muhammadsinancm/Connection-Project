@@ -8,44 +8,56 @@ import { Search } from 'lucide-react'
 import { io } from 'socket.io-client'
 
 function Serch() {
-    const { socket } = useContext(Context_Connection)
+    const { storeEmails } = useContext(Context_Connection)
     const [serch, setSerch] = useState([])
-    const [emails, setEmails] = useState([])
+    // const [emails, setEmails] = useState([])
 
     const navigate = useNavigate()
 
-    useEffect(() => {
+    // useEffect(() => {
 
-        const newSocketProviding = io('https://connection-project-backend.onrender.com', {
-            auth: { serverOffset: 0 },
-            transports: ['websocket', 'polling']
-        })
+    //     const newSocketProviding = io('http://localhost:4000', {
+    //         auth: { serverOffset: 0 },
+    //         transports: ['websocket', 'polling']
+    //     })
 
-        newSocketProviding.on('connect', ()=> {
-            newSocketProviding.emit('initial datas')
-        })
+    //     newSocketProviding.on('connect', ()=> {
+    //         newSocketProviding.emit('initial datas')
+    //     })
 
-        const emailList = (email) => setEmails(email)
+    //     const emailList = (email) => setEmails(email)
 
-        newSocketProviding.on('user emails to serch component', emailList)
+    //     newSocketProviding.on('user emails to serch component', emailList)
 
-        return () => {
-             socket?.off('user emails to serch component', emailList)
-                 newSocketProviding.disconnect()
-        }
-    }, [])
+    //     return () => {
+    //          socket?.off('user emails to serch component', emailList)
+    //              newSocketProviding.disconnect()
+    //     }
+    // }, [])
     const userEmailsSerch = (value) => {
 
-        if (!value.trim()) {
+        // if (!value.trim()) {
+        //     setSerch([])
+        //     return
+        // }
+
+        // const serchFilterEmails = emails?.filter((items) => (
+        //     items.email.toLocaleLowerCase().includes(value.toLocaleLowerCase())
+        // ))
+        // setSerch(serchFilterEmails)
+
+         if (!value.trim()) {
             setSerch([])
             return
         }
 
-        const serchFilterEmails = emails?.filter((items) => (
+        const serchFilterEmails = storeEmails.filter((items) => (
             items.email.toLocaleLowerCase().includes(value.toLocaleLowerCase())
         ))
         setSerch(serchFilterEmails)
     }
+
+
 
     return (
         <div className="search-bar">

@@ -5,21 +5,48 @@ import { useState } from 'react'
 import { NavLink, useLocation, useNavigate } from 'react-router-dom'
 import '../Pages/Users.css'
 import { Search } from 'lucide-react'
-
-export function UserText() {
-
-}
-
+import { io } from 'socket.io-client'
 
 function Serch() {
     const { storeEmails } = useContext(Context_Connection)
     const [serch, setSerch] = useState([])
-    
+    // const [emails, setEmails] = useState([])
+
     const navigate = useNavigate()
 
+    // useEffect(() => {
+
+    //     const newSocketProviding = io('http://localhost:4000', {
+    //         auth: { serverOffset: 0 },
+    //         transports: ['websocket', 'polling']
+    //     })
+
+    //     newSocketProviding.on('connect', ()=> {
+    //         newSocketProviding.emit('initial datas')
+    //     })
+
+    //     const emailList = (email) => setEmails(email)
+
+    //     newSocketProviding.on('user emails to serch component', emailList)
+
+    //     return () => {
+    //          socket?.off('user emails to serch component', emailList)
+    //              newSocketProviding.disconnect()
+    //     }
+    // }, [])
     const userEmailsSerch = (value) => {
 
-        if (!value.trim()) {
+        // if (!value.trim()) {
+        //     setSerch([])
+        //     return
+        // }
+
+        // const serchFilterEmails = emails?.filter((items) => (
+        //     items.email.toLocaleLowerCase().includes(value.toLocaleLowerCase())
+        // ))
+        // setSerch(serchFilterEmails)
+
+         if (!value.trim()) {
             setSerch([])
             return
         }
@@ -30,11 +57,13 @@ function Serch() {
         setSerch(serchFilterEmails)
     }
 
+
+
     return (
         <div className="search-bar">
             <div className="search-input-wrapper">
                 <div className="search-icon">
-                   <Search size={20} />
+                    <Search size={20} />
                 </div>
                 <input
                     onChange={(e) => userEmailsSerch(e.target.value)}
@@ -55,11 +84,11 @@ function Serch() {
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="#5f6368" style={{ marginRight: '16px' }}>
                                 <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z" />
                             </svg>
-                            <NavLink to={'/connectionReq'} state={{value:items}}>
-                            <div className='to-connectios' onClick={()=> navigate('/context', {state:{value:items}})}>
-                                <span className='user-emails' aistyle={{ margin: 0, fontSize: '14px', color: '#202124' }}>{items.email}</span>
-                            </div>         
-                            </NavLink>       
+                            <NavLink to={'/connectionReq'} state={{ value: items }}>
+                                <div className='to-connectios' onClick={() => navigate('/context', { state: { value: items } })}>
+                                    <span className='user-emails' aistyle={{ margin: 0, fontSize: '14px', color: '#202124' }}>{items.email}</span>
+                                </div>
+                            </NavLink>
                         </div>
                     ))
                     }

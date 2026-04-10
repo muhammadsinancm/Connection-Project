@@ -4,4 +4,4 @@ export const ContextForProfile = createContext()
 
 export const TextContext = createContext()
 
-export const TextSelecteClear = createContext()
+export const TextSelecteClear = createContext();

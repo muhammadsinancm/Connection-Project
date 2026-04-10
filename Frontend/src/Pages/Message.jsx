@@ -6,22 +6,24 @@ import './Message.css';
 import { TextSelecteClear } from "../Contect/Context";
 import { toast } from "react-toastify";
 import './Toast.css'
-import {Home, Trash2} from 'lucide-react'
+import { Home, Trash2 } from 'lucide-react'
 import { BeatLoader } from "react-spinners";
+import { io, Socket } from "socket.io-client";
+import { useRef } from "react";
 
-export function ChatHeader({responceText}) {
- 
-  const {token} = useContext(Context_Connection)
+export function ChatHeader({ responceText }) {
+
+  const { token } = useContext(Context_Connection)
   const navigate = useNavigate()
   const location = useLocation()
-  
+
   return (
     <div className="chat-header">
       <button className="back-btn" onClick={() => navigate('/')}><Home size={20} />Home</button>
       <div className="header-info">
-        <div onClick={()=> navigate('/profile', {state:{selectedUserData: responceText, selectedUser:location.state.selectedUser, token:token}})} className="avatar">{responceText?.userName?.email?.charAt(0)?.toUpperCase() || responceText?.userDataFind[0]?.email?.charAt(0)?.toUpperCase()}</div>
+        <div onClick={() => navigate('/profile', { state: { selectedUserData: responceText, selectedUser: location.state.selectedUser, token: token } })} className="avatar">{responceText?.userName?.email?.charAt(0)?.toUpperCase() || responceText?.userDataFind[0]?.email?.charAt(0)?.toUpperCase()}</div>
         <div className="user-profile">
-          <h3 className="user-email">{responceText?.userName[0]?.email || responceText?.userDataFind[0]?.email}</h3>
+          <h3 className="user-email">{responceText?.userName?.email || responceText?.userDataFind[0]?.email}</h3>
           <p className="user-active">Active now</p>
         </div>
       </div>
@@ -38,26 +40,27 @@ export function Messages({ data }) {
   const [loading, setLoading] = useState(false)
 
   let time = data.date
- const date = new Date(time)
+  const date = new Date(time)
 
- const time12 = date.toLocaleString('en-US', {
-  hour: 'numeric',
-  minute: 'numeric',
-  hour12: true,
-  timeZone: 'Asia/Kolkata'
- })
+  const time12 = date.toLocaleString('en-US', {
+    hour: 'numeric',
+    minute: 'numeric',
+    hour12: true,
+    timeZone: 'Asia/Kolkata'
+  })
 
   const { token } = useContext(Context_Connection)
 
   const location = useLocation() //This location come from ConnectionREQ.js
-  
+
 
   useEffect(() => {
 
     //This token is message sending user
-    setSendingUserToken(location.state?.token) 
+    setSendingUserToken(location.state?.token)
     // This token is reciver
     setRecivedUserToken(location.state?.selectedUser)
+
   }, [sendingUserToken, recivedUserToken, dataSaved])
 
 
@@ -70,44 +73,44 @@ export function Messages({ data }) {
     itmes?.recivedUserToken === token
   ))
 
-  useEffect(()=> {
-setLoading(true)
+  useEffect(() => {
+    setLoading(true)
 
   }, [selectPopUp])
 
   return (
     <>
-     {
-      loading ? <div>
-         {datasssss[0]?.userText && (
-        <div className="row theirs">
-          <div onClick={()=> setSelectPopUp(datasssss[0] === selectPopUp ? null : datasssss[0])} className="bubble theirs">
-            <span className="text">{datasssss[0]?.userText}</span>
-            <span className="time">{time12}</span>
-          </div>
-        </div>
-      )}
-      </div> : <BeatLoader color="#0066ff" size={10} className="row theirs"/> 
-     }
-
-     {
-      loading ? <div>
-         {datasss[0]?.userText && (
-        <div className="row mine">
-          <div onClick={()=> setSelectPopUp(datasss[0] === selectPopUp ? null : datasss[0])} className="bubble mine">
-            <span className="text">{datasss[0]?.userText}</span>
-            <span className="time">{time12}</span>
-          </div>
-        </div>
-      )}
-      </div> : <BeatLoader color="#0066ff" className="row mine" size={10}/> 
-     }
       {
-          selectPopUp ? <div>
-            <TextSelecteClear.Provider value={{selectPopUp, setSelectPopUp}}>
-               <PopUp/>
-            </TextSelecteClear.Provider>
-        
+        loading ? <div>
+          {datasssss[0]?.userText && (
+            <div className="row theirs">
+              <div onClick={() => setSelectPopUp(datasssss[0] === selectPopUp ? null : datasssss[0])} className="bubble theirs">
+                <span className="text">{datasssss[0]?.userText}</span>
+                <span className="time">{time12}</span>
+              </div>
+            </div>
+          )}
+        </div> : <BeatLoader color="#0066ff" size={10} className="row theirs" />
+      }
+
+      {
+        loading ? <div>
+          {datasss[0]?.userText && (
+            <div className="row mine">
+              <div onClick={() => setSelectPopUp(datasss[0] === selectPopUp ? null : datasss[0])} className="bubble mine">
+                <span className="text">{datasss[0]?.userText}</span>
+                <span className="time">{time12}</span>
+              </div>
+            </div>
+          )}
+        </div> : <BeatLoader color="#0066ff" className="row mine" size={10} />
+      }
+      {
+        selectPopUp ? <div>
+          <TextSelecteClear.Provider value={{ selectPopUp, setSelectPopUp }}>
+            <PopUp tokens={location} />
+          </TextSelecteClear.Provider>
+
         </div> : ''
       }
     </>
@@ -115,7 +118,7 @@ setLoading(true)
 }
 
 export function CopyIcon() {
-  
+
   return (
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
       <rect x="9" y="9" width="13" height="13" rx="2" />
@@ -146,10 +149,10 @@ export function DeleteIcon() {
 
 export function BackIcon() {
   return (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-    <polyline points="15 18 9 12 15 6" />
-  </svg>
-);
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <polyline points="15 18 9 12 15 6" />
+    </svg>
+  );
 }
 
 export function SendIcon() {
@@ -157,61 +160,71 @@ export function SendIcon() {
   return (
     <div>
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-      <line x1="22" y1="2" x2="11" y2="13" />
-      <polygon points="22 2 15 22 11 13 2 9 22 2" />
-    </svg>
+        <line x1="22" y1="2" x2="11" y2="13" />
+        <polygon points="22 2 15 22 11 13 2 9 22 2" />
+      </svg>
     </div>
   );
 }
 
-export function PopUp() {
-  const {token, backendURL} = useContext(Context_Connection)
-
-  const {selectPopUp, setSelectPopUp} = useContext(TextSelecteClear)
-
-const textCopy = (event) => {
- toast.success("Message copy", {
-  className: "custom-toast-copy-text",
-  icon: "✅",
-  autoClose: 2000,
-  hideProgressBar: true,
-  closeButton: false,
-});
-
-  setSelectPopUp(null)
-  console.log(event);
-  navigator.clipboard.writeText(event).catch(() => {});
+export function PopUp({tokens}) { 
   
-}
+  const { token, backendURL } = useContext(Context_Connection)
 
-const textDelete = async (EventDelete) => {
+  const { selectPopUp, setSelectPopUp } = useContext(TextSelecteClear)
 
-  try {
+  const useRefSocket = useRef(null)
 
-       const responce = await axios.delete(backendURL + `/api/usertext/userinputdelete/${EventDelete}`, {headers:{token}})
-       
-       if (responce.data.success) {
-        toast.success('Message Deleted', {
-          className: "custom-toast-delete-text",
-          icon:<Trash2 size={20} color="white"/>,
-          autoClose:3000,
-          hideProgressBar: true,
-          closeButton: false,
-        })
-          console.log(responce.data.message);                  
-       } else {
-        console.log(responce.data.message);              
-       }
-    
-  } catch (error) {
-    console.log(error.message); 
+  useEffect(()=> {
+
+   const newSocketProviding = io('http://localhost:4000', {
+      auth:{
+        serverOffset: 0,
+        token:token
+      },
+      transports: ['websocket', 'polling']
+   })
+
+   useRefSocket.current = newSocketProviding
+
+   newSocketProviding.on('connect', () => {
+   newSocketProviding.emit('initial datas')
+   newSocketProviding.emit('user message previos', token, location.state?.selectedUser)
+
+    if (token && tokens?.state?.selectedUser) {
+      newSocketProviding.emit('message join', token, tokens?.state?.selectedUser)
+    }
+   })
+
+   return ()=> {
+    newSocketProviding.disconnect()
+   }
+
+  }, [])
+
+  const textCopy = (event) => {
+    toast.success("Message copy", {
+      className: "custom-toast-copy-text",
+      icon: "✅",
+      autoClose: 2000,
+      hideProgressBar: true,
+      closeButton: false,
+    });
+
+    setSelectPopUp(null)
+    console.log(event);
+    navigator.clipboard.writeText(event).catch(() => { });
+
   }
+   
+  const textDelete = async (EventDelete) => {
+    useRefSocket.current.emit('user message delete', tokens?.state?.token, tokens?.state?.selectedUser, EventDelete)
 
-}
+  }
 
   return (
     <div className={`user-select-container${selectPopUp._id}`}>
-      <div onClick={()=> textCopy(selectPopUp?.userText)} className="item">
+      <div onClick={() => textCopy(selectPopUp?.userText)} className="item">
         <CopyIcon /> <label>Copy</label>
 
       </div>
@@ -220,7 +233,7 @@ const textDelete = async (EventDelete) => {
       </div>
       {
         selectPopUp.sendingUserToken === token && (
-          <div onClick={()=> textDelete(selectPopUp?._id)} className="item danger">
+          <div onClick={() => textDelete(selectPopUp?._id)} className="item danger">
             <DeleteIcon /> Delete
           </div>
         )}
@@ -234,6 +247,8 @@ export function InputBar() {
 
   const { backendURL, sendingUserToken, setSendingUserToken, recivedUserToken, token, setRecivedUserToken } = useContext(Context_Connection)
   const [saveUserText, setSaveUserText] = useState('')
+  const [sender, setSender] = useState([])
+  const useReffSocket = useRef(null)
 
   const location = useLocation() //This location come from ConnectionREQ.js
 
@@ -241,28 +256,38 @@ export function InputBar() {
   useEffect(() => {
     setSendingUserToken(location.state?.token) //This token is message sending user
     setRecivedUserToken(location.state?.selectedUser) // This token is reciver
-    
-    
+
+
   }, [sendingUserToken, recivedUserToken])
-  
+
+  useEffect(()=> {
+   const newSocketProviding = io('http://localhost:4000', {
+     auth:{
+      serverOffset: 0,
+      token:token
+     },
+     transports: ['websocket', 'polling']
+   })
+   useReffSocket.current = newSocketProviding
+
+    newSocketProviding.on('connect', () => {
+ newSocketProviding.emit('user token sent to server', token);
+    newSocketProviding.emit('initial datas')
+    })
+
+    newSocketProviding.on('responce for client', async (person)=> {setSender(person)})
+
+  }, [])
+
   const userInputForSelectedUser = async (userEvent) => {
-    
+console.log(userEvent);
+
     userEvent.preventDefault()
     setSaveUserText('')
-    
-    try {
 
-      const responceSave = await axios.post(backendURL + '/api/usertext/userinputrecive', { saveUserText, sendingUserToken, recivedUserToken }, {headers:{token}})
-      if (responceSave.data.success) {
-        console.log(responceSave.data.savedUserTextandDatas);
-        
-      }
-     
-    } catch (error) {
-      console.log(error.message);
-
-    }
-
+   useReffSocket.current.emit('user message send', location.state?.token, location.state?.selectedUser, saveUserText, sender)
+   console.log(location);
+   
   }
   return (
 
@@ -286,8 +311,9 @@ function Message() {
   const [textSaved, setTextSaved] = useState([])
   const [userSendTexts, setUserSendTexts] = useState([]) //Select user texts
   const [userName, setUserName] = useState('')
+  const useRefSocket = useRef(null)
 
-  const { backendURL, token, userTexts, setUserTexts, sendingUserToken, setSendingUserToken, recivedUserToken, setRecivedUserToken } = useContext(Context_Connection)
+  const { token, sendingUserToken, setSendingUserToken, recivedUserToken, setRecivedUserToken } = useContext(Context_Connection)
 
   const location = useLocation() //This location come from ConnectionREQ.js
 
@@ -298,66 +324,94 @@ function Message() {
     setUserName(location.state?.selectedUserName)
   }, [sendingUserToken, recivedUserToken, userName])
 
-  const userDataFind = Object.values(userName).filter((items)=> {
-   return items?.token === recivedUserToken
+  const userDataFind = Object.values(userName).filter((items) => {
+    return items?.token === recivedUserToken
   })
 
+    useEffect(()=> {
+   const newSocketProviding = io('http://localhost:4000', {
+     auth:{
+      serverOffset: 0,
+      token:token
+     },
+     transports: ['websocket', 'polling']
+   })
+   useRefSocket.current = newSocketProviding
 
-  // -------------User Texts doing display--------------------
-  const userTextsShowOnTheDisplay = async () => {
+    newSocketProviding.on('connect', () => {
+      newSocketProviding.emit('initial datas')
+     newSocketProviding.emit('user message previos', token, location.state?.selectedUser)
 
-    try {
 
-      const responce = await axios.post(backendURL + '/api/usertext/userinputsent', { sendingUserToken, recivedUserToken, token }, {headers:{token}})
-      if (responce.data.success) {
-        setUserTextResponceData(responce.data.userTextsToFrontend)
-        setUserSendTexts(responce.data.userMessage) // reciver texts
-        setSpeshal(responce.data.userTextsToFrontend)
-        setUserTexts(textSaved)
+     if (token && location.state?.selectedUser) {
+      newSocketProviding.emit('message join', token, location.state?.selectedUser)
+    }
+    })
 
-      }
 
-      const send = userTextResponceData.filter((itmes) => (
-        itmes.sendingUserToken === token && itmes.recivedUserToken === recivedUserToken
-      ))
-      setResponceText(send)
-     
-      
-
-    } catch (error) {
-      console.log(error.message);
+    const userLatestMessages = (messages)=> {
+      setUserTextResponceData((pre)=> [...pre, messages])
+      setSpeshal((pre)=> [...pre, messages])
     }
 
-  }
-   useEffect(()=> {
+    const userTextsToFrontend = (messages)=> {
+      setUserTextResponceData(messages)
+      setSpeshal(messages)
+    }
 
-  }, [userTexts])
+    const messageDeleted = (deletedMessage)=> {
+      setUserTextResponceData(deletedMessage)
+      setSpeshal(deletedMessage)
+    }
+    
+    newSocketProviding.on('user message deleted', messageDeleted)
+    newSocketProviding.on('user message previos', userTextsToFrontend)
+    newSocketProviding.on('user message show', userLatestMessages)
 
-  //UseEffect for userTexts Display
+    return ()=> {
+      newSocketProviding.off('user message deleted', messageDeleted)
+      newSocketProviding.off('user message previos', userTextsToFrontend)
+      newSocketProviding.off('user message show', userLatestMessages)
+      newSocketProviding.disconnect()
+    }
+
+  }, [])
+
   useEffect(() => {
-    userTextsShowOnTheDisplay()
 
-    const FinalFilterTexts = speshal.filter((item) => (
-      item.sendingUserToken === recivedUserToken && item.recivedUserToken === token
+    const dataToArray = Array.isArray(userTextResponceData) ? userTextResponceData : Object.values(userTextResponceData || [])
+
+    const send = dataToArray.filter((itmes) => (
+      itmes?.sendingUserToken === token && itmes?.recivedUserToken === recivedUserToken
     ))
-    setTextSaved(FinalFilterTexts)
+    setResponceText(send)
 
-  }, [userTextResponceData, userSendTexts, responceText])
+    const dataToArraySpeshal = Array.isArray(speshal) ? speshal : Object.values(speshal || [])
+    
+    const FinalFilterTexts = dataToArraySpeshal.filter((item) => (
+      item?.sendingUserToken === recivedUserToken && item?.recivedUserToken === token
+    ))
+    setTextSaved(FinalFilterTexts)   
+
+  }, [userTextResponceData, speshal])
 
 
-  //Convert to modern-------------------------------------
   const mixedMessages = [...responceText, ...textSaved].sort((a, b) => (
     new Date(a?.date).getTime() - new Date(b?.date).getTime()
   ))
 
+  const newDatas = mixedMessages.filter((items, index, self)=> {
+   return index === self.findIndex((m)=> m._id === items._id)
+   })
+
   return (
 
     <div className="chat">
-      <ChatHeader responceText={{userName, userDataFind}} />
+      <ChatHeader responceText={{ userName, userDataFind }} />
 
       <div className="messages">
-        {Array.isArray(mixedMessages) &&
-          Object.values(mixedMessages).map((items, index) => (
+        {Array.isArray(newDatas) &&
+          Object.values(newDatas).map((items, index) => (
             <Messages key={items?._id || index} data={items} />
           ))
         }

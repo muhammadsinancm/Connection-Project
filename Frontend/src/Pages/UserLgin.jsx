@@ -8,46 +8,48 @@ import { useNavigate } from 'react-router-dom';
 
 function UserLgin() {
 
-const {backendURL, setToken} = useContext(Context_Connection)
-const navigate = useNavigate()
-const [firstName, setFirtName] = useState('')
-const [lastName, setLastName] = useState('')
-const [email, setEmail] = useState('')
-const [password, setPassword] = useState('')
-const [current, setCurrent] = useState('LOGIN')
+  const { backendURL, setToken } = useContext(Context_Connection)
+  const navigate = useNavigate()
+  const [firstName, setFirtName] = useState('')
+  const [lastName, setLastName] = useState('')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [current, setCurrent] = useState('LOGIN')
 
-    const Submit = async (event) => {
-        event.preventDefault();
+  const Submit = async (event) => {
+    event.preventDefault();
 
-        try {
+    try {
 
-            if (current === 'LOGIN') {
-                const responce = await axios.post(backendURL + '/api/users/login', { email, password })
-                console.log(responce.data.message);
-                
-                setToken(responce.data.newToken)
-                localStorage.setItem('token', responce.data.newToken)
-                navigate('/')
+      if (current === 'LOGIN') {
+        const responce = await axios.post(backendURL + '/api/users/login', { email, password })
+        console.log(responce.data.message);
 
-            }
-            else {
-                const responce = await axios.post(backendURL + '/api/users/sign', { firstName, lastName, email, password })
-                if (responce.data.success) {
-                    console.log(responce.data.token);
-                    setToken(responce.data.token)
-                    localStorage.setItem('token', responce.data.token)
-                    navigate('/')
-                }
-                else {
-                    console.log(responce.data.message);
-                }
-            }
+        setToken(responce.data.newToken)
+        localStorage.setItem('token', responce.data.newToken)
+        navigate('/')
 
-        } catch (error) {
-            console.log(error.message);
-
+      }
+      else {
+        const responce = await axios.post(backendURL + '/api/users/sign', { firstName, lastName, email, password })
+        if (responce.data.success) {
+          console.log(responce.data.token);
+          setToken(responce.data.token)
+          localStorage.setItem('token', responce.data.token)
+           alert('success: ', 'working')
+          navigate('/')
         }
+        else {
+          console.log(responce.data.message);
+           alert('error: ' + error.message)
+        }
+      }
+
+    } catch (error) {
+      console.log(error.message);
+
     }
+  }
 
   return (
     <div className="userpage-wrap">
@@ -59,44 +61,44 @@ const [current, setCurrent] = useState('LOGIN')
 
         <form onSubmit={Submit} className="form-field" aria-label="auth-form">
 
-                  {current !== 'LOGIN' && (
-                      <>
-                          <div className="field">
-                              <label htmlFor="firstName">First Name</label>
-                              <input id="firstName" className="input" onChange={(e) => setFirtName(e.target.value)} value={firstName} type="text" placeholder='First Name' required />
-                          </div>
-                          <div className="field">
-                              <label htmlFor="lastName">Last Name</label>
-                              <input id="lastName" className="input" onChange={(e) => setLastName(e.target.value)} value={lastName} type="text" placeholder='Last Name' required />
-                          </div>
-                          <div className="field">
-                              <label htmlFor="signup-email">Email</label>
-                              <input id="signup-email" className="input" onChange={(e) => setEmail(e.target.value)} value={email} type="email" placeholder='Enter Your New Email Address' required />
-                          </div>
-                          <div className="field">
-                              <label htmlFor="signup-password">Password</label>
-                              <input id="signup-password" className="input" onChange={(e) => setPassword(e.target.value)} value={password} type="password" placeholder='Enter Your New Password' required />
-                          </div>
-                      </>
-                  )}
+          {current !== 'LOGIN' && (
+            <>
+              <div className="field">
+                <label htmlFor="firstName">First Name</label>
+                <input id="firstName" className="input" onChange={(e) => setFirtName(e.target.value)} value={firstName} type="text" placeholder='First Name' required />
+              </div>
+              <div className="field">
+                <label htmlFor="lastName">Last Name</label>
+                <input id="lastName" className="input" onChange={(e) => setLastName(e.target.value)} value={lastName} type="text" placeholder='Last Name' required />
+              </div>
+              <div className="field">
+                <label htmlFor="signup-email">Email</label>
+                <input id="signup-email" className="input" onChange={(e) => setEmail(e.target.value)} value={email} type="email" placeholder='Enter Your New Email Address' required />
+              </div>
+              <div className="field">
+                <label htmlFor="signup-password">Password</label>
+                <input id="signup-password" className="input" onChange={(e) => setPassword(e.target.value)} value={password} type="password" placeholder='Enter Your New Password' required />
+              </div>
+            </>
+          )}
 
           {current === 'LOGIN' && (
             <>
               <div className="field">
                 <label htmlFor="login-email">Email</label>
-                <input id="login-email" className="input" onChange={(e)=> setEmail(e.target.value)} type="email" placeholder='Email' required />
+                <input id="login-email" className="input" onChange={(e) => setEmail(e.target.value)} type="email" placeholder='Email' required />
               </div>
 
               <div className="field">
                 <label htmlFor="login-password">Password</label>
-                <input id="login-password" className="input" onChange={(e)=> setPassword(e.target.value)} type="password" placeholder='Password' required />
+                <input id="login-password" className="input" onChange={(e) => setPassword(e.target.value)} type="password" placeholder='Password' required />
               </div>
             </>
           )}
 
           <div className="actions">
             <button type="submit" className="btn-primary">Log In</button>
-            <button type="button" className="btn-switch" onClick={()=> setCurrent(current === 'LOGIN' ? 'SIGNUP' : 'LOGIN')}>{current}</button>
+            <button type="button" className="btn-switch" onClick={() => setCurrent(current === 'LOGIN' ? 'SIGNUP' : 'LOGIN')}>{current}</button>
           </div>
         </form>
 

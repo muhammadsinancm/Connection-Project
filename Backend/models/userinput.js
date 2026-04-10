@@ -7,4 +7,5 @@ const userInputScheema = new mongoose.Schema({
 })
 
 const Texts = mongoose.models.input || mongoose.model('input', userInputScheema)
+
 export default Texts

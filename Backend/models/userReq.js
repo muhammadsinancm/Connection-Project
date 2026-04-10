@@ -7,8 +7,11 @@ const userREQScheema = new mongoose.Schema({
     token: { type: String, required: true },
     request: { type: String, required: true },
     reciver: { type: String, required: true },
-    accepted: { type: Boolean, default: false }
+    accepted: { type: Boolean, default: false },
+    date: { type: Date, default: Date.now, required: true },
+    roomId: {type:String, required: true}
 })
+
 
 const REQ = mongoose.models.reqest || mongoose.model('reqest', userREQScheema)
 

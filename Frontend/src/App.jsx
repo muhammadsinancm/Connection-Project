@@ -10,19 +10,19 @@ import UserProfile from './Pages/UserProfile'
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer } from 'react-toastify'
 function App() {
-  
+
   return (
     <div>
       <ToastContainer position="top-center"
-  style={{ width: "fit-content", left: "50%", transform: "translateX(-50%)" }}/>
+        style={{ width: "fit-content", left: "50%", transform: "translateX(-50%)" }} />
       <Routes>
-        <Route path='/' element={<Home/>}/>
-        <Route path='/user' element={<UserConnect/>}/>
-        <Route path='/loginorSing' element={<UserLgin/>}/>
-        <Route path='/connectionReq' element={<ConnectionREQ/>}/>
-        <Route path='/context' element={<ContextBrowser/>}/>
-        <Route path='/message' element={<Message/>}/>
-        <Route path='/profile' element={<UserProfile/>}/>
+        <Route path='/' element={<Home />} />
+        <Route path='/user' element={<UserConnect />} />
+        <Route path='/loginorSing' element={<UserLgin />} />
+        <Route path='/connectionReq' element={<ConnectionREQ />} />
+        <Route path='/context' element={<ContextBrowser />} />
+        <Route path='/message' element={<Message />} />
+        <Route path='/profile' element={<UserProfile />} />
       </Routes>
     </div>
   )

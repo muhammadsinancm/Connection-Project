@@ -2,7 +2,9 @@ import axios from 'axios'
 import React, { useContext, useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { Context_Connection } from '../Contect/ContextBrowser'
-import './ConnectionREQ.css'
+import './ConnectionREQ.css';
+import { useRef } from 'react';
+import { io } from 'socket.io-client';
 
 function ConnectionREQ() {
 
@@ -12,141 +14,127 @@ function ConnectionREQ() {
   const [storeREQ, setStoreREQ] = useState([])
   const [requestAccept, setRequestAccept] = useState([])
   const [storings, setStorings] = useState([])
-  const [finding, setFinding] = useState(false)
+  const [finding, setFinding] = useState([])
+  const [userRequest, setUserRequest] = useState([])
+  const useRefSocket = useRef(null)
 
 
 
   const navigate = useNavigate()
   const { token, backendURL, same, setConnection, final, setFinal, setUserAccepted } = useContext(Context_Connection)
 
-  const acceptTokenMatch = requestAccept.filter((itme) => (
-    itme.request === location.state.value.token
-  ))
+// connectionreqTobackend
 
-  // -----------REQ list Of user------------------
-  const ListOFREQ = async () => {
+useEffect(()=> {
+     const newSocketProviding = io('http://localhost:4000', {
+     auth:{
+      serverOffset: 0,
+      token:token
+     },
+     transports: ['websocket', 'polling']
+   })
 
-    try {
+   useRefSocket.current = newSocketProviding
 
-      const responceREQList = await axios.get(backendURL + '/api/user/requestlist', {headers:{token}})
-      if (responceREQList.data.success) {
-        if (responceREQList.data.orginal) {
-          console.log(responceREQList.data.orginal);
-        }
+   newSocketProviding.on('connect', () => {
+    newSocketProviding.emit('initial datas')
+    useRefSocket.current.emit('message allow', token, location?.state?.value?.token)
+   })
 
-        setStoreREQ(responceREQList.data.orginal)
-
-      } else {
-        console.log(responceREQList.data.message);
-      }
-
-    } catch (error) {
-      console.log(error.message);
-
-    }
+  const requestPass = (setRequest) => {
+    console.log(setRequest);
+    
+    setPending(setRequest)
+ setUserRequest((prev)=> [...prev, setRequest])      
   }
 
-  // ---------this useEffect using List of request---------------- 
-  useEffect(() => {
-    ListOFREQ()
+  const deletedUser = (deleted)=> {
+    console.log(deleted);
+    
 
-  }, [])
-
-
-  //  -----------List Of User Connection Allow-------------
-  const listOfMessagepermision = async () => {
-
-    try {
-
-      const responce = await axios.put(backendURL + `/api/user/messageallow/${token}`, {}, {headers:{token}})
-      if (responce.data.success) {
-        console.log(responce.data.filterConnectionAllow);
-
-        if (responce.data.filterConnectionAllow) {
-
-        }
-        setRequestAccept(responce.data.filterConnectionAllow)
-      }
-
-    } catch (error) {
-      console.log(error.message);
-    }
-  }
-
-  //  -------Calling Message Allow--------
-  useEffect(() => {
-    listOfMessagepermision()
-  }, [])
-
-  // ----------This useEffect doing for request filter----------
-  useEffect(() => {
-
-    if (!storeREQ || storeREQ.length === 0) return
-
-    let newData = storeREQ?.filter((items) => {
-      return items?.request === token && items?.accepted === false
+  let newData = deleted?.filter((items) => {
+      return items?.request === location?.state?.value?.token && items?.accepted === false && items?.token === token
     })
-    setStorings(newData)
+    setUserRequest(newData)
+  }
+  
 
-  }, [storeREQ])
+  const previosData = (pre)=> {
+
+  }
+
+  const UserDetet = (user)=> {
+    console.log(user);
+    
+setRequestAccept([])
+  }
+   const acceptHandler = (accepted) => {
+     console.log(accepted);
+     
+      setRequestAccept((pre)=> [...pre, accepted])
+        
+    }
+
+    const previosAcceptHandler = (previos) => {
+        setRequestAccept(previos)
+        console.log(previos);
+        
+    }
+
+    const userRequestList = (requestList)=> {
+      
+    let newData = requestList?.filter((items) => {
+      return items?.request === location?.state?.value?.token && items?.accepted === false && items?.token === token
+    })  
+    setUserRequest(newData)         
+    }
+
+   newSocketProviding.on('accept', acceptHandler)
+   newSocketProviding.on('previos accept', previosAcceptHandler)
+
+   newSocketProviding.on('user request list', userRequestList)
+
+   newSocketProviding.on('server responce', requestPass)
+   newSocketProviding.on('user request', deletedUser)
+   newSocketProviding.on('previos', previosData)
+
+   newSocketProviding.on('user deleted', UserDetet)
+   newSocketProviding.on('previos delete', (prev)=> {
+    setStoreREQ(prev)
+   })
+
+
+   return()=> {
+     newSocketProviding.off('user request list', userRequestList)
+    newSocketProviding.off('message allow')
+       newSocketProviding.off('accept', acceptHandler)
+   newSocketProviding.off('previos accept', previosAcceptHandler)
+    newSocketProviding.off('previos delete')
+    newSocketProviding.off('user deleted', UserDetet)
+    newSocketProviding.off('previos', previosData)
+    newSocketProviding.off('server responce', requestPass)
+    newSocketProviding.off('user request', deletedUser)
+    newSocketProviding.disconnect()
+   }
+
+    }, [token])
 
   // -------------userConnection request to backend------------------------
   const connectionreqTobackend = async (userData) => {
-
+    console.log(userData);
+    
+    useRefSocket.current.emit('request user data to server', userData, token)
+    setFinal(false)
+    setConnection(false)
     localStorage.setItem('moving', JSON.stringify(false))
-
-    try {
-
-      if (userData) {
-        setFinal(false)
-        setConnection(false)
-        const userRequistSent = await axios.post(backendURL + '/api/user/request', { userData, token }, { headers: { token } })
-
-        if (userRequistSent.data.success) {
-          setPending(userRequistSent.data.message)
-          setUserAccepted(userRequistSent.data.savedREQ)
-        } else {
-          console.log(userRequistSent.data.message);
-        }
-      }
-
-    } catch (error) {
-      console.log(error.message);
-    }
 
   }
 
   // ----------------user request cancel-----------------------
-  const RequestCancel = async (cancelREQ) => {
-
-    try {
-
-      const deleteREQResponce = await axios.delete(backendURL + `/api/user/userunrequest/${cancelREQ}`, { headers: { token } })
-      if (deleteREQResponce.data.success) {
-        console.log(deleteREQResponce.data.message);
-      }
-      else {
-        console.log(deleteREQResponce.data.message);
-      }
-
-    } catch (error) {
-      console.log(error.message);
-    }
+  const RequestCancel = async (cancel) => {
+      const cancelREQ = cancel.email
+      useRefSocket.current.emit('user request cancel or unfollw', cancelREQ, token, cancel)
   }
-
-  useState(() => {
-
-  }, [same])
-
-  useEffect(() => {
-
-    storeREQ.filter((items) => {
-      let newOne = items?.token === token && items?.accepted === false && items.request === location.state.value.token
-      console.log(newOne);
-      setFinding(newOne)
-    })
-
-  }, [storeREQ, finding])
 
   return (
 
@@ -164,13 +152,13 @@ function ConnectionREQ() {
 
         <div className='user-id-controal'>
           {
-            acceptTokenMatch[0]?.accepted ? <div>
+            requestAccept[0]?.token === token? <div>
               <div className='to-message'>
                 <button className='message' onClick={() => navigate('/message', { state: { token: token, selectedUser: location.state.value.token, selectedUserName: location.state.value } })}>message</button>
               </div>
               <div className='unfollow-user'>
                 <div className='unfollow-body'>
-                  {<button className='unfollow' onClick={(() => RequestCancel(location.state.value.email))}>Follow</button>
+                  {<button className='unfollow' onClick={(() => RequestCancel(location.state.value))}>Unfollow</button>
 
                   }
                   <button onClick={() => navigate('/')}>Back</button>
@@ -183,11 +171,11 @@ function ConnectionREQ() {
 
                   <div>
                     {
-                      finding && location.state.value.token ?
+                      userRequest[0]?.accepted === false && userRequest[0]?.token === token ?
                         <div className='final-request-container'>
                           <div className='final-request-head'>
                             <div className='final-request'>
-                              {<button className='request' onClick={(() => RequestCancel(location.state.value.email))}>Requested</button>}
+                              {<button className='request' onClick={(() => RequestCancel(location.state.value))}>Requested</button>}
                             </div>
                             <div className='back-to-home-head'>
                               <button className='back-to-home' onClick={() => navigate('/')}>Back</button>

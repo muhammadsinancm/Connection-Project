@@ -142,12 +142,16 @@ socket.join(roomId)
 })
 
 // Message sent and recive_____________________
-socket.on('user message send', async (token, selectedUser, saveUserText)=> {
+socket.on('user message send', async (token, selectedUser, saveUserText, sender)=> {
    try {
+    console.log('************************');
+console.log(sender);
+console.log('************************');
 
     const roomId = [token, selectedUser].sort().join('-')
 
      const saveUserTextData = await new usersText({
+                emailForUser: sender?.email,
                 userText: saveUserText,
                 sendingUserToken: token,
                 recivedUserToken: selectedUser,
@@ -170,10 +174,12 @@ socket.on('user message previos', async (token, reciverToken)=> {
   const roomId = [token, reciverToken].sort().join('-')
 
  const userTextsToFrontend = await usersText.find({roomID: roomId}).sort({ date: 1 });
-         socket.emit('user message previos', userTextsToFrontend)
+         io.to(roomId).emit('user message previos', userTextsToFrontend)
+         io.emit('user message pre', userTextsToFrontend)
 })
 
     socket.on('user message delete', async (token, reciverToken, messageId) => {
+
       const roomId = [token, reciverToken].sort().join('-')
 
       try {
@@ -190,6 +196,19 @@ socket.on('user message previos', async (token, reciverToken)=> {
         socket.emit('can not delete the message')
       }
     })
+
+socket.on('user message old', async ()=> {
+    try {
+
+ const messages = await usersText.find()
+
+  io.emit('user message old', messages)
+      
+    } catch (error) {
+      console.log(error.message);
+      socket.emit('can not fetch the data')
+    }
+})
 
 // initial data send to client_____________________
     socket.on('initial datas', async ()=> {

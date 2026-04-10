@@ -7,6 +7,7 @@ import { BeatLoader } from "react-spinners";
 import { BookOpen, MessageCircle, MessageSquare, Trash2, X } from 'lucide-react'
 import { toast } from 'react-toastify'
 import { io } from 'socket.io-client'
+import { useRef } from 'react'
 
 function MessagesList() {
 
@@ -16,7 +17,7 @@ function MessagesList() {
   const [messageControal, setMessageControal] = useState(true)
   const [time, setTime] = useState(false)
   const [dataSave, setDataSave] = useState([])
-console.log(locationUser?.state);
+  const useRefSocket = useRef(null)
 
   const clone = structuredClone(userTexts)
   const [userTextsUpdated, setUserTextsUpdated] = useState(clone)
@@ -79,6 +80,7 @@ console.log(locationUser?.state);
     })
     setUserTextsUpdated(changed.reverse())
   }
+console.log(newUserDataAdding);
 
   useEffect(() => {
     changeData()
@@ -94,66 +96,61 @@ console.log(locationUser?.state);
       },
        transports: ['websocket', 'polling']
     })
+    
+    useRefSocket.current = newSocketProviding
+    
 
     newSocketProviding.on('connect', () => {
-    //   if (token) {
-    //   newSocketProviding.emit('message join token', token)
-    // }
+      newSocketProviding.emit('initial datas')
+      newSocketProviding.emit('user message old')
     })
 
+    newSocketProviding.on('user message', (data) => {
+
+      setUserTexts((pre)=> {
+        const merged = [...pre, data];
+        const filtered = merged.filter((items)=> items?.recivedUserToken === token)
+        return [...new Map(filtered.map((item) => [item._id, item])).values()]
+      })
+      setTime(true)
+    })
+    
+
+    newSocketProviding.on('user message old', (data) => {
+      console.log(data);
+      setUserTexts(data.filter((items)=> items?.recivedUserToken === token))
+      setTime(true)
+    })
+
+    newSocketProviding.on
+
+    
     return ()=> {
+      newSocketProviding.off('user message old')
+      newSocketProviding.off('user message')
       newSocketProviding.disconnect()
     }
 
   }, [])
+console.log(userTexts);
 
-  // const userTextsShowOnTheDisplay = async () => {
+//   const messageDelete = async (userData) => {
+//         useRefSocket.current.emit('user message delete', token, userData?.sendingUserToken, userData?._id)
+// console.log(token);
 
-  //   try {
+// console.log(userData?.sendingUserToken);
+// console.log(userData?._id);
 
-  //     const responce = await axios.post(backendURL + '/api/usermessage', { token }, { headers: { token } })
-  //     if (responce.data.success) {
-  //       setUserTexts(responce?.data.datas)
-  //       setTime(true)
-  //     }
+//      toast.success('Message Deleted', {
+//               className: "custom-toast-delete-text",
+//               icon: <Trash2 size={20} color="white" />,
+//               autoClose: 3000,
+//               hideProgressBar: true,
+//               closeButton: false,
+//             })
 
-  //   } catch (error) {
-  //     console.log(error.message);
-  //   }
 
-  // }
-  // useEffect(() => {
-  //   userTextsShowOnTheDisplay()
-
-  // }, [])
-
-  const messageDelete = async (userData) => {
-
-     toast.success('Message Deleted', {
-              className: "custom-toast-delete-text",
-              icon: <Trash2 size={20} color="white" />,
-              autoClose: 3000,
-              hideProgressBar: true,
-              closeButton: false,
-            })
-
-    try {
-
-      const EventDelete = userData._id
-
-      console.log(EventDelete);
-
-      const responce = await axios.delete(backendURL + `/api/usertext/userinputdelete/${EventDelete}`, { headers: { token } })
-      if (responce.data.success) {
-        console.log(responce.data.message);
-      } else {
-        console.log(responce.data.message);
-      }
-
-    } catch (error) {
-      console.log(error.message);
-    }
-  }
+//   }
 
   const MessageToUser = async (text) => {
 
@@ -180,7 +177,7 @@ console.log(locationUser?.state);
                 <div className='hover'>
                   <button className='user-select' onClick={() => { setOpen(true), setDataSave(items), setMessageControal(false) }}><BookOpen size={20} /></button>
                   <button className='user-select' onClick={() => MessageToUser(items)}><MessageCircle size={20} /></button>
-                  <button className='user-select' onClick={() => messageDelete(items)}><Trash2 size={18} color='red' /></button>
+                  {/* <button className='user-select' onClick={() => messageDelete(items)}><Trash2 size={18} color='red' /></button> */}
                 </div>
                 <button className='user-select' ><MessageSquare size={25} /></button>
 

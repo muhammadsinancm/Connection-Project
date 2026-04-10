@@ -56,7 +56,6 @@ export function Notifications() {
    newSocketProviding.on('previos accept', previosAcceptHandler)
    newSocketProviding.on('message accept', messageAcceptHandler)
    newSocketProviding.on('previos delete', (deleted)=> {
-    console.log(deleted);
     
    })
 
@@ -72,8 +71,6 @@ export function Notifications() {
    }
 
     }, [])
-console.log(accepted);
-console.log(latestData);
 
     useEffect(()=> {
 if (!notification || notification.length === 0) return
@@ -87,7 +84,6 @@ setLatestData(newData)
 
     // ----------------User accept-------------------------
     const Accept = async (userAcceptData) => {
-        console.log(userAcceptData);
         
         toast.success("Request Accepted", {
             className: "custom-toast-copy-text",
@@ -135,8 +131,6 @@ setLatestData(newData)
 //   }
 // ]
 // ++++++++++++++++++++++++++++++
-
-
 
 
 
@@ -212,7 +206,6 @@ useEffect(()=> {
     
   }
   newSocketProviding.on('previos delete', (deleted)=> {
-    console.log(deleted);
     
    })
 
@@ -223,6 +216,7 @@ useEffect(()=> {
    newSocketProviding.on('responce for client', async (person)=> {setUserDataSave(person)})
 
    return ()=> {
+    newSocketProviding.off('responce for client')
      newSocketProviding.off('previos delete')
     newSocketProviding.off('user deleted', previosDataDelete)
     newSocketProviding.off('server responce', serverResponce)
@@ -240,22 +234,17 @@ useEffect(()=> {
       return items?.request === token && items?.accepted === false
     })
 
-console.log(newData);
-
     const storeRequestCount = []
-    // setStoreCount(storeRequestCount)
     setCount(storeRequestCount)
     for (const key in newData) {
       storeRequestCount.push(Number(key) + 1)
     }
-
 
   }, [listOfRequest]);
 
 
     const navigate = useNavigate()
     console.log(count[count.length - 1]);
-console.log(count);
 
     const LogOut = () => {
         navigate('/loginorSing')

@@ -247,6 +247,7 @@ export function InputBar() {
 
   const { backendURL, sendingUserToken, setSendingUserToken, recivedUserToken, token, setRecivedUserToken } = useContext(Context_Connection)
   const [saveUserText, setSaveUserText] = useState('')
+  const [sender, setSender] = useState([])
   const useReffSocket = useRef(null)
 
   const location = useLocation() //This location come from ConnectionREQ.js
@@ -270,18 +271,23 @@ export function InputBar() {
    useReffSocket.current = newSocketProviding
 
     newSocketProviding.on('connect', () => {
-
+ newSocketProviding.emit('user token sent to server', token);
+    newSocketProviding.emit('initial datas')
     })
+
+    newSocketProviding.on('responce for client', async (person)=> {setSender(person)})
 
   }, [])
 
   const userInputForSelectedUser = async (userEvent) => {
+console.log(userEvent);
 
     userEvent.preventDefault()
     setSaveUserText('')
 
-   useReffSocket.current.emit('user message send', location.state?.token, location.state?.selectedUser, saveUserText)
-
+   useReffSocket.current.emit('user message send', location.state?.token, location.state?.selectedUser, saveUserText, sender)
+   console.log(location);
+   
   }
   return (
 

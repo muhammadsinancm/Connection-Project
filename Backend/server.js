@@ -28,7 +28,11 @@ const io = new Server(server, {
 
 app.set('io', io)
 app.use(express.json())
-app.use(cors())
+app.use(cors({
+    origin: "https://connection-project-frontend.onrender.com",
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    credentials: true
+}))
 
 io.on('connection', async (socket)=> {
     console.log('user connected');

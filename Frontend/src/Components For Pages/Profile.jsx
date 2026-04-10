@@ -260,9 +260,9 @@ useEffect(()=> {
     return (
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
 
-            <div style={{ padding: '8px', cursor: 'pointer' }} title="Support">
+            {/* <div style={{ padding: '8px', cursor: 'pointer' }} title="Support">
                 <MessageCircleQuestion size={25} />
-            </div>
+            </div> */}
             <div onClick={() => { setAllow(!allow) }} style={{ padding: '8px', cursor: 'pointer' }} title="Notification">
                 <div style={{ position: "relative", display: "inline-block" }}>
                     <Bell size={25} style={{ marginTop: '0px' }} className="icon-shake-once cursor-pointer" />

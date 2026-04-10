@@ -36,10 +36,12 @@ function UserLgin() {
           console.log(responce.data.token);
           setToken(responce.data.token)
           localStorage.setItem('token', responce.data.token)
+           alert('success: ', 'working')
           navigate('/')
         }
         else {
           console.log(responce.data.message);
+           alert('error: ' + error.message)
         }
       }
 

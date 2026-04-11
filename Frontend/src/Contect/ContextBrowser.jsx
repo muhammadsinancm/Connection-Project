@@ -34,7 +34,7 @@ console.log(token);
 
 useEffect(()=> {
 
-  const newSocketProviding = io('http://localhost:4000', {
+  const newSocketProviding = io('https://connection-project-frontend.onrender.com', {
   auth:{serverOffset: 0},
   transports: ['websocket', 'polling']
 })
@@ -71,7 +71,7 @@ return () => {
 
   }, [])
 
-  const backendURL = import.meta.env.VITE_BACKEND_URL
+  const backendURL = "https://connection-project-backend.onrender.com"
 
   // -----------REQ list Of user------------------
   // const ListOFREQ = async () => {

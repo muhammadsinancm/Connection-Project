@@ -89,7 +89,7 @@ console.log(newUserDataAdding);
 
   useEffect(()=> {
    
-    const newSocketProviding = io('https://connection-project-backend.onrender.com', {
+    const newSocketProviding = io('https://connection-project-frontend.onrender.com', {
       auth:{
         serverOffset: 0,
         token:token

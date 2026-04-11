@@ -34,7 +34,12 @@ console.log(token);
 
 useEffect(()=> {
 
+<<<<<<< HEAD
   const newSocketProviding = io('https://connection-project-frontend.onrender.com', {
+=======
+  const newSocketProviding = io('https://connection-project-backend.onrender.com', {
+
+>>>>>>> ef9ff1f (just add URL)
   auth:{serverOffset: 0},
   transports: ['websocket', 'polling']
 })

@@ -121,7 +121,7 @@ function MessagesList() {
 
   useEffect(() => {
 
-    const newSocketProviding = io('http://localhost:4000/', {
+    const newSocketProviding = io('https://connection-project-backend.onrender.com', {
       auth: {
         serverOffset: 0,
         token: token

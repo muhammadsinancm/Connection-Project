@@ -17,7 +17,7 @@ const server = createServer(app)
 const io = new Server(server, {
     transports: ["websocket", "polling"],
     cors:{
-        origin:"http://localhost:5173",
+        origin:"https://connection-project-frontend.onrender.com",
         methods:["GET", "POST", "PUT", "DELETE"]
     },
     connectionStateRecovery:{}
@@ -26,7 +26,7 @@ const io = new Server(server, {
 app.set('io', io)
 app.use(express.json())
 app.use(cors({
-    origin: "http://localhost:5173",
+    origin: "https://connection-project-frontend.onrender.com",
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true
 }))

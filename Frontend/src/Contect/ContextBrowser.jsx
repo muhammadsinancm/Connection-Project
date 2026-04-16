@@ -23,7 +23,7 @@ function ContextBrowser(props) {
 
   }, [])
 
-  const backendURL = import.meta.env.VITE_BACKEND_URL
+  const backendURL = 'https://connection-project-backend.onrender.com'
 
 
   const propsValue = {

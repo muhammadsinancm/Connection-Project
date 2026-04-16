@@ -13,7 +13,6 @@ function UserConnect() {
   useEffect(() => {
     if (location?.state?.value) {
       setUserData(location?.state?.value)
-
     }
   }, [location.state])
 
@@ -31,7 +30,6 @@ function UserConnect() {
 
       else {
         console.log(responce.data.message);
-
       }
 
     } catch (error) {

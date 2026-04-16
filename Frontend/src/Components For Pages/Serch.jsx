@@ -1,52 +1,19 @@
 import React, { useEffect } from 'react'
 import { useContext } from 'react'
-import ContextBrowser, { Context_Connection } from '../Contect/ContextBrowser'
+import { Context_Connection } from '../Contect/ContextBrowser'
 import { useState } from 'react'
-import { NavLink, useLocation, useNavigate } from 'react-router-dom'
+import { NavLink, useNavigate } from 'react-router-dom'
 import '../Pages/Users.css'
 import { Search } from 'lucide-react'
-import { io } from 'socket.io-client'
 
 function Serch() {
     const { storeEmails } = useContext(Context_Connection)
     const [serch, setSerch] = useState([])
-    // const [emails, setEmails] = useState([])
 
     const navigate = useNavigate()
 
-    // useEffect(() => {
-
-    //     const newSocketProviding = io('http://localhost:4000', {
-    //         auth: { serverOffset: 0 },
-    //         transports: ['websocket', 'polling']
-    //     })
-
-    //     newSocketProviding.on('connect', ()=> {
-    //         newSocketProviding.emit('initial datas')
-    //     })
-
-    //     const emailList = (email) => setEmails(email)
-
-    //     newSocketProviding.on('user emails to serch component', emailList)
-
-    //     return () => {
-    //          socket?.off('user emails to serch component', emailList)
-    //              newSocketProviding.disconnect()
-    //     }
-    // }, [])
     const userEmailsSerch = (value) => {
-
-        // if (!value.trim()) {
-        //     setSerch([])
-        //     return
-        // }
-
-        // const serchFilterEmails = emails?.filter((items) => (
-        //     items.email.toLocaleLowerCase().includes(value.toLocaleLowerCase())
-        // ))
-        // setSerch(serchFilterEmails)
-
-         if (!value.trim()) {
+        if (!value.trim()) {
             setSerch([])
             return
         }
@@ -56,8 +23,6 @@ function Serch() {
         ))
         setSerch(serchFilterEmails)
     }
-
-
 
     return (
         <div className="search-bar">

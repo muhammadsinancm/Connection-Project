@@ -2,90 +2,75 @@ import React, { useContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import './UserNotifications.css'
 import { Context_Connection } from '../Contect/ContextBrowser'
-import { Bell, MessageCircleQuestion, Settings, Trash2, User, X } from 'lucide-react'
-import axios from 'axios'
+import { Bell, Settings, Trash2, User, X } from 'lucide-react'
 import { toast } from 'react-toastify'
 import { io } from 'socket.io-client'
 import { useRef } from 'react'
 
 export function Notifications() {
-    
-    const { backendURL, token } = useContext(Context_Connection)
+
+    const { token } = useContext(Context_Connection)
 
     const [notification, setNotification] = useState([])
     const [latestData, setLatestData] = useState([])
     const [accepted, setAccepted] = useState([])
     const useRefSocket = useRef(null)
 
-    useEffect(()=> {
-     const newSocketProviding = io('https://connection-project-backend.onrender.com', {
-     auth:{serverOffset: 0},
-     transports: ['websocket', 'polling']
-   })
+    useEffect(() => {
+        const newSocketProviding = io('http://localhost:4000/', {
+            auth: { serverOffset: 0 },
+            transports: ['websocket', 'polling']
+        })
 
-   useRefSocket.current = newSocketProviding
+        useRefSocket.current = newSocketProviding
 
-   newSocketProviding.on('connect', () => {
-    newSocketProviding.emit('initial datas')
-   })
+        newSocketProviding.on('connect', () => {
+            newSocketProviding.emit('initial datas')
+        })
 
-   const userRequest = (datas)=> {
-     setNotification(datas)
-   }
+        const userRequest = (datas) => {
+            setNotification(datas)
+        }
 
-   const serverResponce = (latest)=> {
-      setNotification((pre)=> [...pre, latest])
-      
-   }
+        const serverResponce = (latest) => {
+            setNotification((pre) => [...pre, latest])
+        }
 
-   const acceptHandler = (accepted) => {
-    setAccepted(accepted)
-    }
+        const acceptHandler = (accepted) => {
+            setAccepted(accepted)
+        }
 
-    const previosAcceptHandler = (previos) => {
+        const userDeleted = (data) => {
+            setNotification((pre) => [...pre, data])
+        }
 
-    }
+        newSocketProviding.on('user request', userRequest)
+        newSocketProviding.on('server responce', serverResponce)
+        newSocketProviding.on('accept', acceptHandler)
+        newSocketProviding.on('user deleted', userDeleted)
 
-    const messageAcceptHandler = (messageAccept)=> {
-
-    }
-
-   newSocketProviding.on('user request', userRequest)
-   newSocketProviding.on('server responce', serverResponce)
-   newSocketProviding.on('accept', acceptHandler)
-   newSocketProviding.on('previos accept', previosAcceptHandler)
-   newSocketProviding.on('message accept', messageAcceptHandler)
-   newSocketProviding.on('previos delete', (deleted)=> {
-
-    
-   })
-
-   return()=> {
-    newSocketProviding.off('previos delete')
-    newSocketProviding.off('message accept', messageAcceptHandler)
-    newSocketProviding.off('accept', acceptHandler)
-     newSocketProviding.off('previos accept', previosAcceptHandler)
-     
-    newSocketProviding.off('server responce', serverResponce)
-    newSocketProviding.off('user request', userRequest)
-    newSocketProviding.disconnect()
-   }
-
+        return () => {
+            newSocketProviding.off('accept', acceptHandler)
+            newSocketProviding.off('server responce', serverResponce)
+            newSocketProviding.off('user request', userRequest)
+            newSocketProviding.off('user deleted', userDeleted)
+            newSocketProviding.disconnect()
+        }
     }, [])
 
-    useEffect(()=> {
-if (!notification || notification.length === 0) return
+    useEffect(() => {
+        if (!notification || notification.length === 0) return
 
-    let newData = notification?.filter((items) => {
-      return items?.request === token && items?.accepted === false
-    })
+        let newData = notification?.filter((items) => {
+            return items?.request === token && items?.accepted === false
+        })
 
-setLatestData(newData)
+        setLatestData(newData)
     }, [notification])
 
     // ----------------User accept-------------------------
     const Accept = async (userAcceptData) => {
-        
+
         toast.success("Request Accepted", {
             className: "custom-toast-copy-text",
             autoClose: 2000,
@@ -93,51 +78,11 @@ setLatestData(newData)
             closeButton: false,
         });
 
-       useRefSocket.current.emit('accept user request', userAcceptData, token)
-
+        useRefSocket.current.emit('accept user request', userAcceptData, token)
     }
 
-
-// 1@gmail.com email
-// eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5OGM1MjBlMjg1MjE4NDkzZmIxZTcwZCIsImlhdCI6MTc3MDgwNjQxMn0.TLthE-qh6qVWSjLSIjbVWx6rDfXTk9unuNS3gc1sy9Y token
-// {
-//   _id: '69d2a5c957544ccb862255cb',
-//   firstName: 'muhammad',
-//   lastName: ' sinan',
-//   email: '1@gmail.com',
-//   token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5OGM1MTllMjg1MjE4NDkzZmIxZTcwNiIsImlhdCI6MTc3MDgwNjY1NX0.CBIlGsrW0T5J0SwQH021cpMgxX_nkQPqV-HJVHO4BfI',
-//   request: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5OGM1MjBlMjg1MjE4NDkzZmIxZTcwZCIsImlhdCI6MTc3MDgwNjQxMn0.TLthE-qh6qVWSjLSIjbVWx6rDfXTk9unuNS3gc1sy9Y',
-//   reciver: 'muhammadsinancm30@gmail.com',
-//   accepted: false,
-//   roomId: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5OGM1MTllMjg1MjE4NDkzZmIxZTcwNiIsImlhdCI6MTc3MDgwNjY1NX0.CBIlGsrW0T5J0SwQH021cpMgxX_nkQPqV-HJVHO4BfI-eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5OGM1MjBlMjg1MjE4NDkzZmIxZTcwZCIsImlhdCI6MTc3MDgwNjQxMn0.TLthE-qh6qVWSjLSIjbVWx6rDfXTk9unuNS3gc1sy9Y',
-//   date: '2026-04-05T18:11:21.624Z',
-//   __v: 0
-// } cancel user data
-// User disconnected
-// ++++++++++++++++++++++++++++++
-// eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5OGM1MTllMjg1MjE4NDkzZmIxZTcwNiIsImlhdCI6MTc3MDgwNjY1NX0.CBIlGsrW0T5J0SwQH021cpMgxX_nkQPqV-HJVHO4BfI-eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5OGM1MjBlMjg1MjE4NDkzZmIxZTcwZCIsImlhdCI6MTc3MDgwNjQxMn0.TLthE-qh6qVWSjLSIjbVWx6rDfXTk9unuNS3gc1sy9Y
-// [
-//   {
-//     _id: new ObjectId('69d2a5c957544ccb862255cb'),
-//     firstName: 'muhammad',
-//     lastName: ' sinan',
-//     email: '1@gmail.com',
-//     token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5OGM1MTllMjg1MjE4NDkzZmIxZTcwNiIsImlhdCI6MTc3MDgwNjY1NX0.CBIlGsrW0T5J0SwQH021cpMgxX_nkQPqV-HJVHO4BfI',
-//     request: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5OGM1MjBlMjg1MjE4NDkzZmIxZTcwZCIsImlhdCI6MTc3MDgwNjQxMn0.TLthE-qh6qVWSjLSIjbVWx6rDfXTk9unuNS3gc1sy9Y',
-//     reciver: 'muhammadsinancm30@gmail.com',
-//     accepted: false,
-//     roomId: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5OGM1MTllMjg1MjE4NDkzZmIxZTcwNiIsImlhdCI6MTc3MDgwNjY1NX0.CBIlGsrW0T5J0SwQH021cpMgxX_nkQPqV-HJVHO4BfI-eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5OGM1MjBlMjg1MjE4NDkzZmIxZTcwZCIsImlhdCI6MTc3MDgwNjQxMn0.TLthE-qh6qVWSjLSIjbVWx6rDfXTk9unuNS3gc1sy9Y',
-//     date: 2026-04-05T18:11:21.624Z,
-//     __v: 0
-//   }
-// ]
-// ++++++++++++++++++++++++++++++
-
-
-
     const Ignore = async (cancel) => {
-        console.log(cancel);
-        
+
         toast.success('Request removed', {
             className: "custom-toast-delete-text",
             icon: <Trash2 size={20} color="white" />,
@@ -145,10 +90,9 @@ setLatestData(newData)
             hideProgressBar: true,
             closeButton: false,
         })
-        
-         const cancelREQ = cancel.reciver
-         const cancelToken = cancel._id
-      useRefSocket.current.emit('ingore user', cancelToken)
+
+        const cancelToken = cancel._id
+        useRefSocket.current.emit('ingore user', cancelToken)
 
     }
 
@@ -172,97 +116,89 @@ setLatestData(newData)
 }
 
 function Profile() {
- const [allow, setAllow] = useState(false)
+    const [allow, setAllow] = useState(false)
     const [userIcon, setUserIcon] = useState(false)
-    const [userDataSave, setUserDataSave] = useState([])
+    const [userDataSave, setUserDataSave] = useState(() => {
+        const user = localStorage.getItem('profile data')
+        return user ? JSON.parse(user) : []
+    })
     const [listOfRequest, setListOfRequest] = useState([])
     const [count, setCount] = useState([])
-    const [requests, setRequests] = useState([])
 
-  const { backendURL, token } = useContext(Context_Connection)
+    const { token } = useContext(Context_Connection)
 
-useEffect(()=> {
-     const newSocketProviding = io('https://connection-project-backend.onrender.com', {
-     auth:{serverOffset: 0},
-     transports: ['websocket', 'polling']
-   })
+    useEffect(() => {
+        const newSocketProviding = io('http://localhost:4000/', {
+            auth: { serverOffset: 0 },
+            transports: ['websocket', 'polling']
+        })
 
-   newSocketProviding.on('connect', () => {
-    newSocketProviding.emit('user token sent to server', token);
-    newSocketProviding.emit('initial datas')
-  });
+        newSocketProviding.on('connect', () => {
+            newSocketProviding.emit('user token sent to server', token);
+            newSocketProviding.emit('initial datas')
+        });
 
-  const request = (REQ)=> {
-    console.log(REQ);
-    
-     setListOfRequest(REQ)
-  }
+        const request = (REQ) => {
+            setListOfRequest(REQ)
+        }
 
-  const serverResponce = (newRequest)=> {
-     setListOfRequest((pre)=> [...pre, newRequest])   
-  }
+        const serverResponce = (newRequest) => {
+            setListOfRequest((pre) => [...pre, newRequest])
+        }
 
-  const previosDataDelete = (deletedUser)=> {
-    setListOfRequest((pre)=> [...pre, deletedUser]);
-    
-  }
-  newSocketProviding.on('previos delete', (deleted)=> {
-    
-   })
+        const previosDataDelete = (deletedUser) => {
+            setListOfRequest((pre) => [...pre, deletedUser]);
+        }
 
-  newSocketProviding.on('server responce', serverResponce)
-  newSocketProviding.on('user request', request)
-   newSocketProviding.on('user deleted', previosDataDelete)
+        newSocketProviding.on('server responce', serverResponce)
+        newSocketProviding.on('user request', request)
+        newSocketProviding.on('user deleted', previosDataDelete)
 
-   newSocketProviding.on('responce for client', async (person)=> {setUserDataSave(person)})
+        newSocketProviding.on('responce for client', async (person) => {
+            setUserDataSave(person)
+            localStorage.setItem('profile data', JSON.stringify(person))
+        })
 
-   return ()=> {
-    newSocketProviding.off('responce for client')
-     newSocketProviding.off('previos delete')
-    newSocketProviding.off('user deleted', previosDataDelete)
-    newSocketProviding.off('server responce', serverResponce)
-    newSocketProviding.off('user request', request)
-     newSocketProviding.disconnect()
-   }
+        return () => {
+            newSocketProviding.off('responce for client')
+            newSocketProviding.off('user deleted', previosDataDelete)
+            newSocketProviding.off('server responce', serverResponce)
+            newSocketProviding.off('user request', request)
+            newSocketProviding.disconnect()
+        }
 
-    }, [token])     
+    }, [token])
 
- useEffect(() => {
+    useEffect(() => {
+        if (!listOfRequest || listOfRequest.length === 0) return
 
-    if (!listOfRequest || listOfRequest.length === 0) return
+        let newData = listOfRequest?.filter((items) => {
+            return items?.request === token && items?.accepted === false
+        })
 
-    let newData = listOfRequest?.filter((items) => {
-      return items?.request === token && items?.accepted === false
-    })
+        const storeRequestCount = []
+        setCount(storeRequestCount)
+        for (const key in newData) {
+            storeRequestCount.push(Number(key) + 1)
+        }
 
-    const storeRequestCount = []
-    setCount(storeRequestCount)
-    for (const key in newData) {
-      storeRequestCount.push(Number(key) + 1)
-    }
-
-  }, [listOfRequest]);
+    }, [listOfRequest]);
 
 
     const navigate = useNavigate()
-    console.log(count[count.length - 1]);
+    // console.log(count[count.length - 1]);
 
     const LogOut = () => {
         navigate('/loginorSing')
     }
 
     const UserProfile = async () => {
-
         setUserIcon(!userIcon)
 
     }
 
     return (
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-
-            {/* <div style={{ padding: '8px', cursor: 'pointer' }} title="Support">
-                <MessageCircleQuestion size={25} />
-            </div> */}
             <div onClick={() => { setAllow(!allow) }} style={{ padding: '8px', cursor: 'pointer' }} title="Notification">
                 <div style={{ position: "relative", display: "inline-block" }}>
                     <Bell size={25} style={{ marginTop: '0px' }} className="icon-shake-once cursor-pointer" />

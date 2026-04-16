@@ -1,34 +1,32 @@
-import axios from 'axios'
 import React, { useContext, useEffect, useState } from 'react'
 import { Context_Connection } from '../Contect/ContextBrowser'
 import './MessagesList.css'
 import { useNavigate } from 'react-router-dom'
 import { BeatLoader } from "react-spinners";
-import { BookOpen, MessageCircle, MessageSquare, Trash2, X } from 'lucide-react'
-import { toast } from 'react-toastify'
+import { BookOpen, MessageCircle, MessageSquare, X } from 'lucide-react'
 import { io } from 'socket.io-client'
 import { useRef } from 'react'
-
+import { useLiveQuery } from 'dexie-react-hooks'
+import { db } from '../config/db'
 function MessagesList() {
 
-  const { backendURL, token, storeEmails, locationUser } = useContext(Context_Connection)
-  const [userTexts, setUserTexts] = useState([])
+  const { token, storeEmails } = useContext(Context_Connection)
+
   const [open, setOpen] = useState(false)
   const [messageControal, setMessageControal] = useState(true)
   const [time, setTime] = useState(false)
   const [dataSave, setDataSave] = useState([])
   const useRefSocket = useRef(null)
-
-  const clone = structuredClone(userTexts)
-  const [userTextsUpdated, setUserTextsUpdated] = useState(clone)
+  const [localtext, setLocalText] = useState()
+  const [userTextsUpdated, setUserTextsUpdated] = useState()
 
   const navigate = useNavigate()
 
-  const newUserData = userTexts.filter((items) => {
+  const newUserData = localtext?.filter((items) => {
     return items?._id === dataSave?._id
   })
 
-  const newUserDataAdding = newUserData.map((items) => {
+  const newUserDataAdding = newUserData?.map((items) => {
     let date = items?.date
     const setDate = new Date(date)
     const hours = setDate.getHours();
@@ -49,9 +47,8 @@ function MessagesList() {
   })
 
   const changeData = () => {
-    const changed = userTexts.map((item) => {
+    const changed = localtext?.map((item) => {
       let oldDate = item?.date
-
       const date = new Date(oldDate)
       const hours = date.getHours();
       const minutes = date.getMinutes();
@@ -78,82 +75,107 @@ function MessagesList() {
         _id: item?._id
       }
     })
-    setUserTextsUpdated(changed.reverse())
+    setUserTextsUpdated((changed || []).reverse())
   }
-console.log(newUserDataAdding);
 
   useEffect(() => {
     changeData()
 
-  }, [userTexts])
+  }, [localtext])
 
-  useEffect(()=> {
-   
-    const newSocketProviding = io('https://connection-project-backend.onrender.com', {
-      auth:{
-        serverOffset: 0,
-        token:token
-      },
-       transports: ['websocket', 'polling']
+  const removeDuplicates = async () => {
+    const all = await db.todos.toArray();
+
+    const seen = new Set();
+    const duplicateIds = [];
+
+    all.forEach(msg => {
+      if (seen.has(msg._id)) {
+        duplicateIds.push(msg.id);
+      } else {
+        seen.add(msg._id);
+      }
+    });
+
+    if (duplicateIds.length > 0) {
+      await db.todos.bulkDelete(duplicateIds);
+    }
+  };
+
+  useEffect(() => {
+    removeDuplicates();
+  }, []);
+
+  const allMessages = useLiveQuery(() => db.todos.toArray());
+
+  useEffect(() => {
+    const seen = new Set()
+    const userMessage = allMessages?.filter((items) => {
+      if (seen.has(items?._id)) return false;
+      seen.add(items?._id)
+      return items?.recivedUserToken === token
     })
-    
+    setLocalText(userMessage)
+
+  }, [allMessages])
+
+  useEffect(() => {
+
+    const newSocketProviding = io('http://localhost:4000/', {
+      auth: {
+        serverOffset: 0,
+        token: token
+      },
+      transports: ['websocket', 'polling']
+    })
+
     useRefSocket.current = newSocketProviding
-    
 
     newSocketProviding.on('connect', () => {
       newSocketProviding.emit('initial datas')
       newSocketProviding.emit('user message old')
     })
 
-    newSocketProviding.on('user message', (data) => {
-
-      setUserTexts((pre)=> {
-        const merged = [...pre, data];
-        const filtered = merged.filter((items)=> items?.recivedUserToken === token)
-        return [...new Map(filtered.map((item) => [item._id, item])).values()]
-      })
-      setTime(true)
-    })
-    
-
-    newSocketProviding.on('user message old', (data) => {
-      console.log(data);
-      setUserTexts(data.filter((items)=> items?.recivedUserToken === token))
+    newSocketProviding.on('user message', async (data) => {
+      await db.todos.add(data);
       setTime(true)
     })
 
-    newSocketProviding.on
+    const messageDeleted = async (messages) => {
+      await db.transaction("rw", db.todos, async () => {
+        for (const msg of messages) {
+          await db.todos.put(msg);
+        }
+      });
+      const updatedIds = messages.map((m) => m._id);
+      await db.todos
+        .filter((msg) => !updatedIds.includes(msg._id))
+        .delete();
+    }
+    const userTextsToFrontend = async (messages) => {
+      await db.transaction("rw", db.todos, async () => {
+        for (const msg of messages) {
+          await db.todos.put(msg);
+        }
+      });
+      const updatedIds = messages.map((m) => m._id);
+      await db.todos
+        .filter((msg) => !updatedIds.includes(msg._id))
+        .delete();
+    }
 
-    
-    return ()=> {
-      newSocketProviding.off('user message old')
+    newSocketProviding.on('user message deleted', messageDeleted)
+    newSocketProviding.on('user message old', userTextsToFrontend)
+
+    return () => {
+      newSocketProviding.off('user message old', userTextsToFrontend)
+      newSocketProviding.off('user message deleted', messageDeleted)
       newSocketProviding.off('user message')
       newSocketProviding.disconnect()
     }
-
   }, [])
-console.log(userTexts);
-
-//   const messageDelete = async (userData) => {
-//         useRefSocket.current.emit('user message delete', token, userData?.sendingUserToken, userData?._id)
-// console.log(token);
-
-// console.log(userData?.sendingUserToken);
-// console.log(userData?._id);
-
-//      toast.success('Message Deleted', {
-//               className: "custom-toast-delete-text",
-//               icon: <Trash2 size={20} color="white" />,
-//               autoClose: 3000,
-//               hideProgressBar: true,
-//               closeButton: false,
-//             })
-
-
-//   }
 
   const MessageToUser = async (text) => {
-
     const storeEmailsClone = structuredClone(storeEmails)
 
     if (text?.recivedUserToken === token) {
@@ -163,6 +185,12 @@ console.log(userTexts);
     }
   }
 
+  useEffect(() => {
+    if (localtext?.length > 0) {
+      setTime(true);
+    }
+  }, [localtext]);
+
   return (
     <div className='container'>
       <div className='message-container'>
@@ -171,13 +199,11 @@ console.log(userTexts);
       <div>
         <div className='items-container'>
           {time ? userTextsUpdated?.map((items, index) => (
-
             <div key={index}>
               <div className='items-heder'>
                 <div className='hover'>
                   <button className='user-select' onClick={() => { setOpen(true), setDataSave(items), setMessageControal(false) }}><BookOpen size={20} /></button>
                   <button className='user-select' onClick={() => MessageToUser(items)}><MessageCircle size={20} /></button>
-                  {/* <button className='user-select' onClick={() => messageDelete(items)}><Trash2 size={18} color='red' /></button> */}
                 </div>
                 <button className='user-select' ><MessageSquare size={25} /></button>
 
@@ -213,20 +239,3 @@ console.log(userTexts);
 }
 
 export default MessagesList
-
-export function MessageOpen({ value }) {
-  console.log(value);
-
-  return (
-    <div className='open-container'>
-      <div className='open-head'>
-        <div className='open-selected'>
-          <h1 className='open-text'>{value?.emailForUser}</h1>
-        </div>
-        <div>
-          <span>remove</span>
-        </div>
-      </div>
-    </div>
-  )
-}

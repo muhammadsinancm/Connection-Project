@@ -1,6 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700&display=swap');
 
 :root {
+ 
   --accent: #4f8ef7;
   --accent-bg: #e8f0fe;
   --accent-dark: #2563eb;
@@ -467,6 +468,61 @@
   outline: none;
   padding: 0;
 }
+
+.close-button:hover {
+  background: #fce8e6;
+  border-color: #f5c6c2;
+  box-shadow: 0 2px 8px rgba(217, 48, 37, .18);
+  transform: scale(1.08);
+}
+
+.close-button:active {
+  transform: scale(0.96);
+}
+
+.close-button:hover {
+  background: #fce8e6;
+  border-color: #f5c6c2;
+  box-shadow: 0 2px 8px rgba(217, 48, 37, .18);
+  transform: scale(1.08);
+}
+
+.close-button:active {
+  transform: scale(0.96);
+}
+
+.close-button:hover {
+  background: #fce8e6;
+  border-color: #f5c6c2;
+  box-shadow: 0 2px 8px rgba(217, 48, 37, .18);
+  transform: scale(1.08);
+}
+
+.close-button:active {
+  transform: scale(0.96);
+}
+
+.close-button:hover {
+  background: #fce8e6;
+  border-color: #f5c6c2;
+  box-shadow: 0 2px 8px rgba(217, 48, 37, .18);
+  transform: scale(1.08);
+}
+
+.close-button:active {
+  transform: scale(0.96);
+}
+.close-button:hover {
+  background: #fce8e6;
+  border-color: #f5c6c2;
+  box-shadow: 0 2px 8px rgba(217, 48, 37, .18);
+  transform: scale(1.08);
+}
+
+.close-button:active {
+  transform: scale(0.96);
+}
+
 
 .close-button:hover {
   background: #fce8e6;

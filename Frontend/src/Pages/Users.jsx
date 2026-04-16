@@ -22,14 +22,11 @@ function Users() {
             if (!responceEmails.data.success) {
                 console.log(responceEmails.data.message);
             }
-
             setStoreEmails(responceEmails.data.newResponce)
-            console.log(responceEmails.data.newResponce);
 
         } catch (error) {
             console.log(error.message);
         }
-
     }
 
     useEffect(() => {

@@ -1,30 +1,28 @@
-import axios from "axios";
 import { useContext, useEffect, useState } from "react";
-import { Context_Connection } from "../Contect/ContextBrowser";
+import ContextBrowser, { Context_Connection } from "../Contect/ContextBrowser";
 import { useLocation, useNavigate } from "react-router-dom";
 import './Message.css';
 import { TextSelecteClear } from "../Contect/Context";
 import { toast } from "react-toastify";
 import './Toast.css'
-import { Home, Trash2 } from 'lucide-react'
+import { Home } from 'lucide-react'
 import { BeatLoader } from "react-spinners";
-import { io, Socket } from "socket.io-client";
+import { io } from "socket.io-client";
 import { useRef } from "react";
+import { db } from "../config/db";
+import { useLiveQuery } from 'dexie-react-hooks'
 
 export function ChatHeader({ responceText }) {
 
-  const { token } = useContext(Context_Connection)
   const navigate = useNavigate()
-  const location = useLocation()
 
   return (
     <div className="chat-header">
       <button className="back-btn" onClick={() => navigate('/')}><Home size={20} />Home</button>
       <div className="header-info">
-        <div onClick={() => navigate('/profile', { state: { selectedUserData: responceText, selectedUser: location.state.selectedUser, token: token } })} className="avatar">{responceText?.userName?.email?.charAt(0)?.toUpperCase() || responceText?.userDataFind[0]?.email?.charAt(0)?.toUpperCase()}</div>
+        <div className="avatar">{responceText?.userName?.email?.charAt(0)?.toUpperCase() || responceText?.userDataFind[0]?.email?.charAt(0)?.toUpperCase()}</div>
         <div className="user-profile">
           <h3 className="user-email">{responceText?.userName?.email || responceText?.userDataFind[0]?.email}</h3>
-          <p className="user-active">Active now</p>
         </div>
       </div>
     </div>
@@ -62,8 +60,6 @@ export function Messages({ data }) {
     setRecivedUserToken(location.state?.selectedUser)
 
   }, [sendingUserToken, recivedUserToken, dataSaved])
-
-
 
   const datasss = dataSaved.filter((itmes) => (
     itmes?.recivedUserToken !== token
@@ -167,38 +163,42 @@ export function SendIcon() {
   );
 }
 
-export function PopUp({tokens}) { 
-  
-  const { token, backendURL } = useContext(Context_Connection)
+export function PopUp({ tokens }) {
+
+  const { token } = useContext(Context_Connection)
 
   const { selectPopUp, setSelectPopUp } = useContext(TextSelecteClear)
 
   const useRefSocket = useRef(null)
 
-  useEffect(()=> {
+  useEffect(() => {
 
-   const newSocketProviding = io('https://connection-project-backend.onrender.com', {
-      auth:{
+    const newSocketProviding = io('http://localhost:4000/', {
+      auth: {
         serverOffset: 0,
-        token:token
+        token: token
       },
       transports: ['websocket', 'polling']
-   })
+    })
 
-   useRefSocket.current = newSocketProviding
+    useRefSocket.current = newSocketProviding
 
-   newSocketProviding.on('connect', () => {
-   newSocketProviding.emit('initial datas')
-   newSocketProviding.emit('user message previos', token, location.state?.selectedUser)
-
-    if (token && tokens?.state?.selectedUser) {
-      newSocketProviding.emit('message join', token, tokens?.state?.selectedUser)
+    const loadLocalMessages = async () => {
     }
-   })
+    loadLocalMessages()
 
-   return ()=> {
-    newSocketProviding.disconnect()
-   }
+    newSocketProviding.on('connect', () => {
+      newSocketProviding.emit('initial datas')
+      newSocketProviding.emit('user message previos', token, location.state?.selectedUser)
+
+      if (token && tokens?.state?.selectedUser) {
+        newSocketProviding.emit('message join', token, tokens?.state?.selectedUser)
+      }
+    })
+
+    return () => {
+      newSocketProviding.disconnect()
+    }
 
   }, [])
 
@@ -216,10 +216,14 @@ export function PopUp({tokens}) {
     navigator.clipboard.writeText(event).catch(() => { });
 
   }
-   
-  const textDelete = async (EventDelete) => {
-    useRefSocket.current.emit('user message delete', tokens?.state?.token, tokens?.state?.selectedUser, EventDelete)
 
+  const textDelete = async (EventDelete) => {
+    const item = await db.todos.where("_id").equals(EventDelete).first();
+    if (item) {
+      await db.todos.delete(item.id); // item.id = Dexie auto-increment key
+    }
+
+    useRefSocket.current.emit('user message delete', tokens?.state?.token, tokens?.state?.selectedUser, EventDelete)
   }
 
   return (
@@ -245,7 +249,7 @@ export function PopUp({tokens}) {
 //--------------------This is user message and send button------------------------ 
 export function InputBar() {
 
-  const { backendURL, sendingUserToken, setSendingUserToken, recivedUserToken, token, setRecivedUserToken } = useContext(Context_Connection)
+  const { sendingUserToken, setSendingUserToken, recivedUserToken, token, setRecivedUserToken } = useContext(Context_Connection)
   const [saveUserText, setSaveUserText] = useState('')
   const [sender, setSender] = useState([])
   const useReffSocket = useRef(null)
@@ -260,34 +264,29 @@ export function InputBar() {
 
   }, [sendingUserToken, recivedUserToken])
 
-  useEffect(()=> {
-   const newSocketProviding = io('https://connection-project-backend.onrender.com', {
-     auth:{
-      serverOffset: 0,
-      token:token
-     },
-     transports: ['websocket', 'polling']
-   })
-   useReffSocket.current = newSocketProviding
+  useEffect(() => {
+    const newSocketProviding = io('http://localhost:4000/', {
+      auth: {
+        serverOffset: 0,
+        token: token
+      },
+      transports: ['websocket', 'polling']
+    })
+    useReffSocket.current = newSocketProviding
 
     newSocketProviding.on('connect', () => {
- newSocketProviding.emit('user token sent to server', token);
-    newSocketProviding.emit('initial datas')
+      newSocketProviding.emit('user token sent to server', token);
+      newSocketProviding.emit('initial datas')
     })
 
-    newSocketProviding.on('responce for client', async (person)=> {setSender(person)})
+    newSocketProviding.on('responce for client', async (person) => { setSender(person) })
 
   }, [])
 
   const userInputForSelectedUser = async (userEvent) => {
-console.log(userEvent);
-
     userEvent.preventDefault()
     setSaveUserText('')
-
-   useReffSocket.current.emit('user message send', location.state?.token, location.state?.selectedUser, saveUserText, sender)
-   console.log(location);
-   
+    useReffSocket.current.emit('user message send', location.state?.token, location.state?.selectedUser, saveUserText, sender)
   }
   return (
 
@@ -303,14 +302,13 @@ console.log(userEvent);
 //-----------------------------End-------------------------------------
 
 
-
 function Message() {
   const [responceText, setResponceText] = useState([])
   const [speshal, setSpeshal] = useState([])
   const [userTextResponceData, setUserTextResponceData] = useState([]) //All users texts come here
   const [textSaved, setTextSaved] = useState([])
-  const [userSendTexts, setUserSendTexts] = useState([]) //Select user texts
   const [userName, setUserName] = useState('')
+
   const useRefSocket = useRef(null)
 
   const { token, sendingUserToken, setSendingUserToken, recivedUserToken, setRecivedUserToken } = useContext(Context_Connection)
@@ -328,47 +326,95 @@ function Message() {
     return items?.token === recivedUserToken
   })
 
-    useEffect(()=> {
-   const newSocketProviding = io('https://connection-project-backend.onrender.com', {
-     auth:{
-      serverOffset: 0,
-      token:token
-     },
-     transports: ['websocket', 'polling']
-   })
-   useRefSocket.current = newSocketProviding
+  const removeDuplicates = async () => {
+    const all = await db.todos.toArray();
+
+    const seen = new Set();
+    const duplicateIds = [];
+
+    all.forEach(msg => {
+      if (seen.has(msg._id)) {
+        duplicateIds.push(msg.id);
+      } else {
+        seen.add(msg._id);
+      }
+    });
+
+    if (duplicateIds.length > 0) {
+      await db.todos.bulkDelete(duplicateIds);
+    }
+  };
+
+  useEffect(() => {
+    removeDuplicates();
+  }, []);
+
+
+  const messages = useLiveQuery(() =>
+    db.todos.where("roomID").equals([token, location.state?.selectedUser].sort().join("-"))
+      .sortBy("date", [token, location.state?.selectedUser]))
+
+  useEffect(() => {
+    const message = messages?.filter((itmes) => (
+      itmes?._id !== messages?._id
+    ))
+
+    setUserTextResponceData(message)
+    setSpeshal(message)
+  }, [messages])
+
+  useEffect(() => {
+    const newSocketProviding = io('http://localhost:4000/', {
+      auth: {
+        serverOffset: 0,
+        token: token
+      },
+      transports: ['websocket', 'polling']
+    })
+    useRefSocket.current = newSocketProviding
 
     newSocketProviding.on('connect', () => {
       newSocketProviding.emit('initial datas')
-     newSocketProviding.emit('user message previos', token, location.state?.selectedUser)
+      newSocketProviding.emit('user message previos', token, location.state?.selectedUser)
 
-
-     if (token && location.state?.selectedUser) {
-      newSocketProviding.emit('message join', token, location.state?.selectedUser)
-    }
+      if (token && location.state?.selectedUser) {
+        newSocketProviding.emit('message join', token, location.state?.selectedUser)
+      }
     })
 
-
-    const userLatestMessages = (messages)=> {
-      setUserTextResponceData((pre)=> [...pre, messages])
-      setSpeshal((pre)=> [...pre, messages])
+    const userLatestMessages = async (messages) => {
+      await db.todos.add(messages);
     }
 
-    const userTextsToFrontend = (messages)=> {
-      setUserTextResponceData(messages)
-      setSpeshal(messages)
+    const userTextsToFrontend = async (messages) => {
+      await db.transaction("rw", db.todos, async () => {
+        for (const msg of messages) {
+          await db.todos.put(msg);
+        }
+      });
+      const updatedIds = messages.map((m) => m._id);
+      await db.todos
+        .filter((msg) => !updatedIds.includes(msg._id))
+        .delete();
     }
 
-    const messageDeleted = (deletedMessage)=> {
-      setUserTextResponceData(deletedMessage)
-      setSpeshal(deletedMessage)
+    const messageDeleted = async (messages) => {
+      await db.transaction("rw", db.todos, async () => {
+        for (const msg of messages) {
+          await db.todos.put(msg);
+        }
+      });
+      const updatedIds = messages.map((m) => m._id);
+      await db.todos
+        .filter((msg) => !updatedIds.includes(msg._id))
+        .delete();
     }
-    
+
     newSocketProviding.on('user message deleted', messageDeleted)
     newSocketProviding.on('user message previos', userTextsToFrontend)
     newSocketProviding.on('user message show', userLatestMessages)
 
-    return ()=> {
+    return () => {
       newSocketProviding.off('user message deleted', messageDeleted)
       newSocketProviding.off('user message previos', userTextsToFrontend)
       newSocketProviding.off('user message show', userLatestMessages)
@@ -387,11 +433,11 @@ function Message() {
     setResponceText(send)
 
     const dataToArraySpeshal = Array.isArray(speshal) ? speshal : Object.values(speshal || [])
-    
+
     const FinalFilterTexts = dataToArraySpeshal.filter((item) => (
       item?.sendingUserToken === recivedUserToken && item?.recivedUserToken === token
     ))
-    setTextSaved(FinalFilterTexts)   
+    setTextSaved(FinalFilterTexts)
 
   }, [userTextResponceData, speshal])
 
@@ -400,9 +446,9 @@ function Message() {
     new Date(a?.date).getTime() - new Date(b?.date).getTime()
   ))
 
-  const newDatas = mixedMessages.filter((items, index, self)=> {
-   return index === self.findIndex((m)=> m._id === items._id)
-   })
+  const newDatas = mixedMessages.filter((items, index, self) => {
+    return index === self.findIndex((m) => m._id === items._id)
+  })
 
   return (
 
@@ -418,8 +464,6 @@ function Message() {
       </div>
       <InputBar />
     </div>
-
-
 
   )
 }

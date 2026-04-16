@@ -1,4 +1,3 @@
-import axios from 'axios'
 import React, { useContext, useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { Context_Connection } from '../Contect/ContextBrowser'
@@ -13,116 +12,88 @@ function ConnectionREQ() {
   const [pending, setPending] = useState('')
   const [storeREQ, setStoreREQ] = useState([])
   const [requestAccept, setRequestAccept] = useState([])
-  const [storings, setStorings] = useState([])
-  const [finding, setFinding] = useState([])
   const [userRequest, setUserRequest] = useState([])
   const useRefSocket = useRef(null)
 
 
-
   const navigate = useNavigate()
-  const { token, backendURL, same, setConnection, final, setFinal, setUserAccepted } = useContext(Context_Connection)
+  const { token, setConnection, final, setFinal } = useContext(Context_Connection)
 
-// connectionreqTobackend
-
-useEffect(()=> {
-     const newSocketProviding = io('https://connection-project-backend.onrender.com', {
-     auth:{
-      serverOffset: 0,
-      token:token
-     },
-     transports: ['websocket', 'polling']
-   })
-
-   useRefSocket.current = newSocketProviding
-
-   newSocketProviding.on('connect', () => {
-    newSocketProviding.emit('initial datas')
-    useRefSocket.current.emit('message allow', token, location?.state?.value?.token)
-   })
-
-  const requestPass = (setRequest) => {
-    console.log(setRequest);
-    
-    setPending(setRequest)
- setUserRequest((prev)=> [...prev, setRequest])      
-  }
-
-  const deletedUser = (deleted)=> {
-    console.log(deleted);
-    
-
-  let newData = deleted?.filter((items) => {
-      return items?.request === location?.state?.value?.token && items?.accepted === false && items?.token === token
+  useEffect(() => {
+    const newSocketProviding = io('http://localhost:4000/', {
+      auth: {
+        serverOffset: 0,
+        token: token
+      },
+      transports: ['websocket', 'polling']
     })
-    setUserRequest(newData)
-  }
-  
 
-  const previosData = (pre)=> {
+    useRefSocket.current = newSocketProviding
 
-  }
+    newSocketProviding.on('connect', () => {
+      newSocketProviding.emit('initial datas')
+      useRefSocket.current.emit('message allow', token, location?.state?.value?.token)
+    })
 
-  const UserDetet = (user)=> {
-    console.log(user);
-    
-setRequestAccept([])
-  }
-   const acceptHandler = (accepted) => {
-     console.log(accepted);
-     
-      setRequestAccept((pre)=> [...pre, accepted])
-        
+    const requestPass = (setRequest) => {
+      setPending(setRequest)
+      setUserRequest((prev) => [...prev, setRequest])
+    }
+
+    const deletedUser = (deleted) => {
+      let newData = deleted?.filter((items) => {
+        return items?.request === location?.state?.value?.token && items?.accepted === false && items?.token === token
+      })
+      setUserRequest(newData)
+    }
+
+    const UserDetet = () => {
+
+      setRequestAccept([])
+    }
+    const acceptHandler = (accepted) => {
+      setRequestAccept((pre) => [...pre, accepted])
     }
 
     const previosAcceptHandler = (previos) => {
-        setRequestAccept(previos)
-        console.log(previos);
-        
+      setRequestAccept(previos)
     }
 
-    const userRequestList = (requestList)=> {
-      
-    let newData = requestList?.filter((items) => {
-      return items?.request === location?.state?.value?.token && items?.accepted === false && items?.token === token
-    })  
-    setUserRequest(newData)         
+    const userRequestList = (requestList) => {
+
+      let newData = requestList?.filter((items) => {
+        return items?.request === location?.state?.value?.token && items?.accepted === false && items?.token === token
+      })
+      setUserRequest(newData)
     }
 
-   newSocketProviding.on('accept', acceptHandler)
-   newSocketProviding.on('previos accept', previosAcceptHandler)
-
-   newSocketProviding.on('user request list', userRequestList)
-
-   newSocketProviding.on('server responce', requestPass)
-   newSocketProviding.on('user request', deletedUser)
-   newSocketProviding.on('previos', previosData)
-
-   newSocketProviding.on('user deleted', UserDetet)
-   newSocketProviding.on('previos delete', (prev)=> {
-    setStoreREQ(prev)
-   })
+    newSocketProviding.on('accept', acceptHandler)
+    newSocketProviding.on('previos accept', previosAcceptHandler)
+    newSocketProviding.on('user request list', userRequestList)
+    newSocketProviding.on('server responce', requestPass)
+    newSocketProviding.on('user request', deletedUser)
+    newSocketProviding.on('user deleted', UserDetet)
+    newSocketProviding.on('previos delete', (prev) => {
+      setStoreREQ(prev)
+    })
 
 
-   return()=> {
-     newSocketProviding.off('user request list', userRequestList)
-    newSocketProviding.off('message allow')
-       newSocketProviding.off('accept', acceptHandler)
-   newSocketProviding.off('previos accept', previosAcceptHandler)
-    newSocketProviding.off('previos delete')
-    newSocketProviding.off('user deleted', UserDetet)
-    newSocketProviding.off('previos', previosData)
-    newSocketProviding.off('server responce', requestPass)
-    newSocketProviding.off('user request', deletedUser)
-    newSocketProviding.disconnect()
-   }
+    return () => {
+      newSocketProviding.off('user request list', userRequestList)
+      newSocketProviding.off('message allow')
+      newSocketProviding.off('accept', acceptHandler)
+      newSocketProviding.off('previos accept', previosAcceptHandler)
+      newSocketProviding.off('previos delete')
+      newSocketProviding.off('user deleted', UserDetet)
+      newSocketProviding.off('server responce', requestPass)
+      newSocketProviding.off('user request', deletedUser)
+      newSocketProviding.disconnect()
+    }
 
-    }, [token])
+  }, [token])
 
   // -------------userConnection request to backend------------------------
   const connectionreqTobackend = async (userData) => {
-    console.log(userData);
-    
     useRefSocket.current.emit('request user data to server', userData, token)
     setFinal(false)
     setConnection(false)
@@ -132,8 +103,8 @@ setRequestAccept([])
 
   // ----------------user request cancel-----------------------
   const RequestCancel = async (cancel) => {
-      const cancelREQ = cancel.email
-      useRefSocket.current.emit('user request cancel or unfollw', cancelREQ, token, cancel)
+    const cancelREQ = cancel.email
+    useRefSocket.current.emit('user request cancel or unfollw', cancelREQ, token, cancel)
   }
 
   return (
@@ -152,7 +123,7 @@ setRequestAccept([])
 
         <div className='user-id-controal'>
           {
-            requestAccept[0]?.token === token? <div>
+            requestAccept[0]?.token === token ? <div>
               <div className='to-message'>
                 <button className='message' onClick={() => navigate('/message', { state: { token: token, selectedUser: location.state.value.token, selectedUserName: location.state.value } })}>message</button>
               </div>

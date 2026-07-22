@@ -1,7 +1,7 @@
 import mongoose from 'mongoose'
 
 const USERDATABASE = async () => {
-
+ 
   mongoose.connection.on('connected', () => {
     console.log('data base conected')
   })

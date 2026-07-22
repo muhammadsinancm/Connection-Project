@@ -23,7 +23,7 @@ function ContextBrowser(props) {
 
   }, [])
 
-  const backendURL = 'https://connection-project-backend.onrender.com'
+  const backendURL = 'http://localhost:4000'
 
 
   const propsValue = {

@@ -19,6 +19,7 @@ function MessagesList() {
   const useRefSocket = useRef(null)
   const [localtext, setLocalText] = useState()
   const [userTextsUpdated, setUserTextsUpdated] = useState()
+  const [forLoader, setForloader] = useState(true)
 
   const navigate = useNavigate()
 
@@ -48,6 +49,7 @@ function MessagesList() {
 
   const changeData = () => {
     const changed = localtext?.map((item) => {
+
       let oldDate = item?.date
       const date = new Date(oldDate)
       const hours = date.getHours();
@@ -121,7 +123,7 @@ function MessagesList() {
 
   useEffect(() => {
 
-    const newSocketProviding = io('https://connection-project-backend.onrender.com', {
+    const newSocketProviding = io('http://localhost:4000', {
       auth: {
         serverOffset: 0,
         token: token
@@ -191,6 +193,22 @@ function MessagesList() {
     }
   }, [localtext]);
 
+
+
+  const loader = async () => {
+
+
+    let times = setTimeout(() => {
+      setForloader(false)
+    }, 3000)
+    return () => clearTimeout(times)
+
+  }
+
+  useEffect(() => {
+    loader()
+  }, [forLoader])
+
   return (
     <div className='container'>
       <div className='message-container'>
@@ -215,8 +233,7 @@ function MessagesList() {
 
             </div>
 
-          )) : <BeatLoader color="#0066ff" size={20} className='custom-loading-spinner ' />
-
+          )) : <div>{forLoader ? <BeatLoader color="#0066ff" size={20} className='custom-loading-spinner ' /> : <h1>It could not find messages</h1>}</div>
           }
         </div>
         <div>

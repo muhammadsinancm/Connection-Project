@@ -15,31 +15,26 @@ const userLogin = async (req, res) => {
 
     try {
 
-        const { email, password } = req.body;
+        const { email, password } = req.body;        
 
         const userEmailFind = await UserDataSignLogin.findOne({ email })
-
         if (!userEmailFind) {
             res.json({ success: false, message: 'User does not exist' })
         }
 
         const isMatch = await bcrypt.compare(password, userEmailFind.password)
-        if (isMatch) {
-            if (userEmailFind.token) {
+        if (!isMatch) {
+            console.log('111111111111111111111111');
+            
+          res.json({success: false, message: 'passward incurrect'})
+        }
+          if (userEmailFind.token) {
                 const newToken = userEmailFind.token
 
-                console.log(newToken);
-                res.json({ success: true, mrssage: 'log in', newToken })
+                res.json({ success: true, message: 'log in', newToken, userEmailFind})
             }
-
-
-        }
-
-
-
     } catch (error) {
         console.log(error.message);
-
     }
 
 }

@@ -1,0 +1,28 @@
+/* Loading.css */
+.gradient-spinner {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  background: conic-gradient(from 0deg, #6c63ff, #00c9ff, #6c63ff);
+  -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 8px), #000 0);
+  mask: radial-gradient(farthest-side, transparent calc(100% - 8px), #000 0);
+  animation: spin 1s linear infinite;
+}
+
+.pulse-text {
+  background: linear-gradient(90deg, #6c63ff, #00c9ff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: 700;
+  font-size: 1.5rem;
+  animation: pulse 1.4s ease-in-out infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}

@@ -33,9 +33,10 @@ function FirstLoadingPages() {
             <section className="about-hero">
 
                 <div className="about-logo fade-in-down">YourApp</div>
-                <h1 className="about-title fade-in-up">App name goes here</h1>
+                <h1 className="about-title fade-in-up">Connection</h1>
                 <p className="about-tagline fade-in-up delay-1">
-                    A short one-line tagline describing what your app does.
+                    Purpose of this app,
+                   real time communication webapp, for whole devices.
                 </p>
             </section>
 

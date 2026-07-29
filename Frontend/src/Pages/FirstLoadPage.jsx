@@ -43,31 +43,30 @@ function FirstLoadingPages() {
             <section className="about-features">
                 <div className="feature-card animate-on-scroll">
                     <div className="feature-icon">⚡</div>
-                    <h3>Feature one</h3>
-                    <p>Short description of this feature and why it matters.</p>
+                    <h3>Real-Time Messaging</h3>
+                    <p>Send and receive messages instantly using Socket.IO. Stay connected with zero delays and live message updates.</p>
                 </div>
                 <div className="feature-card animate-on-scroll delay-1">
                     <div className="feature-icon">🔒</div>
-                    <h3>Feature two</h3>
-                    <p>Short description of this feature and why it matters.</p>
+                    <h3>Secure Authentication</h3>
+                    <p>Your account is protected with JWT authentication, encrypted passwords, and secure user sessions.</p>
                 </div>
                 <div className="feature-card animate-on-scroll delay-2">
                     <div className="feature-icon">📈</div>
-                    <h3>Feature three</h3>
-                    <p>Short description of this feature and why it matters.</p>
+                    <h3>Performance</h3>
+                    <p>Enjoy a fast and responsive chatting experience with optimized message delivery, efficient data handling, and smooth navigation.</p>
                 </div>
 
             </section>
             <section className="about-story animate-on-scroll">
                 <h2>About this project</h2>
                 <p>
-                    Write a paragraph here about what the app does, who it's for, and
-                    why you built it. Keep it to 3-4 sentences for readability.
+                    Connection is a real-time communication platform developed using the MERN Stack (MongoDB, Express.js, React.js, and Node.js). It enables users to communicate instantly through live messaging while ensuring secure authentication and a smooth user experience. The project demonstrates modern web development practices, including Socket.IO, REST APIs, JWT authentication, MongoDB, and responsive UI design.
                 </p>
             </section>
 
             <footer className="about-footer">
-                <p>&copy; {new Date().getFullYear()} YourApp. All rights reserved.</p>
+                <p>&copy; {new Date().getFullYear()}Connection. All Rights Reserved.</p>
             </footer>
             <div className="corner-buttons">
                 <button className="corner-btn corner-btn-primary" onClick={()=> ToHomePage()}>Get started</button>

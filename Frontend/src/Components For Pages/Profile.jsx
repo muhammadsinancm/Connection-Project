@@ -17,7 +17,7 @@ export function Notifications() {
     const useRefSocket = useRef(null)
 
     useEffect(() => {
-        const newSocketProviding = io('https://connection-project-backend.onrender.com', {
+        const newSocketProviding = io('http://localhost:4000', {
             auth: { serverOffset: 0 },
             transports: ['websocket', 'polling']
         })
@@ -128,7 +128,7 @@ function Profile() {
     const { token } = useContext(Context_Connection)
 
     useEffect(() => {
-        const newSocketProviding = io('https://connection-project-backend.onrender.com', {
+        const newSocketProviding = io('http://localhost:4000', {
             auth: { serverOffset: 0 },
             transports: ['websocket', 'polling']
         })

@@ -20,7 +20,7 @@ function ConnectionREQ() {
   const { token, setConnection, final, setFinal } = useContext(Context_Connection)
 
   useEffect(() => {
-    const newSocketProviding = io('https://connection-project-backend.onrender.com', {
+    const newSocketProviding = io('http://localhost:4000', {
       auth: {
         serverOffset: 0,
         token: token

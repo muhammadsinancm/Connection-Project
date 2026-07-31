@@ -5,7 +5,7 @@ import 'dotenv/config'
 import UserControl from './router/userLoginSign.js'
 import userConnectionRouter from './router/userconect.js'
 import adminRouter from './router/adminlogin.js'
-import {createServer} from 'node:http'
+import { createServer } from 'node:http'
 import { Server } from 'socket.io'
 import userEmails from './socket/socketIO.js'
 
@@ -16,11 +16,11 @@ USERDATABASE()
 const server = createServer(app)
 const io = new Server(server, {
     transports: ["websocket", "polling"],
-    cors:{
-        origin:"https://connection-project-frontend.onrender.com",
-        methods:["GET", "POST", "PUT", "DELETE"]
+    cors: {
+        origin: "https://connection-project-frontend.onrender.com",
+        methods: ["GET", "POST", "PUT", "DELETE"]
     },
-    connectionStateRecovery:{}
+    connectionStateRecovery: {}
 })
 
 app.set('io', io)
@@ -31,7 +31,7 @@ app.use(cors({
     credentials: true
 }))
 
-io.on('connection', async (socket)=> {
+io.on('connection', async (socket) => {
     console.log('user connected');
 })
 

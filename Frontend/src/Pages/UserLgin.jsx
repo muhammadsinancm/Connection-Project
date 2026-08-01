@@ -26,7 +26,7 @@ function UserLgin() {
 
     try {
 
-      if (current === 'LOGIN') {      
+      if (current === 'LOGIN') {
         const responce = await axios.post(backendURL + '/api/users/login', { email, password })
         console.log(responce.data);
 
@@ -133,7 +133,7 @@ function UserLgin() {
                 alignItems: 'center',
                 gap: '16px',
               }}>
-                 <div
+                <div
                   style={{
                     position: 'fixed',
                     top: '183%',

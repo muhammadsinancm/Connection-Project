@@ -18,7 +18,7 @@ export function ChatHeader({ responceText }) {
 
   return (
     <div className="chat-header">
-      <button className="back-btn" onClick={() => navigate('/')}><Home size={20} />Home</button>
+      <button className="back-btn" onClick={() => navigate('/home')}><Home size={20} />Home</button>
       <div className="header-info">
         <div className="avatar">{responceText?.userName?.email?.charAt(0)?.toUpperCase() || responceText?.userDataFind[0]?.email?.charAt(0)?.toUpperCase()}</div>
         <div className="user-profile">
